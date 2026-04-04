@@ -185,7 +185,7 @@ body{font-family:'Inter',sans-serif;}
     try {
       await fetch(`${API}/connection/revoke`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({token})});
       load();
-    } catch(e) { alert('Failed to revoke connection.'); }
+    } catch(e) { console.error('Failed to revoke:', e); }
   };
 
   document.getElementById('searchInput').addEventListener('input', render);

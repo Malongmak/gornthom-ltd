@@ -350,7 +350,7 @@ body{font-family:'Inter',sans-serif;}
       });
       closeEditModal();
       load();
-    } catch(e) { alert('Failed to update.'); }
+    } catch(e) { console.error('Update failed:', e); }
   };
 
   window.toggleStatus = async function(id, newStatus) {
@@ -361,7 +361,7 @@ body{font-family:'Inter',sans-serif;}
         body: JSON.stringify({status: newStatus})
       });
       load();
-    } catch(e) { alert('Failed to update status.'); }
+    } catch(e) { console.error('Status update failed:', e); }
   };
 
   window.deleteLocation = async function(id) {
@@ -369,7 +369,7 @@ body{font-family:'Inter',sans-serif;}
     try {
       await fetch(`${API}/locations/${id}`, {method:'DELETE'});
       load();
-    } catch(e) { alert('Failed to delete.'); }
+    } catch(e) { console.error('Delete failed:', e); }
   };
 
   document.getElementById('searchInput').addEventListener('input', render);

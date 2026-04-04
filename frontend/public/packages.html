@@ -442,7 +442,7 @@
         }
       } catch (error) {
         console.error("Error opening modal:", error);
-        alert("Error opening payment modal. Please try again.");
+        setText(paymentErrorEl, "Error opening payment. Please refresh.");setHidden(paymentErrorEl, false);
       }
     }
 

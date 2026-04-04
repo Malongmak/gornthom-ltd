@@ -178,7 +178,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","lo
       if (!data.success) throw new Error(data.message);
       closeEdit();
       load();
-    } catch(e) { alert('Failed to save: ' + e.message); }
+    } catch(e) { console.error('Save failed:', e); }
   };
 
   load();
