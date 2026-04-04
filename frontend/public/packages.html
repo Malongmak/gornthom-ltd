@@ -681,8 +681,6 @@ Start Browsing
       sessionStorage.setItem("gh_connection_data", JSON.stringify(connectionData));
       sessionStorage.setItem("gh_internet_active", "true");
       
-      console.log("🌐 Activating internet connection...");
-      console.log("Package:", packageInfo.name, "Duration:", durationMinutes, "minutes");
       
       // Activate connection on backend
       try {
@@ -708,11 +706,9 @@ Start Browsing
         setTimeout(() => {
           sessionStorage.setItem("gh_connection_active", "false");
           sessionStorage.setItem("gh_internet_active", "false");
-          console.log("⏰ Connection expired");
         }, timeUntilExpiry);
       }
       
-      console.log("✅ Internet connection activated - User can now browse");
     }
     
     // Paystack Payment Handler
@@ -785,7 +781,6 @@ Start Browsing
         },
         callback: function(response) {
           // Payment successful - verify with backend before activating
-          console.log("Paystack payment callback:", response);
           
           const txnId = response.reference || paymentReference;
 
@@ -827,7 +822,6 @@ Start Browsing
         },
         onClose: function() {
           // User closed the payment modal
-          console.log("Paystack payment modal closed");
           setText(paymentErrorEl, "Payment was cancelled. Please try again.");
           setHidden(paymentErrorEl, false);
           showStep("phone");
@@ -835,7 +829,6 @@ Start Browsing
       });
       
       if (IS_TEST_MODE) {
-        console.warn("Using TEST Paystack key — switch to live key for production.");
       }
 
       handler.openIframe();
@@ -865,7 +858,6 @@ Start Browsing
         }
 
         // Production mode - using real phone numbers
-        console.log("Processing payment with real phone number:", phone);
 
         // Store payment info
         sessionStorage.setItem("gh_selected_package", selectedPackage.name);

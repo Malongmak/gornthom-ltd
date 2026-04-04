@@ -172,11 +172,14 @@ class RouterService {
     };
   }
 
-  // Store session — use maxDevices from package config
+  // ─── Store session ────────────────────────────────────────────────────────────
   storeConnection(data, token) {
-    const { getPackages } = require('./routes/packages');
-    const pkg = getPackages ? getPackages().find(p => p.name === data.packageName) : null;
-    const maxDevices = pkg ? pkg.maxDevices : (parseInt(process.env.MAX_DEVICES_PER_SESSION) || 1);
+    let maxDevices = parseInt(process.env.MAX_DEVICES_PER_SESSION) || 1;
+    try {
+      const { getPackages } = require('../routes/packages');
+      const pkg = getPackages().find(p => p.name === data.packageName);
+      if (pkg) maxDevices = pkg.maxDevices;
+    } catch (e) { /* packages route not loaded yet, use default */ }
     const expiryTime = data.expiryTime || new Date(Date.now() + data.durationMinutes * 60 * 1000).toISOString();
 
     const connection = {
