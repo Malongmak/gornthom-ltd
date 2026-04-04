@@ -45,7 +45,43 @@ app.get('/api/paystack/verify/:reference', async (req, res) => {
   }
 });
 
-// Health check endpoint
+// Serve frontend static files
+const FRONTEND_PATH = path.join(__dirname, '../frontend');
+app.use('/static', express.static(path.join(FRONTEND_PATH, 'assets')));
+
+// Captive portal — MikroTik redirects all HTTP traffic here
+// Handles Apple/Android/Windows captive portal detection probes too
+const PORTAL_REDIRECT = `http://${process.env.SERVER_IP || 'localhost'}:${process.env.PORT || 3000}/portal`;
+
+const captiveProbes = [
+  '/hotspot-detect.html',           // Apple iOS/macOS
+  '/library/test/success.html',     // Apple
+  '/connecttest.txt',               // Windows
+  '/redirect',                      // Windows
+  '/ncsi.txt',                      // Windows NCSI
+  '/generate_204',                  // Android
+  '/gen_204',                       // Android
+  '/mobile/status.php',             // Android
+];
+
+captiveProbes.forEach(probe => {
+  app.get(probe, (req, res) => {
+    res.redirect(302, PORTAL_REDIRECT);
+  });
+});
+
+// Main portal page — serves the login/payment page
+app.get('/portal', (req, res) => {
+  res.sendFile(path.join(FRONTEND_PATH, 'public', 'index.html'));
+});
+app.get('/portal/packages', (req, res) => {
+  res.sendFile(path.join(FRONTEND_PATH, 'public', 'packages.html'));
+});
+app.get('/portal/session', (req, res) => {
+  res.sendFile(path.join(FRONTEND_PATH, 'public', 'session.html'));
+});
+// Serve frontend assets (logo etc.) for portal pages
+app.use('/assets', express.static(path.join(FRONTEND_PATH, 'assets')));
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 

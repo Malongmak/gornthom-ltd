@@ -936,7 +936,8 @@ Start Browsing
 
     if (goToSessionBtn) {
       goToSessionBtn.addEventListener("click", function() {
-        window.location.href = "session.html";
+        const isServed = window.location.pathname.startsWith('/portal');
+        window.location.href = isServed ? "/portal/session" : "session.html";
       });
     }
 

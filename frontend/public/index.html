@@ -223,8 +223,17 @@
       return `Guest_User_${n}`;
     }
 
+    // Fix asset paths when served via /portal route
+    document.querySelectorAll('img[src*="../assets"]').forEach(function(img) {
+      if (window.location.pathname.startsWith('/portal')) {
+        img.src = img.src.replace(/.*\.\.\/assets/, '/assets');
+      }
+    });
+
     function goPackages() {
-      window.location.href = "packages.html";
+      // Works both when opened as a file and when served via /portal
+      const isServed = window.location.pathname.startsWith('/portal');
+      window.location.href = isServed ? "/portal/packages" : "packages.html";
     }
 
     if (guestBtn) {
