@@ -151,9 +151,6 @@
 <div class="mb-12 text-center max-w-2xl mx-auto">
 <h1 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Choose Your Connection Plan</h1>
                 <p class="text-lg text-slate-600 dark:text-slate-400">Select a package that fits your needs. High-speed internet is just a payment away.</p>
-<div id="demoModeIndicator" class="mt-4 px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-700 rounded-lg text-sm text-yellow-800 dark:text-yellow-200 hidden">
-  <span class="font-semibold">🧪 Demo Mode Active:</span> Payment simulation enabled for testing. Update API_BASE_URL in packages.html for production.
-</div>
 </div>
 <!-- Package Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -384,7 +381,7 @@
 </div>
 </div>
 <div class="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 text-center">
-<p class="text-[10px] text-slate-400 uppercase tracking-[0.2em]">© 2024 GORNHOM INNOVATION LTD. All Rights Reserved.</p>
+<p class="text-[10px] text-slate-400 uppercase tracking-[0.2em]">© 2025 GORNHOM INNOVATION LTD. All Rights Reserved.</p>
 </div>
 </div>
 </footer>
@@ -578,7 +575,6 @@ Start Browsing
     const transactionIDEl = document.getElementById("transactionID");
     const cancelPaymentBtn = document.getElementById("cancelPaymentBtn");
     const loadingStatusEl = document.getElementById("loadingStatus");
-    const demoModeIndicator = document.getElementById("demoModeIndicator");
 
     function setHidden(el, hidden) {
       if (!el) return;
@@ -597,53 +593,27 @@ Start Browsing
       return { authType, user, msisdn };
     }
 
-    // Configuration - MUST be defined before DEMO_MODE check
-    const API_BASE_URL = "http://localhost:3000/api"; // Update to your server IP/domain in production
-    const STK_PUSH_ENDPOINT = API_BASE_URL + "/mpesa/stk-push";
-    const PAYMENT_STATUS_ENDPOINT = API_BASE_URL + "/mpesa/payment-status";
+    // Configuration
+    const API_BASE_URL = "http://localhost:3000/api"; // Change to your production server URL
     const ACTIVATE_CONNECTION_ENDPOINT = API_BASE_URL + "/connection/activate";
-    const CHECK_CONNECTION_ENDPOINT = API_BASE_URL + "/connection/status";
     const VERIFY_PAYMENT_ENDPOINT = API_BASE_URL + "/paystack/verify";
-    
-    // Paystack Configuration
-    // Using LIVE key for production - accepts real phone numbers and processes real payments
-    const PAYSTACK_PUBLIC_KEY = "pk_live_e03c534b8da95187352d47eebd01aa769f3d19a1";
-    const IS_TEST_MODE = PAYSTACK_PUBLIC_KEY.includes("pk_test");
-    
-    // Business phone number for receiving payment notifications
-    const BUSINESS_PHONE = "+254116465399";
-    
-    // Demo/Test Mode - Set to true to simulate STK Push without backend
-    const DEMO_MODE = API_BASE_URL.includes("your-api-domain.com") || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
-    // Show demo mode indicator if in demo mode
-    if (DEMO_MODE && demoModeIndicator) {
-      setHidden(demoModeIndicator, false);
-    }
-    
+    // Paystack — live key
+    const PAYSTACK_PUBLIC_KEY = "pk_live_e03c534b8da95187352d47eebd01aa769f3d19a1";
+    const IS_TEST_MODE = PAYSTACK_PUBLIC_KEY.startsWith("pk_test");
+    const BUSINESS_PHONE = "+254116465399";
+    const BUSINESS_EMAIL = "kerubinotheng1977@gmail.com";
+
     // Show test mode warning if using test key
     const testModeWarning = document.getElementById("testModeWarning");
-    if (IS_TEST_MODE && testModeWarning) {
-      setHidden(testModeWarning, false);
-    }
+    if (IS_TEST_MODE && testModeWarning) setHidden(testModeWarning, false);
 
     const login = getLogin();
-    // Allow testing without login - comment out redirect for development
-    // if (!login.authType || !login.user) {
-    //   // Not logged in → send back to captive portal
-    //   window.location.replace("index.html");
-    //   return;
-    // }
-    
-    // Set default user if not logged in (for testing)
-    if (!login.user) {
-      sessionStorage.setItem("gh_auth_type", "guest");
-      sessionStorage.setItem("gh_user", "Guest User");
-      const updatedLogin = getLogin();
-      setText(connectedAsEl, updatedLogin.user || "Guest");
-    } else {
-      setText(connectedAsEl, login.user);
+    if (!login.authType || !login.user) {
+      window.location.replace("index.html");
+      return;
     }
+    setText(connectedAsEl, login.msisdn || login.user);
 
     if (logoutBtn) {
       logoutBtn.addEventListener("click", function () {
@@ -749,75 +719,17 @@ Start Browsing
     let paymentPollInterval = null;
     let checkoutRequestId = null;
 
-    // Simple and reliable button click handler
-    function handleBuyClick(e) {
+    // Single clean click handler via event delegation
+    document.addEventListener("click", function(e) {
+      const btn = e.target.closest(".buyBtn");
+      if (!btn) return;
       e.preventDefault();
       e.stopPropagation();
-      
-      // Find the button (could be clicked element or parent)
-      let btn = e.target;
-      while (btn && !btn.classList.contains("buyBtn")) {
-        btn = btn.parentElement;
-      }
-      
-      if (!btn) return;
-      
-      const name = btn.getAttribute("data-package") || "Package";
-      const price = btn.getAttribute("data-price") || "0";
-      const currency = btn.getAttribute("data-currency") || "KES";
-      
-      console.log("✅ Buy button clicked:", name, price, currency);
-      openModal({ name, price, currency });
-    }
-    
-    // Initialize buttons - simple and direct approach
-    function setupBuyButtons() {
-      const buyButtons = document.querySelectorAll(".buyBtn");
-      console.log("Setting up", buyButtons.length, "buy buttons");
-      
-      buyButtons.forEach(function(btn) {
-        // Remove any existing handlers
-        btn.onclick = null;
-        
-        // Add click handler directly
-        btn.onclick = handleBuyClick;
-        
-        // Also add event listener
-        btn.addEventListener("click", handleBuyClick, false);
-        
-        // Ensure button is clickable
-        btn.style.pointerEvents = "auto";
-        btn.style.cursor = "pointer";
+      openModal({
+        name: btn.getAttribute("data-package") || "Package",
+        price: btn.getAttribute("data-price") || "0",
+        currency: btn.getAttribute("data-currency") || "KES"
       });
-      
-      console.log("✅ Buy buttons setup complete");
-    }
-    
-    // Setup buttons immediately and also on DOM ready
-    setupBuyButtons();
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setupBuyButtons);
-    }
-    
-    // Also setup after a short delay to catch any dynamically added buttons
-    setTimeout(setupBuyButtons, 200);
-    setTimeout(setupBuyButtons, 1000);
-    
-    // Event delegation as ultimate fallback
-    document.body.addEventListener("click", function(e) {
-      if (e.target.closest && e.target.closest(".buyBtn")) {
-        const btn = e.target.closest(".buyBtn");
-        if (btn) {
-          e.preventDefault();
-          e.stopPropagation();
-          const name = btn.getAttribute("data-package") || "Package";
-          const price = btn.getAttribute("data-price") || "0";
-          const currency = btn.getAttribute("data-currency") || "KES";
-          console.log("✅ Fallback handler: Buy button clicked");
-          openModal({ name, price, currency });
-        }
-      }
     }, false);
 
     // Function to poll payment status
@@ -932,7 +844,7 @@ Start Browsing
         durationMinutes: durationMinutes,
         expiryTime: expiryTime.toISOString(),
         deviceId: sessionStorage.getItem("gh_device_id") || "unknown",
-        userEmail: getLogin().user || "kerubinotheng1977@gmail.com",
+        userEmail: getLogin().user || BUSINESS_EMAIL,
         paymentMethod: "paystack"
       };
       
@@ -947,26 +859,22 @@ Start Browsing
       console.log("🌐 Activating internet connection...");
       console.log("Package:", packageInfo.name, "Duration:", durationMinutes, "minutes");
       
-      // Call backend API to activate connection (if configured)
-      if (!DEMO_MODE && !API_BASE_URL.includes("your-api-domain.com")) {
-        try {
-          const response = await fetch(ACTIVATE_CONNECTION_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(connectionData)
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            if (data.success) {
-              console.log("✅ Backend connection activated");
-              if (data.connectionToken) sessionStorage.setItem("gh_connection_token", data.connectionToken);
-              if (data.sessionId) sessionStorage.setItem("gh_session_id", data.sessionId);
-            }
+      // Activate connection on backend
+      try {
+        const response = await fetch(ACTIVATE_CONNECTION_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(connectionData)
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            if (data.connectionToken) sessionStorage.setItem("gh_connection_token", data.connectionToken);
+            if (data.sessionId) sessionStorage.setItem("gh_session_id", data.sessionId);
           }
-        } catch (error) {
-          console.error("Backend activation error:", error);
         }
+      } catch (error) {
+        // Backend unreachable — session is still stored locally, user can browse
       }
       
       // Set expiry timer
@@ -1018,23 +926,13 @@ Start Browsing
       
       // Generate unique reference
       const paymentReference = "GORNHOM_" + Date.now().toString();
-      
-      // Use the provided email address for Paystack
-      const email = "kerubinotheng1977@gmail.com";
-      
-      console.log("Initializing Paystack payment:", {
-        currency: paystackCurrency,
-        amount: paystackAmount,
-        email: email,
-        reference: paymentReference
-      });
-      
+
       // Initialize Paystack payment
       const handler = PaystackPop.setup({
         key: PAYSTACK_PUBLIC_KEY,
-        email: email,
+        email: BUSINESS_EMAIL,
         amount: paystackAmount,
-        currency: paystackCurrency, // Use KES directly
+        currency: paystackCurrency,
         ref: paymentReference,
         metadata: {
           custom_fields: [
@@ -1070,12 +968,12 @@ Start Browsing
           showStep("loading");
           if (loadingStatusEl) loadingStatusEl.textContent = "Verifying payment...";
 
-          // Verify then activate (wrapped in regular promise chain)
+          // Verify then activate
           fetch(`${VERIFY_PAYMENT_ENDPOINT}/${txnId}`)
             .then(function(r) { return r.json(); })
             .then(function(verifyData) {
-              if (!verifyData.success && !DEMO_MODE) {
-                setText(paymentErrorEl, "Payment could not be verified. Please contact support.");
+              if (!verifyData.success) {
+                setText(paymentErrorEl, "Payment could not be verified. Please contact support if you were charged.");
                 setHidden(paymentErrorEl, false);
                 showStep("phone");
                 return;
@@ -1111,14 +1009,10 @@ Start Browsing
         }
       });
       
-      // Handle payment errors that occur before the popup opens
-      // Note: Paystack test mode requires test mobile money numbers
-      // To use real numbers, switch to live key (pk_live_...)
       if (IS_TEST_MODE) {
-        console.warn("⚠️ Using TEST key - Paystack requires test mobile money numbers in test mode.");
-        console.warn("To use real phone numbers, switch to LIVE key (pk_live_...) in your Paystack dashboard.");
+        console.warn("Using TEST Paystack key — switch to live key for production.");
       }
-      
+
       handler.openIframe();
     }
 
@@ -1231,17 +1125,13 @@ Start Browsing
       });
     }
     
-    // Debug: Log that script loaded successfully
-    console.log("✅ Packages page script loaded successfully");
-    console.log("✅ Buy buttons initialized:", document.querySelectorAll(".buyBtn").length);
-    console.log("✅ Modal element:", modalEl ? "Found" : "Not found");
-    console.log("✅ OpenModal function:", typeof openModal);
-    
     } catch (error) {
-      console.error("❌ Error in packages script:", error);
-      console.error("Error details:", error.message, error.stack);
-      // Show user-friendly error message
-      alert("There was an error loading the page. Please refresh and try again.\n\nError: " + error.message);
+      // Show inline error instead of alert
+      const errEl = document.getElementById("paymentError");
+      if (errEl) {
+        errEl.textContent = "Page failed to load. Please refresh.";
+        errEl.classList.remove("hidden");
+      }
     }
   })();
 </script>
