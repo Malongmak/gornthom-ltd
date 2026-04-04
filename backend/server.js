@@ -86,15 +86,19 @@ app.use((req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log('🚀 GORNHOM Backend Server Started');
-  console.log(`📡 Server running on port ${PORT}`);
-  console.log(`🌐 Router Type: ${process.env.ROUTER_TYPE || 'Not configured'}`);
-  console.log(`📋 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`\n✅ API Endpoints:`);
-  console.log(`   Health: http://localhost:${PORT}/health`);
-  console.log(`   Activate: http://localhost:${PORT}/api/connection/activate`);
-  console.log(`   Status: http://localhost:${PORT}/api/connection/status`);
-  console.log(`\n💡 Update API_BASE_URL in packages.html to: http://your-server-ip:${PORT}/api\n`);
-});
+// Start server only when run directly (not during tests)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log('🚀 GORNHOM Backend Server Started');
+    console.log(`📡 Server running on port ${PORT}`);
+    console.log(`🌐 Router Type: ${process.env.ROUTER_TYPE || 'Not configured'}`);
+    console.log(`📋 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`\n✅ API Endpoints:`);
+    console.log(`   Health: http://localhost:${PORT}/health`);
+    console.log(`   Activate: http://localhost:${PORT}/api/connection/activate`);
+    console.log(`   Status: http://localhost:${PORT}/api/connection/status`);
+    console.log(`\n💡 Update API_BASE_URL in packages.html to: http://your-server-ip:${PORT}/api\n`);
+  });
+}
+
+module.exports = app;

@@ -78,15 +78,6 @@ class RouterService {
       }
       
       // Connect using routeros-api
-      const connection = new RouterOSAPI({
-        host: this.config.host,
-        user: this.config.username,
-        password: this.config.password,
-        port: this.config.port || 8728,
-        timeout: 10
-      });
-
-      // Connect using routeros-api
       const { RouterOSClient } = RouterOSAPI;
       const api = new RouterOSClient({
         host: this.config.host,

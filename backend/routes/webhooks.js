@@ -29,9 +29,10 @@ async function verifyPaystackPayment(reference) {
 router.post('/paystack', express.raw({ type: 'application/json' }), async (req, res) => {
   try {
     // Verify webhook signature
+    const rawBody = Buffer.isBuffer(req.body) ? req.body : Buffer.from(JSON.stringify(req.body));
     const hash = crypto
       .createHmac('sha512', process.env.PAYSTACK_SECRET_KEY || '')
-      .update(req.body)
+      .update(rawBody)
       .digest('hex');
 
     if (hash !== req.headers['x-paystack-signature']) {
@@ -39,7 +40,7 @@ router.post('/paystack', express.raw({ type: 'application/json' }), async (req, 
       return res.status(400).send('Invalid signature');
     }
 
-    const event = JSON.parse(req.body);
+    const event = Buffer.isBuffer(req.body) ? JSON.parse(req.body) : req.body;
 
     console.log(`\n📨 Paystack Webhook | Event: ${event.event} | Ref: ${event.data?.reference}`);
 
