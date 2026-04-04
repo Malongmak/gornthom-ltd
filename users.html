@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Users - GORNHOM INNOVATION LTD</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode:"class",
+  theme:{extend:{colors:{"primary":"#22c55e","logo-green":"#22c55e","logo-red":"#ef4444","logo-black":"#1e293b","logo-blue":"#1e40af","background-light":"#f6f7f8","background-dark":"#101922"},fontFamily:{display:["Inter"]},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"}}}
+}
+</script>
+<style>
+body{font-family:'Inter',sans-serif;}
+.custom-scrollbar::-webkit-scrollbar{width:4px;}
+.custom-scrollbar::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:10px;}
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex">
+
+<!-- Sidebar -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex-shrink-0 hidden lg:flex flex-col sticky top-0 h-screen">
+  <div class="p-6 border-b border-slate-200 dark:border-slate-800">
+    <div class="flex items-center gap-3">
+      <img src="images/logo.jpeg" alt="Logo" class="h-10 w-auto object-contain"/>
+      <h1 class="font-bold text-lg tracking-tight leading-tight uppercase">
+        <span class="text-logo-green">GORNHOM</span><br/>
+        <span class="text-logo-red text-xs">INNOVATION</span>
+        <span class="text-logo-black dark:text-slate-300 text-xs">LTD</span>
+      </h1>
+    </div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+    <a href="admin.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">dashboard</span><span class="font-medium">Dashboard</span></a>
+    <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-logo-green text-white transition-colors"><span class="material-icons-outlined">people</span><span class="font-medium">Users</span></a>
+    <a href="admin-packages.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">inventory_2</span><span class="font-medium">Packages</span></a>
+    <a href="locations.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">location_on</span><span class="font-medium">Locations</span></a>
+    <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">bar_chart</span><span class="font-medium">Analytics</span></a>
+    <div class="pt-8 pb-2 px-4"><p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Management</p></div>
+    <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">settings</span><span class="font-medium">Settings</span></a>
+    <a href="support.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">help_outline</span><span class="font-medium">Support</span></a>
+  </nav>
+</aside>
+
+<!-- Main -->
+<main class="flex-1 flex flex-col min-w-0">
+  <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+    <h2 class="text-lg font-bold">Users</h2>
+    <span id="headerStatus" class="px-2 py-1 bg-emerald-100 text-emerald-600 text-xs font-bold rounded flex items-center gap-1"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>ONLINE</span>
+  </header>
+
+  <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+    <div class="max-w-7xl mx-auto space-y-6">
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-sm text-slate-500 mb-1">Active Now</p>
+          <h3 id="statActive" class="text-3xl font-extrabold text-logo-green">—</h3>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-sm text-slate-500 mb-1">Total Sessions</p>
+          <h3 id="statTotal" class="text-3xl font-extrabold">—</h3>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <p class="text-sm text-slate-500 mb-1">Expired Sessions</p>
+          <h3 id="statExpired" class="text-3xl font-extrabold text-slate-400">—</h3>
+        </div>
+      </div>
+
+      <!-- Search + filter -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4">
+          <div class="relative">
+            <span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+            <input id="searchInput" type="text" placeholder="Search by phone or transaction..." class="pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-72"/>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="filterUsers('all')" id="filterAll" class="px-3 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-lg border border-primary/20">All</button>
+            <button onclick="filterUsers('active')" id="filterActive" class="px-3 py-1.5 text-slate-500 text-xs font-bold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Active</button>
+            <button onclick="filterUsers('expired')" id="filterExpired" class="px-3 py-1.5 text-slate-500 text-xs font-bold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Expired</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-slate-50 dark:bg-slate-800/50 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <tr>
+                <th class="px-6 py-4">Phone</th>
+                <th class="px-6 py-4">Package</th>
+                <th class="px-6 py-4">Amount</th>
+                <th class="px-6 py-4">Connected At</th>
+                <th class="px-6 py-4">Expires At</th>
+                <th class="px-6 py-4 text-center">Status</th>
+                <th class="px-6 py-4 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="usersTable" class="divide-y divide-slate-100 dark:divide-slate-800">
+              <tr><td colspan="7" class="px-6 py-8 text-center text-sm text-slate-400">Loading users...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  const API = 'http://localhost:3000/api';
+  let allUsers = [];
+  let currentFilter = 'all';
+
+  async function load() {
+    try {
+      const res = await fetch(`${API}/admin/stats`);
+      const data = await res.json();
+      allUsers = data.connections || [];
+
+      document.getElementById('statActive').textContent = data.activeConnections;
+      document.getElementById('statTotal').textContent = data.totalConnections;
+      document.getElementById('statExpired').textContent = data.expiredConnections;
+
+      render();
+    } catch(e) {
+      document.getElementById('usersTable').innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center text-sm text-red-400">Could not reach backend. Is the server running?</td></tr>';
+    }
+  }
+
+  function render() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = allUsers.filter(u => {
+      const matchFilter = currentFilter === 'all' || (currentFilter === 'active' ? u.active : !u.active);
+      const matchSearch = !search || u.phone.includes(search) || (u.transactionId||'').toLowerCase().includes(search);
+      return matchFilter && matchSearch;
+    });
+
+    const tbody = document.getElementById('usersTable');
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center text-sm text-slate-400">No users found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(u => {
+      const initials = u.phone.slice(-4);
+      const statusClass = u.active ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500';
+      const statusLabel = u.active ? 'ACTIVE' : 'EXPIRED';
+      const connectedAt = new Date(u.startTime).toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      const expiresAt = new Date(u.expiresAt).toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      return `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+        <td class="px-6 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">${initials}</div>
+            <span class="text-sm font-medium">${u.phone}</span>
+          </div>
+        </td>
+        <td class="px-6 py-4 text-sm">${u.package}</td>
+        <td class="px-6 py-4 text-sm font-bold">${u.packagePrice ? 'KES '+parseFloat(u.packagePrice).toFixed(0) : '—'}</td>
+        <td class="px-6 py-4 text-xs text-slate-500">${connectedAt}</td>
+        <td class="px-6 py-4 text-xs text-slate-500">${expiresAt}</td>
+        <td class="px-6 py-4 text-center"><span class="px-2 py-1 ${statusClass} text-[10px] font-bold rounded">${statusLabel}</span></td>
+        <td class="px-6 py-4 text-center">
+          ${u.active ? `<button onclick="revokeUser('${u.transactionId}')" class="text-xs text-red-500 hover:underline font-semibold">Revoke</button>` : '<span class="text-xs text-slate-300">—</span>'}
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.filterUsers = function(f) {
+    currentFilter = f;
+    ['all','active','expired'].forEach(id => {
+      const btn = document.getElementById('filter'+id.charAt(0).toUpperCase()+id.slice(1));
+      if(btn) btn.className = id === f
+        ? 'px-3 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-lg border border-primary/20'
+        : 'px-3 py-1.5 text-slate-500 text-xs font-bold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800';
+    });
+    render();
+  };
+
+  window.revokeUser = async function(token) {
+    if (!confirm('Revoke this user\'s connection?')) return;
+    try {
+      await fetch(`${API}/connection/revoke`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({token})});
+      load();
+    } catch(e) { alert('Failed to revoke connection.'); }
+  };
+
+  document.getElementById('searchInput').addEventListener('input', render);
+  load();
+  setInterval(load, 15000);
+})();
+</script>
+</body>
+</html>

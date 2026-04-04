@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Packages - GORNHOM INNOVATION LTD</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","logo-green":"#22c55e","logo-red":"#ef4444","logo-black":"#1e293b","logo-blue":"#1e40af","background-light":"#f6f7f8","background-dark":"#101922"},fontFamily:{display:["Inter"]},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"}}}}
+</script>
+<style>body{font-family:'Inter',sans-serif;}.custom-scrollbar::-webkit-scrollbar{width:4px;}.custom-scrollbar::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:10px;}</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex">
+
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex-shrink-0 hidden lg:flex flex-col sticky top-0 h-screen">
+  <div class="p-6 border-b border-slate-200 dark:border-slate-800">
+    <div class="flex items-center gap-3">
+      <img src="images/logo.jpeg" alt="Logo" class="h-10 w-auto object-contain"/>
+      <h1 class="font-bold text-lg tracking-tight leading-tight uppercase"><span class="text-logo-green">GORNHOM</span><br/><span class="text-logo-red text-xs">INNOVATION</span> <span class="text-logo-black dark:text-slate-300 text-xs">LTD</span></h1>
+    </div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+    <a href="admin.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">dashboard</span><span class="font-medium">Dashboard</span></a>
+    <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">people</span><span class="font-medium">Users</span></a>
+    <a href="admin-packages.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-logo-green text-white transition-colors"><span class="material-icons-outlined">inventory_2</span><span class="font-medium">Packages</span></a>
+    <a href="locations.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">location_on</span><span class="font-medium">Locations</span></a>
+    <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">bar_chart</span><span class="font-medium">Analytics</span></a>
+    <div class="pt-8 pb-2 px-4"><p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Management</p></div>
+    <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">settings</span><span class="font-medium">Settings</span></a>
+    <a href="support.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">help_outline</span><span class="font-medium">Support</span></a>
+  </nav>
+</aside>
+
+<main class="flex-1 flex flex-col min-w-0">
+  <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+    <h2 class="text-lg font-bold">Packages</h2>
+    <span class="px-2 py-1 bg-emerald-100 text-emerald-600 text-xs font-bold rounded flex items-center gap-1"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>ONLINE</span>
+  </header>
+
+  <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+    <div class="max-w-7xl mx-auto space-y-6">
+
+      <!-- Package popularity from live data -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="font-bold text-lg">Package Performance</h3>
+          <span class="text-xs text-slate-400">Live from active sessions</span>
+        </div>
+        <div id="packageStats" class="space-y-4">
+          <p class="text-sm text-slate-400">Loading...</p>
+        </div>
+      </div>
+
+      <!-- Package catalogue -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-bold text-lg">Package Catalogue</h3>
+          <p class="text-sm text-slate-500 mt-1">These are the packages available to customers on the portal.</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-slate-50 dark:bg-slate-800/50 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <tr>
+                <th class="px-6 py-4">Package</th>
+                <th class="px-6 py-4">Duration</th>
+                <th class="px-6 py-4">Price</th>
+                <th class="px-6 py-4">Speed</th>
+                <th class="px-6 py-4 text-center">Sessions</th>
+                <th class="px-6 py-4 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody id="packageTable" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  const API = 'http://localhost:3000/api';
+
+  const PACKAGES = [
+    {name:'30 Minutes', duration:'30 min', price:'KES 5', speed:'5 Mbps'},
+    {name:'1 Hour',     duration:'1 hour', price:'KES 10', speed:'5 Mbps'},
+    {name:'1 Day',      duration:'24 hours', price:'KES 60', speed:'10 Mbps'},
+    {name:'1 Week',     duration:'7 days', price:'KES 260', speed:'20 Mbps'},
+    {name:'1 Month',    duration:'30 days', price:'KES 500', speed:'Unlimited'},
+    {name:'Enterprise Plan', duration:'30 days', price:'KES 2,500', speed:'100 Mbps'},
+  ];
+
+  async function load() {
+    try {
+      const res = await fetch(`${API}/admin/stats`);
+      const data = await res.json();
+      const counts = {};
+      (data.connections||[]).forEach(c => { counts[c.package] = (counts[c.package]||0)+1; });
+      const max = Math.max(...Object.values(counts), 1);
+
+      // Performance bars
+      const statsEl = document.getElementById('packageStats');
+      if (Object.keys(counts).length === 0) {
+        statsEl.innerHTML = '<p class="text-sm text-slate-400">No sessions recorded yet.</p>';
+      } else {
+        statsEl.innerHTML = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([name,count])=>{
+          const pct = Math.round((count/max)*100);
+          return `<div class="flex items-center gap-4">
+            <span class="text-sm font-medium w-36 flex-shrink-0">${name}</span>
+            <div class="flex-1 bg-slate-100 dark:bg-slate-800 h-3 rounded-full overflow-hidden">
+              <div class="bg-primary h-full rounded-full" style="width:${pct}%"></div>
+            </div>
+            <span class="text-sm font-bold text-primary w-16 text-right">${count} session${count!==1?'s':''}</span>
+          </div>`;
+        }).join('');
+      }
+
+      // Table
+      const tbody = document.getElementById('packageTable');
+      tbody.innerHTML = PACKAGES.map(p => {
+        const sessions = counts[p.name] || 0;
+        return `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+          <td class="px-6 py-4 font-semibold text-sm">${p.name}</td>
+          <td class="px-6 py-4 text-sm text-slate-500">${p.duration}</td>
+          <td class="px-6 py-4 text-sm font-bold">${p.price}</td>
+          <td class="px-6 py-4 text-sm text-slate-500">${p.speed}</td>
+          <td class="px-6 py-4 text-center text-sm font-bold">${sessions}</td>
+          <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-600 text-[10px] font-bold rounded">ACTIVE</span></td>
+        </tr>`;
+      }).join('');
+    } catch(e) {
+      document.getElementById('packageStats').innerHTML = '<p class="text-sm text-red-400">Could not reach backend.</p>';
+    }
+  }
+
+  load();
+  setInterval(load, 15000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settings - GORNHOM INNOVATION LTD</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","logo-green":"#22c55e","logo-red":"#ef4444","logo-black":"#1e293b","logo-blue":"#1e40af","background-light":"#f6f7f8","background-dark":"#101922"},fontFamily:{display:["Inter"]},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"}}}}
+</script>
+<style>body{font-family:'Inter',sans-serif;}.custom-scrollbar::-webkit-scrollbar{width:4px;}.custom-scrollbar::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:10px;}</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex">
+
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex-shrink-0 hidden lg:flex flex-col sticky top-0 h-screen">
+  <div class="p-6 border-b border-slate-200 dark:border-slate-800">
+    <div class="flex items-center gap-3">
+      <img src="images/logo.jpeg" alt="Logo" class="h-10 w-auto object-contain"/>
+      <h1 class="font-bold text-lg tracking-tight leading-tight uppercase"><span class="text-logo-green">GORNHOM</span><br/><span class="text-logo-red text-xs">INNOVATION</span> <span class="text-logo-black dark:text-slate-300 text-xs">LTD</span></h1>
+    </div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+    <a href="admin.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">dashboard</span><span class="font-medium">Dashboard</span></a>
+    <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">people</span><span class="font-medium">Users</span></a>
+    <a href="admin-packages.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">inventory_2</span><span class="font-medium">Packages</span></a>
+    <a href="locations.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">location_on</span><span class="font-medium">Locations</span></a>
+    <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">bar_chart</span><span class="font-medium">Analytics</span></a>
+    <div class="pt-8 pb-2 px-4"><p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Management</p></div>
+    <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-logo-green text-white transition-colors"><span class="material-icons-outlined">settings</span><span class="font-medium">Settings</span></a>
+    <a href="support.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">help_outline</span><span class="font-medium">Support</span></a>
+  </nav>
+</aside>
+
+<main class="flex-1 flex flex-col min-w-0">
+  <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+    <h2 class="text-lg font-bold">Settings</h2>
+    <button id="saveBtn" onclick="saveSettings()" class="px-4 py-2 bg-logo-green text-white text-sm font-bold rounded-lg hover:bg-logo-green/90 transition-colors flex items-center gap-2">
+      <span class="material-icons-outlined text-sm">save</span>Save Changes
+    </button>
+  </header>
+
+  <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+    <div class="max-w-3xl mx-auto space-y-8">
+
+      <div id="saveMsg" class="hidden px-4 py-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-lg">Settings saved successfully.</div>
+
+      <!-- Backend connection -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+        <h3 class="font-bold text-lg mb-1">Backend Connection</h3>
+        <p class="text-sm text-slate-500 mb-6">The URL your frontend uses to talk to the Node.js server.</p>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">API Base URL</label>
+            <input id="apiUrl" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"/>
+          </div>
+          <button onclick="testConnection()" class="px-4 py-2 border border-primary text-primary text-sm font-bold rounded-lg hover:bg-primary/5 transition-colors flex items-center gap-2">
+            <span class="material-icons-outlined text-sm">wifi_tethering</span>Test Connection
+          </button>
+          <p id="connResult" class="text-sm hidden"></p>
+        </div>
+      </div>
+
+      <!-- Business info -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+        <h3 class="font-bold text-lg mb-1">Business Information</h3>
+        <p class="text-sm text-slate-500 mb-6">Displayed on receipts and payment confirmations.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Business Name</label>
+            <input id="bizName" type="text" value="GORNHOM INNOVATION LTD" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Business Phone</label>
+            <input id="bizPhone" type="text" value="+254116465399" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Business Email</label>
+            <input id="bizEmail" type="email" value="kerubinotheng1977@gmail.com" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Router Type</label>
+            <select id="routerType" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+              <option value="mikrotik">MikroTik</option>
+              <option value="openwrt">OpenWrt</option>
+              <option value="pfsense">pfSense</option>
+              <option value="generic">Generic (Log only)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Server health -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+        <h3 class="font-bold text-lg mb-4">Server Health</h3>
+        <div id="healthInfo" class="space-y-3 text-sm text-slate-500">Loading...</div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  const DEFAULT_API = 'http://localhost:3000/api';
+
+  // Load saved settings
+  const saved = JSON.parse(localStorage.getItem('gh_admin_settings')||'{}');
+  document.getElementById('apiUrl').value = saved.apiUrl || DEFAULT_API;
+  if (saved.bizName) document.getElementById('bizName').value = saved.bizName;
+  if (saved.bizPhone) document.getElementById('bizPhone').value = saved.bizPhone;
+  if (saved.bizEmail) document.getElementById('bizEmail').value = saved.bizEmail;
+  if (saved.routerType) document.getElementById('routerType').value = saved.routerType;
+
+  window.saveSettings = function() {
+    const settings = {
+      apiUrl: document.getElementById('apiUrl').value.trim(),
+      bizName: document.getElementById('bizName').value.trim(),
+      bizPhone: document.getElementById('bizPhone').value.trim(),
+      bizEmail: document.getElementById('bizEmail').value.trim(),
+      routerType: document.getElementById('routerType').value,
+    };
+    localStorage.setItem('gh_admin_settings', JSON.stringify(settings));
+    const msg = document.getElementById('saveMsg');
+    msg.classList.remove('hidden');
+    setTimeout(()=>msg.classList.add('hidden'), 3000);
+  };
+
+  window.testConnection = async function() {
+    const url = document.getElementById('apiUrl').value.trim();
+    const el = document.getElementById('connResult');
+    el.className = 'text-sm text-slate-500';
+    el.textContent = 'Testing...';
+    el.classList.remove('hidden');
+    try {
+      const res = await fetch(url.replace('/api','') + '/health');
+      const data = await res.json();
+      el.className = 'text-sm text-emerald-600 font-semibold';
+      el.textContent = '✅ Connected — ' + data.message + ' | Router: ' + data.routerType;
+    } catch(e) {
+      el.className = 'text-sm text-red-500 font-semibold';
+      el.textContent = '❌ Could not connect. Make sure the backend is running.';
+    }
+  };
+
+  async function loadHealth() {
+    const url = (JSON.parse(localStorage.getItem('gh_admin_settings')||'{}').apiUrl || DEFAULT_API).replace('/api','');
+    try {
+      const res = await fetch(`${url}/health`);
+      const data = await res.json();
+      document.getElementById('healthInfo').innerHTML = `
+        <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800"><span>Status</span><span class="font-bold text-emerald-600">${data.status.toUpperCase()}</span></div>
+        <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800"><span>Router Type</span><span class="font-bold">${data.routerType}</span></div>
+        <div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800"><span>Environment</span><span class="font-bold">${data.message}</span></div>
+        <div class="flex justify-between py-2"><span>Last Checked</span><span class="font-bold">${new Date(data.timestamp).toLocaleTimeString()}</span></div>`;
+    } catch(e) {
+      document.getElementById('healthInfo').innerHTML = '<p class="text-red-400">Backend unreachable. Start the server with <code class="bg-slate-100 px-1 rounded">npm start</code> inside the backend folder.</p>';
+    }
+  }
+
+  loadHealth();
+  setInterval(loadHealth, 30000);
+})();
+</script>
+</body>
+</html>

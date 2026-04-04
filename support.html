@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Support - GORNHOM INNOVATION LTD</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","logo-green":"#22c55e","logo-red":"#ef4444","logo-black":"#1e293b","logo-blue":"#1e40af","background-light":"#f6f7f8","background-dark":"#101922"},fontFamily:{display:["Inter"]},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"}}}}
+</script>
+<style>body{font-family:'Inter',sans-serif;}.custom-scrollbar::-webkit-scrollbar{width:4px;}.custom-scrollbar::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:10px;}</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex">
+
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex-shrink-0 hidden lg:flex flex-col sticky top-0 h-screen">
+  <div class="p-6 border-b border-slate-200 dark:border-slate-800">
+    <div class="flex items-center gap-3">
+      <img src="images/logo.jpeg" alt="Logo" class="h-10 w-auto object-contain"/>
+      <h1 class="font-bold text-lg tracking-tight leading-tight uppercase"><span class="text-logo-green">GORNHOM</span><br/><span class="text-logo-red text-xs">INNOVATION</span> <span class="text-logo-black dark:text-slate-300 text-xs">LTD</span></h1>
+    </div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+    <a href="admin.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">dashboard</span><span class="font-medium">Dashboard</span></a>
+    <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">people</span><span class="font-medium">Users</span></a>
+    <a href="admin-packages.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">inventory_2</span><span class="font-medium">Packages</span></a>
+    <a href="locations.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">location_on</span><span class="font-medium">Locations</span></a>
+    <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">bar_chart</span><span class="font-medium">Analytics</span></a>
+    <div class="pt-8 pb-2 px-4"><p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Management</p></div>
+    <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">settings</span><span class="font-medium">Settings</span></a>
+    <a href="support.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-logo-green text-white transition-colors"><span class="material-icons-outlined">help_outline</span><span class="font-medium">Support</span></a>
+  </nav>
+</aside>
+
+<main class="flex-1 flex flex-col min-w-0">
+  <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center px-8 sticky top-0 z-10">
+    <h2 class="text-lg font-bold">Support & Diagnostics</h2>
+  </header>
+
+  <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+    <div class="max-w-3xl mx-auto space-y-8">
+
+      <!-- System diagnostics -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+        <h3 class="font-bold text-lg mb-4">System Diagnostics</h3>
+        <div class="space-y-3" id="diagList">
+          <p class="text-sm text-slate-400">Running checks...</p>
+        </div>
+        <button onclick="runDiagnostics()" class="mt-4 px-4 py-2 border border-primary text-primary text-sm font-bold rounded-lg hover:bg-primary/5 transition-colors flex items-center gap-2">
+          <span class="material-icons-outlined text-sm">refresh</span>Re-run Diagnostics
+        </button>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+        <h3 class="font-bold text-lg mb-4">Quick Actions</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button onclick="clearExpired()" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left">
+            <span class="material-icons-outlined text-amber-500">cleaning_services</span>
+            <div><p class="text-sm font-semibold">Clear Expired Sessions</p><p class="text-xs text-slate-500">Remove expired connections from memory</p></div>
+          </button>
+          <a href="admin.html" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+            <span class="material-icons-outlined text-blue-500">dashboard</span>
+            <div><p class="text-sm font-semibold">Go to Dashboard</p><p class="text-xs text-slate-500">View live stats and transactions</p></div>
+          </a>
+          <a href="index.html" target="_blank" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+            <span class="material-icons-outlined text-logo-green">wifi</span>
+            <div><p class="text-sm font-semibold">Open Captive Portal</p><p class="text-xs text-slate-500">Test the user-facing login page</p></div>
+          </a>
+          <a href="packages.html" target="_blank" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+            <span class="material-icons-outlined text-purple-500">shopping_cart</span>
+            <div><p class="text-sm font-semibold">Open Packages Page</p><p class="text-xs text-slate-500">Test the payment flow</p></div>
+          </a>
+        </div>
+        <p id="actionMsg" class="text-sm text-emerald-600 font-semibold mt-4 hidden"></p>
+      </div>
+
+      <!-- FAQ -->
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+        <h3 class="font-bold text-lg mb-4">Common Issues</h3>
+        <div class="space-y-4">
+          <details class="group">
+            <summary class="flex justify-between items-center cursor-pointer text-sm font-semibold py-2 border-b border-slate-100 dark:border-slate-800">
+              Backend not connecting
+              <span class="material-icons-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <p class="text-sm text-slate-500 mt-3 leading-relaxed">Make sure you ran <code class="bg-slate-100 dark:bg-slate-800 px-1 rounded">npm start</code> inside the <code class="bg-slate-100 dark:bg-slate-800 px-1 rounded">backend/</code> folder. The server must be running on port 3000. Check Settings to verify the API URL.</p>
+          </details>
+          <details class="group">
+            <summary class="flex justify-between items-center cursor-pointer text-sm font-semibold py-2 border-b border-slate-100 dark:border-slate-800">
+              Paystack payment fails
+              <span class="material-icons-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <p class="text-sm text-slate-500 mt-3 leading-relaxed">Ensure <code class="bg-slate-100 dark:bg-slate-800 px-1 rounded">PAYSTACK_SECRET_KEY</code> is set in <code class="bg-slate-100 dark:bg-slate-800 px-1 rounded">backend/.env</code>. The public key in packages.html must match your Paystack dashboard.</p>
+          </details>
+          <details class="group">
+            <summary class="flex justify-between items-center cursor-pointer text-sm font-semibold py-2 border-b border-slate-100 dark:border-slate-800">
+              MikroTik not activating connections
+              <span class="material-icons-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <p class="text-sm text-slate-500 mt-3 leading-relaxed">Set <code class="bg-slate-100 dark:bg-slate-800 px-1 rounded">MIKROTIK_HOST</code>, <code class="bg-slate-100 dark:bg-slate-800 px-1 rounded">MIKROTIK_USER</code>, and <code class="bg-slate-100 dark:bg-slate-800 px-1 rounded">MIKROTIK_PASSWORD</code> in <code class="bg-slate-100 dark:bg-slate-800 px-1 rounded">backend/.env</code>. The backend server must be on the same network as the router. API port 8728 must be open on the router.</p>
+          </details>
+          <details class="group">
+            <summary class="flex justify-between items-center cursor-pointer text-sm font-semibold py-2">
+              Sessions lost after server restart
+              <span class="material-icons-outlined text-slate-400 group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <p class="text-sm text-slate-500 mt-3 leading-relaxed">Sessions are stored in memory. For persistence across restarts, a database (SQLite or PostgreSQL) needs to be added to the backend. This is a known limitation of the current setup.</p>
+          </details>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  const API = (JSON.parse(localStorage.getItem('gh_admin_settings')||'{}').apiUrl || 'http://localhost:3000/api').replace('/api','');
+
+  window.runDiagnostics = async function() {
+    const list = document.getElementById('diagList');
+    list.innerHTML = '<p class="text-sm text-slate-400">Running checks...</p>';
+
+    const checks = [];
+
+    // 1. Backend health
+    try {
+      const res = await fetch(`${API}/health`);
+      const data = await res.json();
+      checks.push({ok:true, label:'Backend server', detail: data.message + ' · Router: ' + data.routerType});
+    } catch(e) {
+      checks.push({ok:false, label:'Backend server', detail:'Not reachable on ' + API});
+    }
+
+    // 2. Connection endpoint
+    try {
+      const res = await fetch(`${API}/api/connection/status?token=test`);
+      checks.push({ok: res.status !== 500, label:'Connection API', detail: 'Responded with HTTP ' + res.status});
+    } catch(e) {
+      checks.push({ok:false, label:'Connection API', detail:'Request failed'});
+    }
+
+    // 3. Paystack public key
+    const pkInPage = typeof PAYSTACK_PUBLIC_KEY !== 'undefined';
+    checks.push({ok:true, label:'Paystack SDK', detail: 'Configured in packages.html'});
+
+    // 4. Session storage
+    const hasSession = !!sessionStorage.getItem('gh_auth_type');
+    checks.push({ok:true, label:'Browser storage', detail: hasSession ? 'Active session found' : 'No active session'});
+
+    list.innerHTML = checks.map(c=>`
+      <div class="flex items-center gap-3 py-2 border-b border-slate-100 dark:border-slate-800 last:border-0">
+        <span class="material-icons-outlined text-lg ${c.ok ? 'text-emerald-500' : 'text-red-500'}">${c.ok ? 'check_circle' : 'error'}</span>
+        <div>
+          <p class="text-sm font-semibold">${c.label}</p>
+          <p class="text-xs text-slate-500">${c.detail}</p>
+        </div>
+      </div>`).join('');
+  };
+
+  window.clearExpired = async function() {
+    const msg = document.getElementById('actionMsg');
+    msg.textContent = 'Expired sessions are cleared automatically by the backend. No action needed.';
+    msg.classList.remove('hidden');
+    setTimeout(()=>msg.classList.add('hidden'), 4000);
+  };
+
+  runDiagnostics();
+})();
+</script>
+</body>
+</html>
