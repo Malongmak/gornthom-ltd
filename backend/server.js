@@ -21,10 +21,12 @@ app.use((req, res, next) => {
 const connectionRoutes = require('./routes/connection');
 const webhookRoutes = require('./routes/webhooks');
 const mpesaRoutes = require('./routes/mpesa');
+const locationRoutes = require('./routes/locations');
 
 app.use('/api/connection', connectionRoutes);
 app.use('/api/webhooks', webhookRoutes);
 app.use('/api/mpesa', mpesaRoutes);
+app.use('/api/locations', locationRoutes);
 
 // Paystack payment verification endpoint (called by frontend after payment)
 app.get('/api/paystack/verify/:reference', async (req, res) => {

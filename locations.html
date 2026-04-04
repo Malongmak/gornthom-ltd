@@ -1,410 +1,381 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
+<html class="light" lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Hotspot Location Management - GORNHOM INNOVATION LTD</title>
+<title>Hotspot Locations - GORNHOM INNOVATION LTD</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#22c55e",
-                        "primary-blue": "#137fec",
-                        "logo-green": "#22c55e",
-                        "logo-red": "#ef4444",
-                        "logo-black": "#1e293b",
-                        "logo-blue": "#1e40af",
-                        "background-light": "#f6f7f8",
-                        "background-dark": "#101922",
-                    },
-                    fontFamily: {
-                        "display": ["Inter"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","logo-green":"#22c55e","logo-red":"#ef4444","logo-black":"#1e293b","logo-blue":"#1e40af","background-light":"#f6f7f8","background-dark":"#101922"},fontFamily:{display:["Inter"]},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"}}}}
+</script>
+<style>
+body{font-family:'Inter',sans-serif;}
+.custom-scrollbar::-webkit-scrollbar{width:4px;}
+.custom-scrollbar::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:10px;}
+</style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
-<!-- Global Header -->
-<header class="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-primary/10 dark:border-primary/20 h-16 flex items-center px-6">
-<div class="flex items-center gap-3">
-<img src="images/logo.jpeg" alt="GORNHOM Innovation Ltd Logo" class="h-10 w-auto object-contain"/>
-<div class="flex flex-col">
-<h1 class="font-bold text-lg leading-none uppercase">
-    <span class="text-logo-green">GORNHOM</span> 
-    <span class="text-logo-red">INNOVATION</span> 
-    <span class="text-logo-black dark:text-slate-300">LTD</span>
-</h1>
-<p class="text-[10px] text-logo-blue font-semibold italic">Together For a Better Internet</p>
-</div>
-</div>
-<div class="ml-12 flex-1 max-w-md hidden md:block">
-<div class="relative group">
-<span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
-<input class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-slate-700 transition-all" placeholder="Search locations, IDs or status..." type="text"/>
-</div>
-</div>
-<div class="ml-auto flex items-center gap-4">
-<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg relative">
-<span class="material-icons text-xl">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
-</button>
-<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
-<div class="flex items-center gap-3 cursor-pointer group">
-<div class="text-right hidden sm:block">
-<p class="text-sm font-semibold leading-none">Admin User</p>
-<p class="text-xs text-slate-500 mt-1">Super Admin</p>
-</div>
-<img class="w-9 h-9 rounded-full border border-primary/20" data-alt="Admin user profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgHwfKVJsG7zTtoO5NIqd7YpVELmuTnv7j7EKjoIhy-ON3oAYarbrxuqSD6-kLgSmgR2MhwZJb85LCfcSIdDSMlFnyOZe7LmM2I3ZmxDBBuuXGIhgiQ-vAClFC-ufopipkh7Wpa8hhtikswTQztrYgp3zVNRDYuUvcWAT_1qcVupzngXAfpfVe-4iys8N_IG29aEvjPUa7BxflOt__4vP1_P8wekWERthxiaBTF0ZoBxwyIiFiSlL_cZEvgCJ2mr5ghpatyVYUs84"/>
-</div>
-</div>
+
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-primary/10 h-16 flex items-center px-6 gap-4">
+  <div class="flex items-center gap-3">
+    <img src="images/logo.jpeg" alt="Logo" class="h-10 w-auto object-contain"/>
+    <div class="flex flex-col">
+      <h1 class="font-bold text-lg leading-none uppercase"><span class="text-logo-green">GORNHOM</span> <span class="text-logo-red">INNOVATION</span> <span class="text-logo-black dark:text-slate-300">LTD</span></h1>
+      <p class="text-[10px] text-logo-blue font-semibold italic">Together For a Better Internet</p>
+    </div>
+  </div>
+  <div class="ml-8 flex-1 max-w-md hidden md:block">
+    <div class="relative">
+      <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+      <input id="searchInput" type="text" placeholder="Search locations or IDs..." class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary focus:bg-white transition-all"/>
+    </div>
+  </div>
+  <div class="ml-auto flex items-center gap-3">
+    <span id="headerStatus" class="px-2 py-1 bg-emerald-100 text-emerald-600 text-xs font-bold rounded flex items-center gap-1"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>LIVE</span>
+  </div>
 </header>
+
 <div class="flex min-h-[calc(100vh-4rem)]">
-<!-- Sidebar Navigation -->
-<aside class="w-64 bg-white dark:bg-slate-900 border-r border-primary/10 dark:border-primary/20 hidden lg:flex flex-col py-6">
-<nav class="flex-1 px-4 space-y-2">
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-primary/5 hover:text-primary transition-colors" href="admin.html">
-<span class="material-icons">dashboard</span>
-<span class="font-medium">Overview</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-logo-green to-logo-green/90 text-white shadow-lg shadow-logo-green/20" href="locations.html">
-<span class="material-icons">place</span>
-<span class="font-medium">Locations</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-primary/5 hover:text-primary transition-colors" href="users.html">
-<span class="material-icons">people</span>
-<span class="font-medium">Users</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-primary/5 hover:text-primary transition-colors" href="analytics.html">
-<span class="material-icons">payments</span>
-<span class="font-medium">Revenue</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-primary/5 hover:text-primary transition-colors" href="settings.html">
-<span class="material-icons">settings</span>
-<span class="font-medium">Settings</span>
-</a>
-</nav>
-<div class="px-6 mt-auto">
-<div class="bg-primary/10 dark:bg-primary/20 rounded-xl p-4">
-<p class="text-xs font-bold text-primary uppercase mb-2">System Status</p>
-<div class="flex items-center gap-2 mb-3">
-<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-<span class="text-xs font-medium">All nodes stable</span>
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white dark:bg-slate-900 border-r border-primary/10 hidden lg:flex flex-col py-6">
+    <nav class="flex-1 px-4 space-y-2">
+      <a href="admin.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-primary/5 hover:text-primary transition-colors"><span class="material-icons">dashboard</span><span class="font-medium">Overview</span></a>
+      <a href="locations.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-logo-green to-logo-green/90 text-white shadow-lg shadow-logo-green/20"><span class="material-icons">place</span><span class="font-medium">Locations</span></a>
+      <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-primary/5 hover:text-primary transition-colors"><span class="material-icons">people</span><span class="font-medium">Users</span></a>
+      <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-primary/5 hover:text-primary transition-colors"><span class="material-icons">bar_chart</span><span class="font-medium">Analytics</span></a>
+      <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 hover:bg-primary/5 hover:text-primary transition-colors"><span class="material-icons">settings</span><span class="font-medium">Settings</span></a>
+    </nav>
+    <div class="px-6 mt-auto">
+      <div class="bg-primary/10 rounded-xl p-4">
+        <p class="text-xs font-bold text-primary uppercase mb-2">System Status</p>
+        <div class="flex items-center gap-2 mb-3">
+          <div id="sidebarDot" class="w-2 h-2 rounded-full bg-slate-300"></div>
+          <span id="sidebarStatus" class="text-xs font-medium">Checking...</span>
+        </div>
+        <a href="support.html" class="block w-full py-2 bg-gradient-to-r from-logo-green to-logo-green/90 text-white text-xs font-bold rounded-lg text-center hover:from-logo-green/90 hover:to-logo-green transition-all">View Logs</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 p-6 overflow-x-hidden custom-scrollbar">
+
+    <!-- Page header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div>
+        <h2 class="text-2xl font-bold">Hotspot Locations</h2>
+        <p class="text-slate-500 mt-1">Manage and monitor all Wi-Fi nodes across your network.</p>
+      </div>
+      <button onclick="openAddModal()" class="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-logo-green to-logo-green/90 text-white font-bold rounded-lg shadow-lg shadow-logo-green/30 hover:from-logo-green/90 hover:to-logo-green transform hover:scale-105 active:scale-95 transition-all">
+        <span class="material-icons">add</span>Add New Hotspot
+      </button>
+    </div>
+
+    <!-- KPI cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/10 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center"><span class="material-icons text-primary">hub</span></div>
+          <span id="kpiTotalBadge" class="text-xs font-bold text-green-500">—</span>
+        </div>
+        <p class="text-slate-500 text-sm font-medium">Total Locations</p>
+        <h3 id="kpiTotal" class="text-2xl font-bold mt-1">—</h3>
+      </div>
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/10 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center"><span class="material-icons text-emerald-500">wifi</span></div>
+          <span id="kpiOnlineBadge" class="text-xs font-bold text-slate-500 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span><span id="kpiOnlineCount">—</span> Online</span>
+        </div>
+        <p class="text-slate-500 text-sm font-medium">Active Users</p>
+        <h3 id="kpiUsers" class="text-2xl font-bold mt-1">—</h3>
+      </div>
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/10 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center"><span class="material-icons text-amber-500">payments</span></div>
+          <span class="text-xs font-bold text-green-500 flex items-center gap-1"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>Live</span>
+        </div>
+        <p class="text-slate-500 text-sm font-medium">Total Revenue</p>
+        <h3 id="kpiRevenue" class="text-2xl font-bold mt-1">—</h3>
+      </div>
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/10 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center"><span class="material-icons text-red-500">wifi_off</span></div>
+        </div>
+        <p class="text-slate-500 text-sm font-medium">Offline Nodes</p>
+        <h3 id="kpiOffline" class="text-2xl font-bold mt-1 text-red-500">—</h3>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white dark:bg-slate-900 border border-primary/10 rounded-xl overflow-hidden shadow-sm">
+      <div class="p-4 border-b border-primary/10 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <button onclick="setFilter('all')" id="fAll" class="px-4 py-2 bg-primary/10 text-primary text-xs font-bold rounded-lg border border-primary/20">All Sites</button>
+          <button onclick="setFilter('online')" id="fOnline" class="px-4 py-2 text-slate-500 text-xs font-bold rounded-lg hover:bg-slate-100 transition-colors">Online Only</button>
+          <button onclick="setFilter('offline')" id="fOffline" class="px-4 py-2 text-slate-500 text-xs font-bold rounded-lg hover:bg-slate-100 transition-colors">Offline Only</button>
+        </div>
+        <p id="tableCount" class="text-sm text-slate-500"></p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 dark:bg-slate-800/50 text-[11px] uppercase tracking-wider text-slate-400 font-bold border-b border-primary/10">
+              <th class="px-6 py-4">Location Name</th>
+              <th class="px-6 py-4">Region</th>
+              <th class="px-6 py-4">Status</th>
+              <th class="px-6 py-4 text-center">Active Users</th>
+              <th class="px-6 py-4 text-right">Revenue</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="locationsTable" class="divide-y divide-primary/5">
+            <tr><td colspan="6" class="px-6 py-8 text-center text-sm text-slate-400">Loading locations...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
 </div>
-<button class="w-full py-2 bg-gradient-to-r from-logo-green to-logo-green/90 text-white text-xs font-bold rounded-lg hover:from-logo-green/90 hover:to-logo-green transition-all transform hover:scale-105 active:scale-95">View Logs</button>
+
+<!-- Add Hotspot Modal -->
+<div id="addModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+  <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl p-8">
+    <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><span class="material-icons text-logo-green">add_location</span>Add New Hotspot</h3>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Location Name</label>
+        <input id="newName" type="text" placeholder="e.g. Westlands Business Hub" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Region / City</label>
+        <input id="newRegion" type="text" placeholder="e.g. Nairobi" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"/>
+      </div>
+      <p id="addError" class="text-sm text-red-500 hidden"></p>
+    </div>
+    <div class="flex gap-3 mt-6">
+      <button onclick="closeAddModal()" class="flex-1 py-3 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors">Cancel</button>
+      <button onclick="addHotspot()" class="flex-1 py-3 bg-logo-green text-white rounded-lg text-sm font-bold hover:bg-logo-green/90 transition-colors">Add Hotspot</button>
+    </div>
+  </div>
 </div>
+
+<!-- Edit Modal -->
+<div id="editModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+  <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl p-8">
+    <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><span class="material-icons text-logo-green">edit_location</span>Edit Hotspot</h3>
+    <input type="hidden" id="editId"/>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Location Name</label>
+        <input id="editName" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary"/>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Status</label>
+        <select id="editStatus" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+          <option value="online">Online</option>
+          <option value="offline">Offline</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex gap-3 mt-6">
+      <button onclick="closeEditModal()" class="flex-1 py-3 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors">Cancel</button>
+      <button onclick="saveEdit()" class="flex-1 py-3 bg-logo-green text-white rounded-lg text-sm font-bold hover:bg-logo-green/90 transition-colors">Save Changes</button>
+    </div>
+  </div>
 </div>
-</aside>
-<!-- Main Content Area -->
-<main class="flex-1 p-6 overflow-x-hidden">
-<!-- Header Section -->
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-<div>
-<h2 class="text-2xl font-bold">Hotspot Locations</h2>
-<p class="text-slate-500 dark:text-slate-400 mt-1">Manage and monitor all Wi-Fi nodes across your network.</p>
-</div>
-<button class="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-logo-green to-logo-green/90 text-white font-bold rounded-lg shadow-lg shadow-logo-green/30 hover:from-logo-green/90 hover:to-logo-green transform hover:scale-105 active:scale-95 transition-all">
-<span class="material-icons">add</span>
-                    Add New Hotspot
-                </button>
-</div>
-<!-- Metrics Summary -->
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/10 dark:border-primary/20 shadow-sm">
-<div class="flex items-center justify-between mb-4">
-<div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-<span class="material-icons text-primary">hub</span>
-</div>
-<span class="text-xs font-bold text-green-500">+2 this month</span>
-</div>
-<p class="text-slate-500 text-sm font-medium">Total Locations</p>
-<h3 class="text-2xl font-bold mt-1">24</h3>
-</div>
-<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/10 dark:border-primary/20 shadow-sm">
-<div class="flex items-center justify-between mb-4">
-<div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
-<span class="material-icons text-emerald-500">wifi</span>
-</div>
-<div class="flex items-center gap-1">
-<span class="w-2 h-2 rounded-full bg-green-500"></span>
-<span class="text-xs font-bold text-slate-500">22 Online</span>
-</div>
-</div>
-<p class="text-slate-500 text-sm font-medium">Active Users</p>
-<h3 class="text-2xl font-bold mt-1">1,482</h3>
-</div>
-<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/10 dark:border-primary/20 shadow-sm">
-<div class="flex items-center justify-between mb-4">
-<div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
-<span class="material-icons text-amber-500">attach_money</span>
-</div>
-<span class="text-xs font-bold text-green-500">↑ 12%</span>
-</div>
-<p class="text-slate-500 text-sm font-medium">Daily Revenue</p>
-<h3 class="text-2xl font-bold mt-1">$1,245.80</h3>
-</div>
-<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-primary/10 dark:border-primary/20 shadow-sm">
-<div class="flex items-center justify-between mb-4">
-<div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-<span class="material-icons text-purple-500">signal_cellular_alt</span>
-</div>
-<span class="text-xs font-bold text-slate-500">Peak 14:00</span>
-</div>
-<p class="text-slate-500 text-sm font-medium">Avg. Network Load</p>
-<h3 class="text-2xl font-bold mt-1">64%</h3>
-</div>
-</div>
-<!-- Table Filters -->
-<div class="bg-white dark:bg-slate-900 border border-primary/10 dark:border-primary/20 rounded-xl overflow-hidden shadow-sm">
-<div class="p-4 border-b border-primary/10 dark:border-primary/20 flex flex-wrap items-center justify-between gap-4">
-<div class="flex items-center gap-2">
-<button class="px-4 py-2 bg-primary/10 text-primary text-xs font-bold rounded-lg border border-primary/20">All Sites</button>
-<button class="px-4 py-2 text-slate-500 text-xs font-bold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Online Only</button>
-<button class="px-4 py-2 text-slate-500 text-xs font-bold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Offline Only</button>
-</div>
-<div class="flex items-center gap-3">
-<span class="text-xs text-slate-500">Sort by:</span>
-<select class="bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-xs font-bold pr-8 focus:ring-1 focus:ring-primary">
-<option>Most Users</option>
-<option>Highest Revenue</option>
-<option>Name (A-Z)</option>
-<option>Status</option>
-</select>
-</div>
-</div>
-<!-- Locations Table -->
-<div class="overflow-x-auto">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-slate-50 dark:bg-slate-800/50 text-[11px] uppercase tracking-wider text-slate-400 font-bold border-b border-primary/10 dark:border-primary/20">
-<th class="px-6 py-4">Location Name</th>
-<th class="px-6 py-4">Status</th>
-<th class="px-6 py-4 text-center">Active Users</th>
-<th class="px-6 py-4 text-right">Daily Revenue</th>
-<th class="px-6 py-4 text-center">Avg Latency</th>
-<th class="px-6 py-4 text-right">Actions</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-primary/5 dark:divide-primary/10">
-<!-- Row 1 -->
-<tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group">
-<td class="px-6 py-4">
-<div class="flex flex-col">
-<span class="font-bold text-sm">Nairobi Central Hub</span>
-<span class="text-[10px] text-slate-400 mt-1 uppercase tracking-tight">ID: GH-NRB-001</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-[10px] font-bold rounded-full uppercase">
-<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                        Online
-                                    </span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-sm font-bold">412</span>
-</td>
-<td class="px-6 py-4 text-right">
-<span class="text-sm font-bold">$342.50</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-xs text-slate-500">24ms</span>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2">
-<button class="w-8 h-8 flex items-center justify-center bg-logo-green/10 text-logo-green rounded-lg hover:bg-logo-green hover:text-white transition-all transform hover:scale-110" title="View Analytics">
-<span class="material-icons text-sm">insights</span>
-</button>
-<button class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all" title="Edit Hotspot">
-<span class="material-icons text-sm">edit</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 2 -->
-<tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group">
-<td class="px-6 py-4">
-<div class="flex flex-col">
-<span class="font-bold text-sm">Mombasa Coastal Link</span>
-<span class="text-[10px] text-slate-400 mt-1 uppercase tracking-tight">ID: GH-MBA-042</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-[10px] font-bold rounded-full uppercase">
-<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                        Online
-                                    </span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-sm font-bold">289</span>
-</td>
-<td class="px-6 py-4 text-right">
-<span class="text-sm font-bold">$185.20</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-xs text-slate-500">42ms</span>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2">
-<button class="w-8 h-8 flex items-center justify-center bg-logo-green/10 text-logo-green rounded-lg hover:bg-logo-green hover:text-white transition-all transform hover:scale-110" title="View Analytics">
-<span class="material-icons text-sm">insights</span>
-</button>
-<button class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all" title="Edit Hotspot">
-<span class="material-icons text-sm">edit</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 3 - Offline -->
-<tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group">
-<td class="px-6 py-4">
-<div class="flex flex-col">
-<span class="font-bold text-sm">Kisumu West Station</span>
-<span class="text-[10px] text-slate-400 mt-1 uppercase tracking-tight">ID: GH-KIS-109</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-[10px] font-bold rounded-full uppercase">
-<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                                        Offline
-                                    </span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-sm font-bold text-slate-400">0</span>
-</td>
-<td class="px-6 py-4 text-right">
-<span class="text-sm font-bold text-slate-400">$0.00</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-xs text-red-500 font-bold">TIMEOUT</span>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2">
-<button class="w-8 h-8 flex items-center justify-center bg-logo-green/10 text-logo-green rounded-lg hover:bg-logo-green hover:text-white transition-all transform hover:scale-110" title="View Analytics">
-<span class="material-icons text-sm">insights</span>
-</button>
-<button class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all" title="Edit Hotspot">
-<span class="material-icons text-sm">edit</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 4 -->
-<tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group">
-<td class="px-6 py-4">
-<div class="flex flex-col">
-<span class="font-bold text-sm">Eldoret Tech Park</span>
-<span class="text-[10px] text-slate-400 mt-1 uppercase tracking-tight">ID: GH-ELD-215</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-[10px] font-bold rounded-full uppercase">
-<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                        Online
-                                    </span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-sm font-bold">156</span>
-</td>
-<td class="px-6 py-4 text-right">
-<span class="text-sm font-bold">$112.45</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="text-xs text-slate-500">31ms</span>
-</td>
-<td class="px-6 py-4 text-right">
-<div class="flex items-center justify-end gap-2">
-<button class="w-8 h-8 flex items-center justify-center bg-logo-green/10 text-logo-green rounded-lg hover:bg-logo-green hover:text-white transition-all transform hover:scale-110" title="View Analytics">
-<span class="material-icons text-sm">insights</span>
-</button>
-<button class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all" title="Edit Hotspot">
-<span class="material-icons text-sm">edit</span>
-</button>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="p-6 border-t border-primary/10 dark:border-primary/20 flex items-center justify-between">
-<p class="text-sm text-slate-500">Showing <span class="font-bold text-slate-700 dark:text-slate-200">1-4</span> of 24 locations</p>
-<div class="flex items-center gap-2">
-<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-400">
-<span class="material-icons text-lg">chevron_left</span>
-</button>
-<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-sm shadow-md">1</button>
-<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm font-bold">2</button>
-<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm font-bold">3</button>
-<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-400">
-<span class="material-icons text-lg">chevron_right</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Recently Active Users (Small Grid) -->
-<div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-<div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-primary/10 dark:border-primary/20 rounded-xl p-6">
-<div class="flex items-center justify-between mb-6">
-<h4 class="font-bold">Regional Distribution</h4>
-<button class="text-xs font-bold text-primary flex items-center gap-1">
-                            Full Map <span class="material-icons text-xs">arrow_forward</span>
-</button>
-</div>
-<div class="aspect-video bg-slate-100 dark:bg-slate-800 rounded-lg relative overflow-hidden group">
-<div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&amp;fit=crop&amp;q=80&amp;w=1000')] bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-700" data-alt="Satellite map view of the region"></div>
-<!-- Mock Map Markers -->
-<div class="absolute top-1/4 left-1/3 w-3 h-3 bg-primary rounded-full ring-4 ring-primary/20 animate-pulse"></div>
-<div class="absolute top-1/2 left-1/2 w-3 h-3 bg-primary rounded-full ring-4 ring-primary/20"></div>
-<div class="absolute bottom-1/4 right-1/4 w-3 h-3 bg-red-500 rounded-full ring-4 ring-red-500/20"></div>
-</div>
-</div>
-<div class="bg-white dark:bg-slate-900 border border-primary/10 dark:border-primary/20 rounded-xl p-6">
-<h4 class="font-bold mb-6">Device Breakdown</h4>
-<div class="space-y-4">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-3">
-<span class="material-icons text-slate-400">smartphone</span>
-<span class="text-sm font-medium">Mobile Devices</span>
-</div>
-<span class="text-sm font-bold">78%</span>
-</div>
-<div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-<div class="w-[78%] h-full bg-primary"></div>
-</div>
-<div class="flex items-center justify-between mt-6">
-<div class="flex items-center gap-3">
-<span class="material-icons text-slate-400">laptop</span>
-<span class="text-sm font-medium">Laptops</span>
-</div>
-<span class="text-sm font-bold">15%</span>
-</div>
-<div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-<div class="w-[15%] h-full bg-blue-400"></div>
-</div>
-<div class="flex items-center justify-between mt-6">
-<div class="flex items-center gap-3">
-<span class="material-icons text-slate-400">tablet</span>
-<span class="text-sm font-medium">Tablets</span>
-</div>
-<span class="text-sm font-bold">7%</span>
-</div>
-<div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-<div class="w-[7%] h-full bg-slate-400"></div>
-</div>
-</div>
-<div class="mt-8 pt-6 border-t border-primary/10 dark:border-primary/20">
-<p class="text-[11px] text-slate-400 font-bold uppercase mb-2">Total Managed Data (24h)</p>
-<h5 class="text-xl font-bold">1.28 TB</h5>
-</div>
-</div>
-</div>
-</main>
-</div>
-</body></html>
+
+<script>
+(function(){
+  const API = 'http://localhost:3000/api';
+  let allLocations = [];
+  let currentFilter = 'all';
+
+  async function load() {
+    try {
+      const res = await fetch(`${API}/locations`);
+      const data = await res.json();
+      allLocations = data.locations || [];
+      const s = data.summary || {};
+
+      // KPIs
+      document.getElementById('kpiTotal').textContent = s.total ?? '—';
+      document.getElementById('kpiTotalBadge').textContent = s.online + ' online';
+      document.getElementById('kpiOnlineCount').textContent = s.online ?? '—';
+      document.getElementById('kpiUsers').textContent = s.activeUsers ?? '—';
+      document.getElementById('kpiRevenue').textContent = 'KES ' + Number(s.totalRevenue||0).toLocaleString();
+      document.getElementById('kpiOffline').textContent = s.offline ?? '—';
+
+      // Sidebar status
+      const dot = document.getElementById('sidebarDot');
+      const statusTxt = document.getElementById('sidebarStatus');
+      if (s.offline > 0) {
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+        statusTxt.textContent = s.offline + ' node(s) offline';
+      } else {
+        dot.className = 'w-2 h-2 rounded-full bg-green-500 animate-pulse';
+        statusTxt.textContent = 'All nodes stable';
+      }
+
+      render();
+    } catch(e) {
+      document.getElementById('locationsTable').innerHTML =
+        '<tr><td colspan="6" class="px-6 py-8 text-center text-sm text-red-400">Could not reach backend. Is the server running?</td></tr>';
+    }
+  }
+
+  function render() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = allLocations.filter(l => {
+      const matchFilter = currentFilter === 'all' || l.status === currentFilter;
+      const matchSearch = !search || l.name.toLowerCase().includes(search) || l.id.toLowerCase().includes(search) || l.region.toLowerCase().includes(search);
+      return matchFilter && matchSearch;
+    });
+
+    document.getElementById('tableCount').textContent = `Showing ${filtered.length} of ${allLocations.length} locations`;
+
+    const tbody = document.getElementById('locationsTable');
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-sm text-slate-400">No locations found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(l => {
+      const isOnline = l.status === 'online';
+      const statusBadge = isOnline
+        ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-full uppercase"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>Online</span>`
+        : `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-100 text-red-600 text-[10px] font-bold rounded-full uppercase"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>Offline</span>`;
+
+      return `<tr class="hover:bg-primary/5 transition-colors">
+        <td class="px-6 py-4">
+          <div class="flex flex-col">
+            <span class="font-bold text-sm">${l.name}</span>
+            <span class="text-[10px] text-slate-400 mt-1 uppercase tracking-tight">ID: ${l.id}</span>
+          </div>
+        </td>
+        <td class="px-6 py-4 text-sm text-slate-500">${l.region}</td>
+        <td class="px-6 py-4">${statusBadge}</td>
+        <td class="px-6 py-4 text-center">
+          <span class="text-sm font-bold ${isOnline ? '' : 'text-slate-400'}">${isOnline ? l.activeUsers : 0}</span>
+        </td>
+        <td class="px-6 py-4 text-right">
+          <span class="text-sm font-bold ${isOnline ? '' : 'text-slate-400'}">
+            ${isOnline ? 'KES ' + Number(l.dailyRevenue||0).toLocaleString() : '—'}
+          </span>
+        </td>
+        <td class="px-6 py-4 text-right">
+          <div class="flex items-center justify-end gap-2">
+            <button onclick="openEditModal('${l.id}')" class="w-8 h-8 flex items-center justify-center bg-logo-green/10 text-logo-green rounded-lg hover:bg-logo-green hover:text-white transition-all" title="Edit">
+              <span class="material-icons text-sm">edit</span>
+            </button>
+            <button onclick="toggleStatus('${l.id}','${isOnline ? 'offline' : 'online'}')" class="w-8 h-8 flex items-center justify-center ${isOnline ? 'text-amber-500 hover:bg-amber-50' : 'text-emerald-500 hover:bg-emerald-50'} rounded-lg transition-all" title="${isOnline ? 'Set Offline' : 'Set Online'}">
+              <span class="material-icons text-sm">${isOnline ? 'wifi_off' : 'wifi'}</span>
+            </button>
+            <button onclick="deleteLocation('${l.id}')" class="w-8 h-8 flex items-center justify-center text-red-400 hover:bg-red-50 rounded-lg transition-all" title="Delete">
+              <span class="material-icons text-sm">delete</span>
+            </button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.setFilter = function(f) {
+    currentFilter = f;
+    ['all','online','offline'].forEach(id => {
+      const btn = document.getElementById('f' + id.charAt(0).toUpperCase() + id.slice(1));
+      if (btn) btn.className = id === f
+        ? 'px-4 py-2 bg-primary/10 text-primary text-xs font-bold rounded-lg border border-primary/20'
+        : 'px-4 py-2 text-slate-500 text-xs font-bold rounded-lg hover:bg-slate-100 transition-colors';
+    });
+    render();
+  };
+
+  window.openAddModal = () => {
+    document.getElementById('newName').value = '';
+    document.getElementById('newRegion').value = '';
+    document.getElementById('addError').classList.add('hidden');
+    document.getElementById('addModal').classList.remove('hidden');
+  };
+  window.closeAddModal = () => document.getElementById('addModal').classList.add('hidden');
+
+  window.addHotspot = async function() {
+    const name = document.getElementById('newName').value.trim();
+    const region = document.getElementById('newRegion').value.trim();
+    const errEl = document.getElementById('addError');
+    if (!name || !region) {
+      errEl.textContent = 'Both fields are required.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    try {
+      const res = await fetch(`${API}/locations`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({name, region})
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+      closeAddModal();
+      load();
+    } catch(e) {
+      errEl.textContent = e.message || 'Failed to add hotspot.';
+      errEl.classList.remove('hidden');
+    }
+  };
+
+  window.openEditModal = function(id) {
+    const loc = allLocations.find(l => l.id === id);
+    if (!loc) return;
+    document.getElementById('editId').value = id;
+    document.getElementById('editName').value = loc.name;
+    document.getElementById('editStatus').value = loc.status;
+    document.getElementById('editModal').classList.remove('hidden');
+  };
+  window.closeEditModal = () => document.getElementById('editModal').classList.add('hidden');
+
+  window.saveEdit = async function() {
+    const id = document.getElementById('editId').value;
+    const name = document.getElementById('editName').value.trim();
+    const status = document.getElementById('editStatus').value;
+    try {
+      await fetch(`${API}/locations/${id}`, {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({name, status})
+      });
+      closeEditModal();
+      load();
+    } catch(e) { alert('Failed to update.'); }
+  };
+
+  window.toggleStatus = async function(id, newStatus) {
+    try {
+      await fetch(`${API}/locations/${id}`, {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({status: newStatus})
+      });
+      load();
+    } catch(e) { alert('Failed to update status.'); }
+  };
+
+  window.deleteLocation = async function(id) {
+    if (!confirm('Delete this hotspot? This cannot be undone.')) return;
+    try {
+      await fetch(`${API}/locations/${id}`, {method:'DELETE'});
+      load();
+    } catch(e) { alert('Failed to delete.'); }
+  };
+
+  document.getElementById('searchInput').addEventListener('input', render);
+  load();
+  setInterval(load, 15000);
+})();
+</script>
+</body>
+</html>
