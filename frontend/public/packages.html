@@ -211,149 +211,108 @@
 </div>
 </footer>
 <script>document.getElementById('footerYear').textContent = '© ' + new Date().getFullYear() + ' GORNHOM INNOVATION LTD. All Rights Reserved.';</script>
-<!-- Payment Modal - Multi-step STK Push Flow -->
-<div id="paymentModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center px-4 bg-black/70 backdrop-blur-md" style="pointer-events: auto;">
-<div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 scale-100 relative z-10" style="pointer-events: auto;">
-<!-- Step 1: Phone Number Entry -->
-<div id="stepPhone" class="payment-step">
-<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-gradient-to-r from-logo-green/5 to-transparent">
-<h3 class="font-bold text-xl flex items-center gap-2">
-<span class="material-icons text-logo-green">payments</span>
-Confirm Purchase
-</h3>
-<button id="closeModalBtn" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-<span class="material-icons">close</span>
-</button>
-</div>
-<div class="p-8">
-<div class="text-center mb-8">
-<div id="modalPackageName" class="inline-block px-4 py-2 bg-logo-green/10 text-logo-green rounded-full text-xs font-bold uppercase mb-3">Package</div>
-<div id="modalPackagePrice" class="text-4xl font-extrabold text-slate-900 dark:text-white mb-2">KES 0</div>
-                    <p class="text-sm text-slate-500">Enter your phone number</p>
-                    <div id="testModeWarning" class="mt-2 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg hidden">
-                    <p class="text-xs text-amber-800 dark:text-amber-200 mb-1">
-                    <span class="font-semibold">⚠️ Test Mode Detected:</span>
-                    </p>
-                    <p class="text-xs text-amber-700 dark:text-amber-300">
-                    You're using a test key. Paystack requires test mobile money numbers in test mode. To use real phone numbers, switch to your <strong>LIVE key (pk_live_...)</strong> in the code.
-                    </p>
-                    </div>
-</div>
-<div class="space-y-6">
-<div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-3">Phone Number</label>
-<div class="relative">
-<span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-lg">+254</span>
-<input id="mpesaPhone" class="w-full pl-20 pr-4 py-4 bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-logo-green focus:border-logo-green font-semibold tracking-widest text-lg" placeholder="712345678" type="tel" inputmode="tel" autocomplete="tel" maxlength="9"/>
-</div>
-</div>
-<button id="initiatePaymentBtn" type="button" class="w-full py-4 bg-gradient-to-r from-logo-green to-logo-green/90 text-white font-bold rounded-xl shadow-lg shadow-logo-green/30 hover:from-logo-green/90 hover:to-logo-green transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-lg cursor-pointer" style="pointer-events: auto; z-index: 20;">
-                    <span class="material-icons">payment</span>
-                    Proceed to Payment
-</button>
-<p id="paymentError" class="text-center text-sm text-rose-600 hidden mt-2"></p>
-</div>
-</div>
-</div>
+<!-- Payment Modal -->
+<div id="paymentModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center px-4 py-6 bg-black/70 backdrop-blur-sm">
+<div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
 
-<!-- Step 2: Sending STK Push Loading -->
-<div id="stepLoading" class="payment-step hidden">
-<div class="p-8 text-center">
-<div class="mb-6">
-<div class="w-24 h-24 mx-auto bg-logo-green/10 rounded-full flex items-center justify-center mb-4 animate-pulse">
-<span class="material-icons text-5xl text-logo-green">phone_android</span>
-</div>
-                    <h3 class="text-2xl font-bold mb-2">Processing Payment</h3>
-                    <p class="text-slate-500 dark:text-slate-400 mb-4">Please complete the payment in the popup window</p>
-                    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
-                    <p class="text-sm text-blue-700 dark:text-blue-300 font-medium mb-2">💳 What to do:</p>
-                    <ol class="text-xs text-blue-600 dark:text-blue-400 text-left space-y-1 list-decimal list-inside">
-                    <li>Complete payment in the popup window</li>
-                    <li>Follow the payment instructions</li>
-                    <li>Wait for confirmation (this page will update automatically)</li>
-                    </ol>
-                    </div>
-</div>
-<div class="space-y-3">
-<div class="flex items-center justify-center gap-2 text-sm text-slate-400">
-<span class="w-2 h-2 bg-logo-green rounded-full animate-pulse"></span>
-<span id="loadingStatus">Waiting for payment confirmation...</span>
-</div>
-<div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
-<div class="bg-gradient-to-r from-logo-green to-logo-green/80 h-full rounded-full animate-pulse" style="width: 60%;"></div>
-</div>
-<button id="cancelPaymentBtn" type="button" class="mt-4 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium">
-Cancel Payment
-</button>
-</div>
-</div>
-</div>
+  <!-- Step 1: Phone Entry -->
+  <div id="stepPhone" class="payment-step flex flex-col overflow-y-auto">
+    <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center flex-shrink-0">
+      <h3 class="font-bold text-lg flex items-center gap-2">
+        <span class="material-icons text-logo-green text-xl">payments</span>Confirm Purchase
+      </h3>
+      <button id="closeModalBtn" type="button" class="text-slate-400 hover:text-slate-600 transition-colors p-1">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <div class="px-6 py-5 flex-1">
+      <div class="text-center mb-5">
+        <div id="modalPackageName" class="inline-block px-3 py-1 bg-logo-green/10 text-logo-green rounded-full text-xs font-bold uppercase mb-2">Package</div>
+        <div id="modalPackagePrice" class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">KES 0</div>
+        <p class="text-sm text-slate-500">Enter your M-Pesa phone number</p>
+        <div id="testModeWarning" class="mt-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg hidden">
+          <p class="text-xs text-amber-800"><span class="font-semibold">⚠️ Test Mode:</span> Use test mobile numbers only.</p>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Phone Number</label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-semibold text-sm">+254</span>
+            <input id="mpesaPhone" class="w-full pl-16 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-logo-green focus:border-logo-green font-semibold text-base" placeholder="712345678" type="tel" inputmode="tel" autocomplete="tel" maxlength="9"/>
+          </div>
+        </div>
+        <button id="initiatePaymentBtn" type="button" class="w-full py-3 bg-gradient-to-r from-logo-green to-logo-green/90 text-white font-bold rounded-xl shadow-lg hover:from-logo-green/90 hover:to-logo-green transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <span class="material-icons text-lg">payment</span>Proceed to Payment
+        </button>
+        <p id="paymentError" class="text-center text-sm text-rose-600 hidden"></p>
+      </div>
+    </div>
+  </div>
 
-<!-- Step 3: PIN Entry -->
-<div id="stepPIN" class="payment-step hidden">
-<div class="p-6 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-[#49B04D]/5 to-transparent">
-<h3 class="font-bold text-xl flex items-center gap-2">
-<span class="material-icons text-[#49B04D]">lock</span>
-Enter M-Pesa PIN
-</h3>
-</div>
-<div class="p-8">
-<div class="text-center mb-8">
-<div class="w-20 h-20 mx-auto bg-[#49B04D]/10 rounded-full flex items-center justify-center mb-4">
-<span class="material-icons text-4xl text-[#49B04D]">security</span>
-</div>
-<p class="text-sm text-slate-500 dark:text-slate-400 mb-2">Enter your 4-digit M-Pesa PIN</p>
-<p id="pinPhoneDisplay" class="text-xs text-slate-400">+254 7XX XXX XXX</p>
-</div>
-<div class="space-y-6">
-<div>
-<label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-3">M-Pesa PIN</label>
-<div class="relative">
-<input id="mpesaPIN" class="w-full px-4 py-4 bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-[#49B04D] focus:border-[#49B04D] font-bold tracking-[0.5em] text-center text-2xl" type="password" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="off"/>
-</div>
-<p class="text-xs text-slate-400 mt-2 text-center">Your PIN is encrypted and secure</p>
-</div>
-<button id="confirmPINBtn" type="button" class="w-full py-4 bg-gradient-to-r from-[#49B04D] to-[#49B04D]/90 text-white font-bold rounded-xl shadow-lg shadow-[#49B04D]/30 hover:from-[#49B04D]/90 hover:to-[#49B04D] transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-lg">
-<span class="material-icons">check_circle</span>
-Confirm Payment
-</button>
-<p id="pinError" class="text-center text-sm text-rose-600 hidden mt-2"></p>
-<button id="cancelPINBtn" type="button" class="w-full py-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-sm font-medium">
-Cancel
-</button>
-</div>
-</div>
-</div>
+  <!-- Step 2: Loading -->
+  <div id="stepLoading" class="payment-step hidden px-6 py-8 text-center">
+    <div class="w-20 h-20 mx-auto bg-logo-green/10 rounded-full flex items-center justify-center mb-4 animate-pulse">
+      <span class="material-icons text-4xl text-logo-green">phone_android</span>
+    </div>
+    <h3 class="text-xl font-bold mb-2">Processing Payment</h3>
+    <p class="text-slate-500 text-sm mb-4">Complete the payment in the popup window</p>
+    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4 text-left">
+      <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold mb-1">What to do:</p>
+      <ol class="text-xs text-blue-600 dark:text-blue-400 space-y-1 list-decimal list-inside">
+        <li>Complete payment in the popup</li>
+        <li>Wait for confirmation</li>
+      </ol>
+    </div>
+    <div class="flex items-center justify-center gap-2 text-sm text-slate-400 mb-3">
+      <span class="w-2 h-2 bg-logo-green rounded-full animate-pulse"></span>
+      <span id="loadingStatus">Waiting for confirmation...</span>
+    </div>
+    <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden mb-4">
+      <div class="bg-logo-green h-full rounded-full animate-pulse" style="width:60%"></div>
+    </div>
+    <button id="cancelPaymentBtn" type="button" class="text-sm text-slate-400 hover:text-slate-600 font-medium">Cancel</button>
+  </div>
 
-<!-- Step 4: Success -->
-<div id="stepSuccess" class="payment-step hidden">
-<div class="p-8 text-center">
-<div class="mb-6">
-<div class="w-24 h-24 mx-auto bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mb-4 animate-bounce">
-<span class="material-icons text-5xl text-emerald-600 dark:text-emerald-400">check_circle</span>
-</div>
-<h3 class="text-2xl font-bold mb-2 text-emerald-600 dark:text-emerald-400">Payment Successful!</h3>
-<p class="text-slate-500 dark:text-slate-400 mb-4">Your internet package has been activated</p>
-</div>
-<div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-6 mb-6">
-<div class="flex justify-between items-center mb-2">
-<span class="text-sm text-slate-500">Package:</span>
-<span id="successPackageName" class="text-sm font-bold">-</span>
-</div>
-<div class="flex justify-between items-center mb-2">
-<span class="text-sm text-slate-500">Amount:</span>
-<span id="successAmount" class="text-sm font-bold">-</span>
-</div>
-<div class="flex justify-between items-center">
-<span class="text-sm text-slate-500">Transaction ID:</span>
-<span id="transactionID" class="text-xs font-mono text-slate-400">TXN-XXXXX</span>
-</div>
-</div>
-<button id="goToSessionBtn" type="button" class="w-full py-4 bg-gradient-to-r from-logo-green to-logo-green/90 text-white font-bold rounded-xl shadow-lg shadow-logo-green/30 hover:from-logo-green/90 hover:to-logo-green transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 text-lg">
-<span class="material-icons">wifi</span>
-Start Browsing
-</button>
-</div>
+  <!-- Step 3: PIN (hidden — user enters on phone) -->
+  <div id="stepPIN" class="payment-step hidden px-6 py-8 text-center">
+    <div class="w-16 h-16 mx-auto bg-logo-green/10 rounded-full flex items-center justify-center mb-4">
+      <span class="material-icons text-3xl text-logo-green">security</span>
+    </div>
+    <p class="text-sm text-slate-500 mb-1">Enter your M-Pesa PIN on your phone</p>
+    <p id="pinPhoneDisplay" class="text-xs text-slate-400 mb-4">+254 7XX XXX XXX</p>
+    <input id="mpesaPIN" class="hidden" type="password" inputmode="numeric" maxlength="4" autocomplete="off"/>
+    <p id="pinError" class="text-sm text-rose-600 hidden mb-2"></p>
+    <button id="confirmPINBtn" type="button" class="w-full py-3 bg-logo-green text-white font-bold rounded-xl mb-2">Confirm</button>
+    <button id="cancelPINBtn" type="button" class="w-full py-2 text-slate-500 text-sm font-medium">Cancel</button>
+  </div>
+
+  <!-- Step 4: Success -->
+  <div id="stepSuccess" class="payment-step hidden px-6 py-8 text-center">
+    <div class="w-20 h-20 mx-auto bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mb-4 animate-bounce">
+      <span class="material-icons text-4xl text-emerald-600">check_circle</span>
+    </div>
+    <h3 class="text-xl font-bold mb-1 text-emerald-600 dark:text-emerald-400">Payment Successful!</h3>
+    <p class="text-slate-500 text-sm mb-5">Your internet package has been activated</p>
+    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 mb-5 text-left space-y-2">
+      <div class="flex justify-between items-center">
+        <span class="text-sm text-slate-500">Package</span>
+        <span id="successPackageName" class="text-sm font-bold">-</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-sm text-slate-500">Amount</span>
+        <span id="successAmount" class="text-sm font-bold">-</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-sm text-slate-500">Transaction ID</span>
+        <span id="transactionID" class="text-xs font-mono text-slate-400 truncate max-w-[160px]">-</span>
+      </div>
+    </div>
+    <button id="goToSessionBtn" type="button" class="w-full py-3 bg-gradient-to-r from-logo-green to-logo-green/90 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2">
+      <span class="material-icons">wifi</span>Start Browsing
+    </button>
+  </div>
+
 </div>
 </div>
 
