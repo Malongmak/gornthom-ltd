@@ -236,7 +236,31 @@
 
   // Poll backend for live status every 30s
   async function checkStatus() {
-    if (!token) return;
+    if (!token) {
+      // No token — try to reconnect by phone number
+      const phone = sessionStorage.getItem('gh_msisdn') || sessionStorage.getItem('gh_payment_phone');
+      if (phone) {
+        try {
+          const res = await fetch(`${API_BASE_URL}/connection/reconnect`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phoneNumber: phone })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success) {
+              sessionStorage.setItem('gh_connection_token', data.connectionToken);
+              sessionStorage.setItem('gh_connection_expiry', data.expiresAt);
+              sessionStorage.setItem('gh_connection_active', 'true');
+              // Reload to pick up new token and expiry
+              window.location.reload();
+              return;
+            }
+          }
+        } catch (e) { /* network error */ }
+      }
+      return;
+    }
     try {
       const res = await fetch(`${API_BASE_URL}/connection/status?token=${token}`);
       if (res.ok) {

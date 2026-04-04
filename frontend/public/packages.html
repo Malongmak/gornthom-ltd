@@ -843,7 +843,7 @@ Start Browsing
         packageCurrency: packageInfo.currency,
         durationMinutes: durationMinutes,
         expiryTime: expiryTime.toISOString(),
-        deviceId: sessionStorage.getItem("gh_device_id") || "unknown",
+        deviceId: sessionStorage.getItem("gh_device_id") || navigator.userAgent.slice(0, 50),
         userEmail: getLogin().user || BUSINESS_EMAIL,
         paymentMethod: "paystack"
       };
