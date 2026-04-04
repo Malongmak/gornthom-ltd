@@ -194,14 +194,13 @@
 <div class="p-3 bg-gradient-to-br from-logo-green to-logo-green/80 rounded-xl shadow-md">
 <span class="material-icons-outlined text-white text-2xl">payments</span>
 </div>
-<span class="text-emerald-500 text-xs font-bold flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-full">
-<span class="material-icons-outlined text-xs">trending_up</span>
-                                12.5%
-                            </span>
+<span id="kpiRevenueTrend" class="text-emerald-500 text-xs font-bold flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-full">
+<span class="material-icons-outlined text-xs">trending_up</span>Live
+</span>
 </div>
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Total Revenue</p>
-<h3 class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white bg-gradient-to-r from-logo-green to-logo-green/70 bg-clip-text text-transparent" data-stat="revenue">$24,560.00</h3>
-<p class="text-[10px] text-slate-400 mt-3 font-semibold">VS LAST 30 DAYS</p>
+<h3 id="kpiRevenue" class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white bg-gradient-to-r from-logo-green to-logo-green/70 bg-clip-text text-transparent">—</h3>
+<p class="text-[10px] text-slate-400 mt-3 font-semibold">ALL TIME</p>
 </div>
 <div class="kpi-card bg-gradient-to-br from-white to-blue-50 dark:from-slate-900 dark:to-blue-900/10 p-6 rounded-2xl border-2 border-blue-200 dark:border-blue-800/30 shadow-lg hover:shadow-xl">
 <div class="flex justify-between items-start mb-4">
@@ -209,12 +208,11 @@
 <span class="material-icons-outlined text-white text-2xl">group</span>
 </div>
 <span class="text-emerald-500 text-xs font-bold flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-full">
-<span class="material-icons-outlined text-xs">trending_up</span>
-                                8.2%
-                            </span>
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>Live
+</span>
 </div>
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Active Users</p>
-<h3 class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white" data-stat="active-users">1,284</h3>
+<h3 id="kpiActiveUsers" class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white">—</h3>
 <p class="text-[10px] text-slate-400 mt-3 font-semibold">REAL-TIME CONNECTED</p>
 </div>
 <div class="kpi-card bg-gradient-to-br from-white to-purple-50 dark:from-slate-900 dark:to-purple-900/10 p-6 rounded-2xl border-2 border-purple-200 dark:border-purple-800/30 shadow-lg hover:shadow-xl">
@@ -222,27 +220,23 @@
 <div class="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-md">
 <span class="material-icons-outlined text-white text-2xl">router</span>
 </div>
-<span class="text-slate-400 text-xs font-bold flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full">
-                                0.0%
-                            </span>
+<span class="text-emerald-500 text-xs font-bold flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-full">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>Live
+</span>
 </div>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Hotspots</p>
-<h3 class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white">42</h3>
-<p class="text-[10px] text-slate-400 mt-3 font-semibold">38 ONLINE / 4 OFFLINE</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Total Sessions</p>
+<h3 id="kpiTotalSessions" class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white">—</h3>
+<p id="kpiSessionsSub" class="text-[10px] text-slate-400 mt-3 font-semibold">ACTIVE / EXPIRED</p>
 </div>
 <div class="kpi-card bg-gradient-to-br from-white to-amber-50 dark:from-slate-900 dark:to-amber-900/10 p-6 rounded-2xl border-2 border-amber-200 dark:border-amber-800/30 shadow-lg hover:shadow-xl">
 <div class="flex justify-between items-start mb-4">
 <div class="p-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl shadow-md">
-<span class="material-icons-outlined text-white text-2xl">receipt_long</span>
+<span class="material-icons-outlined text-white text-2xl">schedule</span>
 </div>
-<span class="text-rose-500 text-xs font-bold flex items-center gap-1 bg-rose-50 dark:bg-rose-900/30 px-2 py-1 rounded-full">
-<span class="material-icons-outlined text-xs">trending_down</span>
-                                3.1%
-                            </span>
 </div>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Recent Payments</p>
-<h3 class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white">142</h3>
-<p class="text-[10px] text-slate-400 mt-3 font-semibold">LAST 24 HOURS</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Server Uptime</p>
+<h3 id="kpiUptime" class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white">—</h3>
+<p class="text-[10px] text-slate-400 mt-3 font-semibold">HH:MM:SS</p>
 </div>
 </div>
 <!-- Main Grid -->
@@ -263,92 +257,31 @@ Revenue Trends
 <div class="p-6 flex-1 flex flex-col justify-end">
 <!-- Simulated Chart -->
 <div class="h-64 w-full relative group">
-<div class="absolute inset-0 flex items-end justify-between gap-1.5">
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/40 to-logo-green/20 rounded-t-lg h-[30%] hover:from-logo-green/60 hover:to-logo-green/40 transition-all cursor-pointer relative border-t-2 border-logo-green/50">
-<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">$450</div>
-</div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/50 to-logo-green/30 rounded-t-lg h-[45%] hover:from-logo-green/70 hover:to-logo-green/50 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/40 to-logo-green/20 rounded-t-lg h-[35%] hover:from-logo-green/60 hover:to-logo-green/40 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/60 to-logo-green/40 rounded-t-lg h-[60%] hover:from-logo-green/80 hover:to-logo-green/60 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/70 to-logo-green/50 rounded-t-lg h-[75%] hover:from-logo-green/90 hover:to-logo-green/70 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/40 to-logo-green/20 rounded-t-lg h-[40%] hover:from-logo-green/60 hover:to-logo-green/40 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/80 to-logo-green/60 rounded-t-lg h-[85%] hover:from-logo-green/100 hover:to-logo-green/80 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/60 to-logo-green/40 rounded-t-lg h-[55%] hover:from-logo-green/80 hover:to-logo-green/60 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/50 to-logo-green/30 rounded-t-lg h-[45%] hover:from-logo-green/70 hover:to-logo-green/50 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/90 to-logo-green/70 rounded-t-lg h-[95%] hover:from-logo-green/100 hover:to-logo-green/90 transition-all cursor-pointer border-t-2 border-logo-green/50 pulse-glow"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/70 to-logo-green/50 rounded-t-lg h-[70%] hover:from-logo-green/90 hover:to-logo-green/70 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/50 to-logo-green/30 rounded-t-lg h-[50%] hover:from-logo-green/70 hover:to-logo-green/50 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/80 to-logo-green/60 rounded-t-lg h-[80%] hover:from-logo-green/100 hover:to-logo-green/80 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
-<div class="chart-bar w-full bg-gradient-to-t from-logo-green/60 to-logo-green/40 rounded-t-lg h-[65%] hover:from-logo-green/80 hover:to-logo-green/60 transition-all cursor-pointer border-t-2 border-logo-green/50"></div>
+<div id="chartBars" class="absolute inset-0 flex items-end justify-between gap-1.5">
+<!-- bars rendered by JS -->
 </div>
 <!-- Decorative Line -->
 <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="none">
 <path d="M0 200 Q 50 180, 100 150 T 200 100 T 300 120 T 400 80 T 500 50 T 600 90 T 700 30" fill="none" stroke="#22c55e" stroke-width="3" stroke-dasharray="5,5" opacity="0.3"></path>
 </svg>
 </div>
-<div class="flex justify-between mt-4 text-[10px] text-slate-400 font-bold tracking-widest uppercase">
-<span>01 May</span>
-<span>07 May</span>
-<span>14 May</span>
-<span>21 May</span>
-<span>28 May</span>
-<span>31 May</span>
+<div id="chartLabels" class="flex justify-between mt-4 text-[10px] text-slate-400 font-bold tracking-widest uppercase">
+<!-- labels rendered by JS -->
 </div>
 </div>
 </div>
 <!-- Side Stats/Info -->
 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
-<h3 class="font-bold text-slate-900 dark:text-white mb-6">Popular Locations</h3>
-<div class="space-y-6">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
-<img alt="Cafe" class="w-full h-full object-cover opacity-80" data-alt="Modern cafe interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJd5B-Okk28IfUoV5b_ZUfP_FN1EEUv8bJzdCJCHWTFyYXNAQ0-iS9eigYr9ZkZBHEzIGNGqgmFq4jOsvIW44dwn5eIDGTpft77b6I1fhwhkjBdSxSP_99SINv88l935PgUMTzTqDEbx0lF7tBuSA5dHemLItfkzHw7Qi5OmqGtzKeXlOWj9Gez5thkafAxnWlwHjYrFIOlL2QgMLGu0jncoH1h-ga40cCWdOJxZ_DYXGap_XTI0xoE0J0nbOeh4KqhyM8Q3IaCLk"/>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-center mb-1">
-<p class="text-sm font-semibold">Downtown Cafe</p>
-<span class="text-xs font-bold text-primary">342 Users</span>
-</div>
-<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-<div class="bg-primary h-full w-[85%] rounded-full"></div>
-</div>
-</div>
-</div>
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
-<img alt="Hotel" class="w-full h-full object-cover opacity-80" data-alt="Luxury hotel lobby" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVmlRTgwdrsNxL_mpvDuewjHBpvABsEUItXfz8Kuw5hE-Z6pz-TqGcoHnyeH3ITwlcuYNB0PqehwzK5UmdvktVMn21UPcge4qW20cc1wB_DexU1U75_56HkE7bGF4tAjlE0lJazhpP0UA0kZSHNWjGWMEQT-BTd3-JWQUkg8lD749eFWvmtRc3ouhkIz-vhpl3XcL8p-AAlT388DtpFeBY8rZ_1_eWTsbAsN9rge3RbbfLVw0UESK8iuUXp4w7RLTPumS_okZQMpQ"/>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-center mb-1">
-<p class="text-sm font-semibold">Grand Plaza Hotel</p>
-<span class="text-xs font-bold text-primary">218 Users</span>
-</div>
-<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-<div class="bg-primary h-full w-[65%] rounded-full"></div>
-</div>
-</div>
-</div>
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
-<img alt="Mall" class="w-full h-full object-cover opacity-80" data-alt="Shopping mall corridor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCtUC2Om0P5_oUkXMgessORzcJN8uq0TIUGWE1x_1uDYqb_a1LuuGtU1SRsYgchLeyT0hktCrXR9kgdCmv876mdhkl-K6ZVp1T4_mqhnTq82t3Bk_lWDemkkgd1MZIFV-Wf8vdh9wlL7al7fJoR2fL0-aeuhdecVy97nWTSiNbed0JF-aoO2Now5BWoiMzbZ7LGtBCwZrsrPbIWST9Tu16Zh76CaDio9nu5Ra7U7nyjt8jvFyu7t2fsRDgYw62fGYt-pupUk8s1-o"/>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-center mb-1">
-<p class="text-sm font-semibold">North Mall Annex</p>
-<span class="text-xs font-bold text-primary">156 Users</span>
-</div>
-<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-<div class="bg-primary h-full w-[45%] rounded-full"></div>
-</div>
-</div>
-</div>
+<h3 class="font-bold text-slate-900 dark:text-white mb-6">Top Packages</h3>
+<div id="topPackagesList" class="space-y-5">
+  <p class="text-sm text-slate-400">Loading...</p>
 </div>
 <div class="mt-8 p-4 bg-primary/5 rounded-xl border border-primary/10">
 <div class="flex items-start gap-3">
 <span class="material-icons-outlined text-primary">tips_and_updates</span>
 <div>
-<p class="text-xs font-bold text-primary uppercase tracking-wide">System Insight</p>
-<p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">Network usage is 20% higher on weekends. Consider promoting the 'Weekend Unlimited' package.</p>
+<p class="text-xs font-bold text-primary uppercase tracking-wide">System Status</p>
+<p id="systemInsight" class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">Loading system data...</p>
 </div>
 </div>
 </div>
@@ -373,90 +306,7 @@ Revenue Trends
 </tr>
 </thead>
 <tbody id="transactionsBody" class="divide-y divide-slate-100 dark:divide-slate-800">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="px-6 py-4 text-sm font-mono text-slate-500">TXN-90214</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">JD</div>
-<span class="text-sm font-medium">John Doe</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="text-sm">Premium Monthly</span>
-</td>
-<td class="px-6 py-4">
-<span class="text-sm font-bold">$29.99</span>
-</td>
-<td class="px-6 py-4">
-<span class="text-xs text-slate-500">Today, 10:45 AM</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold rounded">SUCCESS</span>
-</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="px-6 py-4 text-sm font-mono text-slate-500">TXN-90213</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center font-bold text-xs">AS</div>
-<span class="text-sm font-medium">Alice Smith</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="text-sm">Daily Lite</span>
-</td>
-<td class="px-6 py-4">
-<span class="text-sm font-bold">$1.50</span>
-</td>
-<td class="px-6 py-4">
-<span class="text-xs text-slate-500">Today, 10:12 AM</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold rounded">SUCCESS</span>
-</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="px-6 py-4 text-sm font-mono text-slate-500">TXN-90212</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">MB</div>
-<span class="text-sm font-medium">Mark Brown</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="text-sm">Weekly Plus</span>
-</td>
-<td class="px-6 py-4">
-<span class="text-sm font-bold">$8.00</span>
-</td>
-<td class="px-6 py-4">
-<span class="text-xs text-slate-500">Today, 09:30 AM</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="px-2 py-1 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 text-[10px] font-bold rounded">FAILED</span>
-</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<td class="px-6 py-4 text-sm font-mono text-slate-500">TXN-90211</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center font-bold text-xs">LK</div>
-<span class="text-sm font-medium">Lisa Kang</span>
-</div>
-</td>
-<td class="px-6 py-4">
-<span class="text-sm">Premium Monthly</span>
-</td>
-<td class="px-6 py-4">
-<span class="text-sm font-bold">$29.99</span>
-</td>
-<td class="px-6 py-4">
-<span class="text-xs text-slate-500">Yesterday, 11:58 PM</span>
-</td>
-<td class="px-6 py-4 text-center">
-<span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold rounded">SUCCESS</span>
-</td>
-</tr>
+<tr><td colspan="6" class="px-6 py-8 text-center text-sm text-slate-400">Loading transactions...</td></tr>
 </tbody>
 </table>
 </div>
@@ -469,49 +319,179 @@ Revenue Trends
 (function () {
   const API_BASE_URL = 'http://localhost:3000/api';
 
+  function formatUptime(seconds) {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return [h, m, s].map(n => String(n).padStart(2, '0')).join(':');
+  }
+
+  function formatTime(iso) {
+    const d = new Date(iso);
+    const today = new Date();
+    const isToday = d.toDateString() === today.toDateString();
+    const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return isToday ? 'Today, ' + time : d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + time;
+  }
+
+  function renderChart(connections) {
+    // Build hourly buckets for last 12 hours
+    const now = Date.now();
+    const buckets = Array.from({ length: 12 }, (_, i) => ({
+      label: new Date(now - (11 - i) * 3600000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      count: 0,
+      revenue: 0
+    }));
+
+    connections.forEach(function(c) {
+      const start = new Date(c.startTime).getTime();
+      const hoursAgo = (now - start) / 3600000;
+      if (hoursAgo <= 12) {
+        const idx = Math.min(11, Math.floor(12 - hoursAgo));
+        buckets[idx].count++;
+        buckets[idx].revenue += parseFloat(c.packagePrice) || 0;
+      }
+    });
+
+    const maxRevenue = Math.max(...buckets.map(b => b.revenue), 1);
+
+    const barsEl = document.getElementById('chartBars');
+    const labelsEl = document.getElementById('chartLabels');
+
+    if (barsEl) {
+      barsEl.innerHTML = buckets.map(function(b) {
+        const pct = Math.max(5, Math.round((b.revenue / maxRevenue) * 95));
+        return `<div class="chart-bar w-full bg-gradient-to-t from-logo-green/70 to-logo-green/40 rounded-t-lg border-t-2 border-logo-green/50 transition-all cursor-pointer relative group/bar" style="height:${pct}%">
+          <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/bar:opacity-100 transition-opacity shadow-lg whitespace-nowrap">KES ${b.revenue.toFixed(0)} · ${b.count} sessions</div>
+        </div>`;
+      }).join('');
+    }
+
+    if (labelsEl) {
+      const step = Math.floor(buckets.length / 5);
+      labelsEl.innerHTML = buckets
+        .filter((_, i) => i % step === 0 || i === buckets.length - 1)
+        .map(b => `<span>${b.label}</span>`).join('');
+    }
+  }
+
+  function renderTopPackages(topPackages, totalConnections) {
+    const el = document.getElementById('topPackagesList');
+    if (!el) return;
+    if (!topPackages || topPackages.length === 0) {
+      el.innerHTML = '<p class="text-sm text-slate-400">No sessions yet.</p>';
+      return;
+    }
+    const max = topPackages[0].count;
+    el.innerHTML = topPackages.map(function(p) {
+      const pct = Math.round((p.count / Math.max(max, 1)) * 100);
+      return `<div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+          <span class="material-icons-outlined text-primary text-lg">wifi</span>
+        </div>
+        <div class="flex-1">
+          <div class="flex justify-between items-center mb-1">
+            <p class="text-sm font-semibold">${p.name}</p>
+            <span class="text-xs font-bold text-primary">${p.count} session${p.count !== 1 ? 's' : ''}</span>
+          </div>
+          <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div class="bg-primary h-full rounded-full transition-all" style="width:${pct}%"></div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderTransactions(connections) {
+    const tbody = document.getElementById('transactionsBody');
+    if (!tbody) return;
+
+    if (!connections || connections.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-sm text-slate-400">No transactions yet. Payments will appear here.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = connections.slice(0, 20).map(function(c) {
+      const initials = c.phone ? c.phone.slice(-4) : '??';
+      const statusClass = c.active
+        ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
+        : 'bg-slate-100 dark:bg-slate-800 text-slate-500';
+      const statusLabel = c.active ? 'ACTIVE' : 'EXPIRED';
+      const price = c.packagePrice ? 'KES ' + parseFloat(c.packagePrice).toFixed(0) : '—';
+
+      return `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+        <td class="px-6 py-4 text-sm font-mono text-slate-500">${c.transactionId || 'N/A'}</td>
+        <td class="px-6 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">${initials}</div>
+            <span class="text-sm font-medium">${c.phone}</span>
+          </div>
+        </td>
+        <td class="px-6 py-4"><span class="text-sm">${c.package}</span></td>
+        <td class="px-6 py-4"><span class="text-sm font-bold">${price}</span></td>
+        <td class="px-6 py-4"><span class="text-xs text-slate-500">${formatTime(c.startTime)}</span></td>
+        <td class="px-6 py-4 text-center">
+          <span class="px-2 py-1 ${statusClass} text-[10px] font-bold rounded">${statusLabel}</span>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
   async function loadStats() {
     try {
       const res = await fetch(`${API_BASE_URL}/admin/stats`);
-      if (!res.ok) return;
+      if (!res.ok) throw new Error('Server returned ' + res.status);
       const data = await res.json();
 
-      // Update KPI cards
-      const activeUsersEl = document.querySelector('[data-stat="active-users"]');
-      const revenueEl = document.querySelector('[data-stat="revenue"]');
-      const paymentsEl = document.querySelector('[data-stat="payments"]');
+      // KPI cards
+      const rev = document.getElementById('kpiRevenue');
+      const users = document.getElementById('kpiActiveUsers');
+      const sessions = document.getElementById('kpiTotalSessions');
+      const sessionsSub = document.getElementById('kpiSessionsSub');
+      const uptime = document.getElementById('kpiUptime');
+      const insight = document.getElementById('systemInsight');
 
-      if (activeUsersEl) activeUsersEl.textContent = data.activeConnections;
-      if (revenueEl) revenueEl.textContent = 'KES ' + data.recentRevenue;
-      if (paymentsEl) paymentsEl.textContent = data.totalConnections;
-
-      // Populate transactions table
-      const tbody = document.getElementById('transactionsBody');
-      if (tbody && data.connections.length > 0) {
-        tbody.innerHTML = data.connections.map(c => {
-          const expiry = new Date(c.expiresAt);
-          const initials = c.phone ? c.phone.slice(-4) : '??';
-          return `
-            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-              <td class="px-6 py-4 text-sm font-mono text-slate-500">${c.transactionId || 'N/A'}</td>
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">${initials}</div>
-                  <span class="text-sm font-medium">${c.phone}</span>
-                </div>
-              </td>
-              <td class="px-6 py-4"><span class="text-sm">${c.package}</span></td>
-              <td class="px-6 py-4"><span class="text-sm font-bold">Active</span></td>
-              <td class="px-6 py-4"><span class="text-xs text-slate-500">Expires ${expiry.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span></td>
-              <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold rounded">ACTIVE</span></td>
-            </tr>`;
-        }).join('');
+      if (rev) rev.textContent = 'KES ' + Number(data.totalRevenue).toLocaleString();
+      if (users) users.textContent = data.activeConnections;
+      if (sessions) sessions.textContent = data.totalConnections;
+      if (sessionsSub) sessionsSub.textContent = data.activeConnections + ' ACTIVE / ' + data.expiredConnections + ' EXPIRED';
+      if (uptime) uptime.textContent = formatUptime(data.serverUptime);
+      if (insight) {
+        insight.textContent = data.activeConnections > 0
+          ? data.activeConnections + ' user' + (data.activeConnections !== 1 ? 's' : '') + ' currently connected. Top package: ' + (data.topPackages[0]?.name || 'N/A') + '.'
+          : 'No active sessions. Server is running normally.';
       }
+
+      renderChart(data.connections);
+      renderTopPackages(data.topPackages, data.totalConnections);
+      renderTransactions(data.connections);
+
     } catch (e) {
-      console.warn('Could not load admin stats:', e.message);
+      console.warn('Admin stats error:', e.message);
+      const insight = document.getElementById('systemInsight');
+      if (insight) insight.textContent = 'Could not reach backend. Make sure the server is running on port 3000.';
+    }
+  }
+
+  // Uptime ticks every second locally
+  let localUptime = 0;
+  function tickUptime() {
+    localUptime++;
+    const el = document.getElementById('kpiUptime');
+    if (el && el.textContent !== '—') {
+      const parts = el.textContent.split(':').map(Number);
+      if (parts.length === 3) {
+        let [h, m, s] = parts;
+        s++;
+        if (s >= 60) { s = 0; m++; }
+        if (m >= 60) { m = 0; h++; }
+        el.textContent = [h, m, s].map(n => String(n).padStart(2, '0')).join(':');
+      }
     }
   }
 
   loadStats();
-  setInterval(loadStats, 15000); // refresh every 15s
+  setInterval(loadStats, 15000);
+  setInterval(tickUptime, 1000);
 })();
 </script>

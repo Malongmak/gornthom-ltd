@@ -93,18 +93,36 @@ app.get('/api/admin/stats', (req, res) => {
   const now = Date.now();
 
   const active = connections.filter(c => new Date(c.expiryTime).getTime() > now);
-  const revenue = active.reduce((sum, c) => sum + (parseFloat(c.packagePrice) || 0), 0);
+  const expired = connections.filter(c => new Date(c.expiryTime).getTime() <= now);
+  const totalRevenue = connections.reduce((sum, c) => sum + (parseFloat(c.packagePrice) || 0), 0);
+
+  // Package breakdown
+  const packageCounts = {};
+  connections.forEach(c => {
+    packageCounts[c.packageName] = (packageCounts[c.packageName] || 0) + 1;
+  });
+  const topPackages = Object.entries(packageCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([name, count]) => ({ name, count }));
 
   res.json({
     activeConnections: active.length,
     totalConnections: connections.length,
-    recentRevenue: revenue.toFixed(2),
-    connections: active.map(c => ({
+    expiredConnections: expired.length,
+    totalRevenue: totalRevenue.toFixed(2),
+    recentRevenue: totalRevenue.toFixed(2),
+    topPackages,
+    serverUptime: Math.floor(process.uptime()),
+    connections: connections.map(c => ({
       phone: c.phoneNumber,
       package: c.packageName,
+      packagePrice: c.packagePrice || 0,
+      startTime: c.startTime,
       expiresAt: c.expiryTime,
-      transactionId: c.transactionId
-    }))
+      transactionId: c.transactionId,
+      active: new Date(c.expiryTime).getTime() > now
+    })).sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
   });
 });
 if (require.main === module) {
