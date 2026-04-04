@@ -20,9 +20,26 @@ app.use((req, res, next) => {
 // Routes
 const connectionRoutes = require('./routes/connection');
 const webhookRoutes = require('./routes/webhooks');
+const mpesaRoutes = require('./routes/mpesa');
 
 app.use('/api/connection', connectionRoutes);
 app.use('/api/webhooks', webhookRoutes);
+app.use('/api/mpesa', mpesaRoutes);
+
+// Paystack payment verification endpoint (called by frontend after payment)
+app.get('/api/paystack/verify/:reference', async (req, res) => {
+  try {
+    const axios = require('axios');
+    const response = await axios.get(
+      `https://api.paystack.co/transaction/verify/${req.params.reference}`,
+      { headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` }, timeout: 10000 }
+    );
+    const data = response.data;
+    res.json({ success: data.data?.status === 'success', status: data.data?.status, data: data.data });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -43,7 +60,11 @@ app.get('/', (req, res) => {
       health: '/health',
       activate: 'POST /api/connection/activate',
       status: 'GET /api/connection/status',
-      webhook: 'POST /api/webhooks/paystack'
+      paystackWebhook: 'POST /api/webhooks/paystack',
+      paystackVerify: 'GET /api/paystack/verify/:reference',
+      mpesaStkPush: 'POST /api/mpesa/stk-push',
+      mpesaStatus: 'POST /api/mpesa/payment-status',
+      mpesaCallback: 'POST /api/mpesa/callback'
     }
   });
 });

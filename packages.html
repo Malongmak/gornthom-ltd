@@ -598,11 +598,12 @@ Start Browsing
     }
 
     // Configuration - MUST be defined before DEMO_MODE check
-    const API_BASE_URL = "http://localhost:3000/api"; // Backend server URL
+    const API_BASE_URL = "http://localhost:3000/api"; // Update to your server IP/domain in production
     const STK_PUSH_ENDPOINT = API_BASE_URL + "/mpesa/stk-push";
     const PAYMENT_STATUS_ENDPOINT = API_BASE_URL + "/mpesa/payment-status";
     const ACTIVATE_CONNECTION_ENDPOINT = API_BASE_URL + "/connection/activate";
     const CHECK_CONNECTION_ENDPOINT = API_BASE_URL + "/connection/status";
+    const VERIFY_PAYMENT_ENDPOINT = API_BASE_URL + "/paystack/verify";
     
     // Paystack Configuration
     // Using LIVE key for production - accepts real phone numbers and processes real payments
@@ -1059,11 +1060,37 @@ Start Browsing
             }
           ]
         },
-        callback: function(response) {
-          // Payment successful
-          console.log("Paystack payment successful:", response);
+        callback: async function(response) {
+          // Payment successful - verify with backend before activating
+          console.log("Paystack payment callback:", response);
           
           const txnId = response.reference || paymentReference;
+
+          // Verify payment with backend
+          let verified = false;
+          try {
+            const verifyRes = await fetch(`${VERIFY_PAYMENT_ENDPOINT}/${txnId}`);
+            const verifyData = await verifyRes.json();
+            verified = verifyData.success;
+            if (!verified) {
+              console.error("Payment verification failed:", verifyData);
+              setText(paymentErrorEl, "Payment could not be verified. Please contact support.");
+              setHidden(paymentErrorEl, false);
+              showStep("phone");
+              return;
+            }
+          } catch (err) {
+            console.warn("Verification request failed, proceeding with caution:", err.message);
+            // In demo/local mode, allow proceeding if verification endpoint is unreachable
+            if (!DEMO_MODE) {
+              setText(paymentErrorEl, "Could not verify payment. Please try again.");
+              setHidden(paymentErrorEl, false);
+              showStep("phone");
+              return;
+            }
+            verified = true;
+          }
+
           if (transactionIDEl) setText(transactionIDEl, txnId);
           if (successPackageNameEl) setText(successPackageNameEl, selectedPackage.name);
           if (successAmountEl) setText(successAmountEl, `${selectedPackage.currency} ${selectedPackage.price}`);
@@ -1073,26 +1100,18 @@ Start Browsing
           sessionStorage.setItem("gh_payment_status", "success");
           sessionStorage.setItem("gh_payment_method", "paystack");
           
-          // Clear polling if it was set
           if (paymentPollInterval) {
             clearInterval(paymentPollInterval);
             paymentPollInterval = null;
           }
           
-          // Activate internet connection after payment (async operation)
-          (async function() {
-            try {
-              console.log("Activating internet connection...");
-              await activateInternetConnection(txnId, phone, selectedPackage);
-              console.log("✅ Internet connection activated successfully");
-            } catch (error) {
-              console.error("Error activating connection:", error);
-              // Still show success even if connection activation fails
-              // User can contact support if needed
-            }
-          })();
+          // Activate internet connection after verified payment
+          try {
+            await activateInternetConnection(txnId, phone, selectedPackage);
+          } catch (error) {
+            console.error("Error activating connection:", error);
+          }
           
-          // Show success step
           showStep("success");
         },
         onClose: function() {

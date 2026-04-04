@@ -62,131 +62,86 @@ class RouterService {
         };
       }
       
-      // Try to use routeros-api-connector if available
+      // Try to use routeros-api if available
       let RouterOSAPI;
       try {
-        RouterOSAPI = require('routeros-api-connector');
+        RouterOSAPI = require('routeros-api');
       } catch (e) {
-        // Fallback: Use generic method or direct API
-        console.log('⚠️  routeros-api-connector not installed. Using generic method.');
-        console.log(`📝 To enable real MikroTik integration, install: npm install routeros-api-connector`);
-        console.log(`   Or configure router manually with IP: ${data.userIP}`);
-        
+        console.log('⚠️  routeros-api not installed. Run: npm install routeros-api');
         this.storeConnection(data, `mikrotik_${data.transactionId}`);
         return {
           success: true,
           token: `mikrotik_${data.transactionId}`,
           sessionId: `session_${Date.now()}`,
-          message: 'Connection logged. Install routeros-api-connector for automatic activation.'
+          message: 'Connection logged. Install routeros-api for automatic activation.'
         };
       }
       
-      // If package is available, use it
-      const connection = RouterOSAPI.connect({
+      // Connect using routeros-api
+      const connection = new RouterOSAPI({
         host: this.config.host,
         user: this.config.username,
         password: this.config.password,
         port: this.config.port || 8728,
-        timeout: 5000
+        timeout: 10
       });
 
-      return new Promise((resolve, reject) => {
-        connection.on('error', (err) => {
-          console.error('❌ MikroTik connection error:', err.message);
-          connection.close();
-          reject({ 
-            success: false, 
-            message: `Router connection failed: ${err.message}`,
-            error: err.message
-          });
-        });
+      // Connect using routeros-api
+      const { RouterOSClient } = RouterOSAPI;
+      const api = new RouterOSClient({
+        host: this.config.host,
+        user: this.config.username,
+        password: this.config.password,
+        port: this.config.port || 8728,
+        timeout: 10
+      });
 
-        connection.on('connected', () => {
-          console.log('✅ Connected to MikroTik router');
-          
-          const timeout = data.durationMinutes || 60;
-          const businessPhone = data.businessPhone || data.recipientPhone || "+254116465399";
-          const comment = `GORNHOM: ${data.packageName} | Customer: ${data.phoneNumber} | Business: ${businessPhone} | TXN: ${data.transactionId}`;
-          
-          // Add user to firewall address list
-          connection.write('/ip/firewall/address-list/add', {
+      try {
+        const client = await api.connect();
+        console.log('✅ Connected to MikroTik router');
+
+        const timeout = data.durationMinutes || 60;
+        const comment = `GORNHOM: ${data.packageName} | Phone: ${data.phoneNumber} | TXN: ${data.transactionId}`;
+
+        try {
+          await client.menu('/ip firewall address-list').add({
             list: 'allowed-users',
             address: data.userIP,
             timeout: `${timeout}m`,
-            comment: comment
-          }, (err, result) => {
-            connection.close();
-            
-            if (err) {
-              console.error('❌ MikroTik API error:', err.message);
-              
-              // Check if IP already exists
-              if (err.message && err.message.includes('already have')) {
-                // Update existing entry
-                connection.write('/ip/firewall/address-list/print', {
-                  '?list': 'allowed-users',
-                  '?address': data.userIP
-                }, (updateErr, entries) => {
-                  if (!updateErr && entries && entries.length > 0) {
-                    const entryId = entries[0]['.id'];
-                    connection.write('/ip/firewall/address-list/set', {
-                      '.id': entryId,
-                      timeout: `${timeout}m`,
-                      comment: comment
-                    }, (setErr) => {
-                      connection.close();
-                      if (setErr) {
-                        resolve({ 
-                          success: false, 
-                          message: `Failed to update existing entry: ${setErr.message}` 
-                        });
-                      } else {
-                        console.log('✅ MikroTik: Updated existing whitelist entry');
-                        this.storeConnection(data, `mikrotik_${data.transactionId}`);
-                        resolve({
-                          success: true,
-                          token: `mikrotik_${data.transactionId}`,
-                          sessionId: entryId
-                        });
-                      }
-                    });
-                  } else {
-                    resolve({ 
-                      success: false, 
-                      message: `Failed to add IP: ${err.message}` 
-                    });
-                  }
-                });
-              } else {
-                resolve({ 
-                  success: false, 
-                  message: `Router API error: ${err.message}`,
-                  error: err.message
-                });
-              }
-            } else {
-              console.log('✅ MikroTik: User added to whitelist');
-              const sessionId = result[0]?.['.id'] || `session_${Date.now()}`;
-              this.storeConnection(data, `mikrotik_${data.transactionId}`);
-              
-              resolve({
-                success: true,
-                token: `mikrotik_${data.transactionId}`,
-                sessionId: sessionId
-              });
-            }
+            comment
           });
-        });
+          console.log(`✅ MikroTik: Added ${data.userIP} to allowed-users (${timeout}m)`);
+        } catch (addErr) {
+          // If IP already exists, update the timeout instead
+          if (addErr.message && addErr.message.includes('already have')) {
+            const entries = await client.menu('/ip firewall address-list')
+              .where('list', 'allowed-users')
+              .where('address', data.userIP)
+              .get();
 
-        // Connection timeout
-        setTimeout(() => {
-          connection.close();
-          reject({ 
-            success: false, 
-            message: 'Connection timeout - router not responding' 
-          });
-        }, 10000);
-      });
+            if (entries.length > 0) {
+              await client.menu('/ip firewall address-list').where('id', entries[0].id).update({
+                timeout: `${timeout}m`,
+                comment
+              });
+              console.log(`✅ MikroTik: Updated existing entry for ${data.userIP}`);
+            }
+          } else {
+            throw addErr;
+          }
+        }
+
+        api.close();
+        this.storeConnection(data, `mikrotik_${data.transactionId}`);
+        return {
+          success: true,
+          token: `mikrotik_${data.transactionId}`,
+          sessionId: `session_${Date.now()}`
+        };
+      } catch (connErr) {
+        api.close();
+        throw connErr;
+      }
     } catch (error) {
       console.error('❌ MikroTik activation error:', error);
       return { 
