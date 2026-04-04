@@ -67,8 +67,10 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","lo
                 <th class="px-6 py-4">Duration</th>
                 <th class="px-6 py-4">Price</th>
                 <th class="px-6 py-4">Speed</th>
+                <th class="px-6 py-4 text-center">Max Devices</th>
                 <th class="px-6 py-4 text-center">Sessions</th>
                 <th class="px-6 py-4 text-center">Status</th>
+                <th class="px-6 py-4 text-center">Edit</th>
               </tr>
             </thead>
             <tbody id="packageTable" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
@@ -82,22 +84,18 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","lo
 <script>
 (function(){
   const API = 'http://localhost:3000/api';
-
-  const PACKAGES = [
-    {name:'30 Minutes', duration:'30 min', price:'KES 5', speed:'5 Mbps'},
-    {name:'1 Hour',     duration:'1 hour', price:'KES 10', speed:'5 Mbps'},
-    {name:'1 Day',      duration:'24 hours', price:'KES 60', speed:'10 Mbps'},
-    {name:'1 Week',     duration:'7 days', price:'KES 260', speed:'20 Mbps'},
-    {name:'1 Month',    duration:'30 days', price:'KES 500', speed:'Unlimited'},
-    {name:'Enterprise Plan', duration:'30 days', price:'KES 2,500', speed:'100 Mbps'},
-  ];
+  let allPackages = [];
 
   async function load() {
     try {
-      const res = await fetch(`${API}/admin/stats`);
-      const data = await res.json();
+      const [pkgRes, statsRes] = await Promise.all([
+        fetch(`${API}/packages/all`),
+        fetch(`${API}/admin/stats`)
+      ]);
+      allPackages = await pkgRes.json();
+      const stats = await statsRes.json();
       const counts = {};
-      (data.connections||[]).forEach(c => { counts[c.package] = (counts[c.package]||0)+1; });
+      (stats.connections||[]).forEach(c => { counts[c.package] = (counts[c.package]||0)+1; });
       const max = Math.max(...Object.values(counts), 1);
 
       // Performance bars
@@ -117,17 +115,27 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","lo
         }).join('');
       }
 
-      // Table
+      // Table — from live /api/packages/all
       const tbody = document.getElementById('packageTable');
-      tbody.innerHTML = PACKAGES.map(p => {
+      tbody.innerHTML = allPackages.map(p => {
         const sessions = counts[p.name] || 0;
+        const statusClass = p.active ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500';
+        const statusLabel = p.active ? 'ACTIVE' : 'INACTIVE';
         return `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
           <td class="px-6 py-4 font-semibold text-sm">${p.name}</td>
           <td class="px-6 py-4 text-sm text-slate-500">${p.duration}</td>
-          <td class="px-6 py-4 text-sm font-bold">${p.price}</td>
+          <td class="px-6 py-4 text-sm font-bold">${p.currency} ${p.price}</td>
           <td class="px-6 py-4 text-sm text-slate-500">${p.speed}</td>
+          <td class="px-6 py-4 text-center">
+            <span class="font-bold text-sm" id="devices-${p.id}">${p.maxDevices}</span>
+          </td>
           <td class="px-6 py-4 text-center text-sm font-bold">${sessions}</td>
-          <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-emerald-100 text-emerald-600 text-[10px] font-bold rounded">ACTIVE</span></td>
+          <td class="px-6 py-4 text-center"><span class="px-2 py-1 ${statusClass} text-[10px] font-bold rounded">${statusLabel}</span></td>
+          <td class="px-6 py-4 text-center">
+            <button onclick="openEdit('${p.id}')" class="w-8 h-8 flex items-center justify-center bg-primary/10 text-primary rounded-lg hover:bg-primary hover:text-white transition-all mx-auto">
+              <span class="material-icons-outlined text-sm">edit</span>
+            </button>
+          </td>
         </tr>`;
       }).join('');
     } catch(e) {
@@ -135,9 +143,85 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","lo
     }
   }
 
+  window.openEdit = function(id) {
+    const pkg = allPackages.find(p => p.id === id);
+    if (!pkg) return;
+    document.getElementById('editId').value = id;
+    document.getElementById('editName').value = pkg.name;
+    document.getElementById('editPrice').value = pkg.price;
+    document.getElementById('editSpeed').value = pkg.speed;
+    document.getElementById('editMaxDevices').value = pkg.maxDevices;
+    document.getElementById('editActive').checked = pkg.active;
+    document.getElementById('editModal').classList.remove('hidden');
+  };
+
+  window.closeEdit = function() {
+    document.getElementById('editModal').classList.add('hidden');
+  };
+
+  window.saveEdit = async function() {
+    const id = document.getElementById('editId').value;
+    const payload = {
+      name: document.getElementById('editName').value,
+      price: parseFloat(document.getElementById('editPrice').value),
+      speed: document.getElementById('editSpeed').value,
+      maxDevices: parseInt(document.getElementById('editMaxDevices').value),
+      active: document.getElementById('editActive').checked,
+    };
+    try {
+      const res = await fetch(`${API}/packages/${id}`, {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+      closeEdit();
+      load();
+    } catch(e) { alert('Failed to save: ' + e.message); }
+  };
+
   load();
   setInterval(load, 15000);
 })();
 </script>
+
+<!-- Edit Package Modal -->
+<div id="editModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+  <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl p-8">
+    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+      <span class="material-icons-outlined text-logo-green">edit</span>Edit Package
+    </h3>
+    <input type="hidden" id="editId"/>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Package Name</label>
+        <input id="editName" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary"/>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Price (KES)</label>
+          <input id="editPrice" type="number" min="1" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary"/>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Max Devices</label>
+          <input id="editMaxDevices" type="number" min="1" max="100" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary"/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Speed</label>
+        <input id="editSpeed" type="text" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary"/>
+      </div>
+      <div class="flex items-center gap-3">
+        <input id="editActive" type="checkbox" class="w-4 h-4 text-primary rounded"/>
+        <label class="text-sm font-medium">Package is active (visible to customers)</label>
+      </div>
+    </div>
+    <div class="flex gap-3 mt-6">
+      <button onclick="closeEdit()" class="flex-1 py-3 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors">Cancel</button>
+      <button onclick="saveEdit()" class="flex-1 py-3 bg-logo-green text-white rounded-lg text-sm font-bold hover:bg-logo-green/90 transition-colors">Save Changes</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
