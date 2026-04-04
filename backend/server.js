@@ -66,8 +66,23 @@ const captiveProbes = [
 
 captiveProbes.forEach(probe => {
   app.get(probe, (req, res) => {
+    // Return unexpected response so OS detects captive portal
+    // and shows "Sign in to network" notification
     res.redirect(302, PORTAL_REDIRECT);
   });
+});
+
+// Apple-specific: must return non-success body
+app.get('/hotspot-detect.html', (req, res) => {
+  res.status(200).send('<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>'.replace('Success', 'GORNHOM WiFi — Sign in required'));
+});
+
+// Android-specific: must NOT return 204
+app.get('/generate_204', (req, res) => {
+  res.redirect(302, PORTAL_REDIRECT);
+});
+app.get('/gen_204', (req, res) => {
+  res.redirect(302, PORTAL_REDIRECT);
 });
 
 // Main portal page — serves the login/payment page
