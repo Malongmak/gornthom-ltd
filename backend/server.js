@@ -86,7 +86,27 @@ app.use((req, res) => {
   });
 });
 
-// Start server only when run directly (not during tests)
+// Admin stats endpoint
+app.get('/api/admin/stats', (req, res) => {
+  const routerSvc = require('./services/routerService');
+  const connections = Array.from(routerSvc.activeConnections.values());
+  const now = Date.now();
+
+  const active = connections.filter(c => new Date(c.expiryTime).getTime() > now);
+  const revenue = active.reduce((sum, c) => sum + (parseFloat(c.packagePrice) || 0), 0);
+
+  res.json({
+    activeConnections: active.length,
+    totalConnections: connections.length,
+    recentRevenue: revenue.toFixed(2),
+    connections: active.map(c => ({
+      phone: c.phoneNumber,
+      package: c.packageName,
+      expiresAt: c.expiryTime,
+      transactionId: c.transactionId
+    }))
+  });
+});
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log('🚀 GORNHOM Backend Server Started');

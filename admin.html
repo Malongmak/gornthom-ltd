@@ -200,7 +200,7 @@
                             </span>
 </div>
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Total Revenue</p>
-<h3 class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white bg-gradient-to-r from-logo-green to-logo-green/70 bg-clip-text text-transparent">$24,560.00</h3>
+<h3 class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white bg-gradient-to-r from-logo-green to-logo-green/70 bg-clip-text text-transparent" data-stat="revenue">$24,560.00</h3>
 <p class="text-[10px] text-slate-400 mt-3 font-semibold">VS LAST 30 DAYS</p>
 </div>
 <div class="kpi-card bg-gradient-to-br from-white to-blue-50 dark:from-slate-900 dark:to-blue-900/10 p-6 rounded-2xl border-2 border-blue-200 dark:border-blue-800/30 shadow-lg hover:shadow-xl">
@@ -214,7 +214,7 @@
                             </span>
 </div>
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Active Users</p>
-<h3 class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white">1,284</h3>
+<h3 class="text-3xl font-extrabold mt-1 text-slate-900 dark:text-white" data-stat="active-users">1,284</h3>
 <p class="text-[10px] text-slate-400 mt-3 font-semibold">REAL-TIME CONNECTED</p>
 </div>
 <div class="kpi-card bg-gradient-to-br from-white to-purple-50 dark:from-slate-900 dark:to-purple-900/10 p-6 rounded-2xl border-2 border-purple-200 dark:border-purple-800/30 shadow-lg hover:shadow-xl">
@@ -372,7 +372,7 @@ Revenue Trends
 <th class="px-6 py-4 text-center">Status</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tbody id="transactionsBody" class="divide-y divide-slate-100 dark:divide-slate-800">
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
 <td class="px-6 py-4 text-sm font-mono text-slate-500">TXN-90214</td>
 <td class="px-6 py-4">
@@ -465,3 +465,53 @@ Revenue Trends
 </div>
 </main>
 </body></html>
+<script>
+(function () {
+  const API_BASE_URL = 'http://localhost:3000/api';
+
+  async function loadStats() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/stats`);
+      if (!res.ok) return;
+      const data = await res.json();
+
+      // Update KPI cards
+      const activeUsersEl = document.querySelector('[data-stat="active-users"]');
+      const revenueEl = document.querySelector('[data-stat="revenue"]');
+      const paymentsEl = document.querySelector('[data-stat="payments"]');
+
+      if (activeUsersEl) activeUsersEl.textContent = data.activeConnections;
+      if (revenueEl) revenueEl.textContent = 'KES ' + data.recentRevenue;
+      if (paymentsEl) paymentsEl.textContent = data.totalConnections;
+
+      // Populate transactions table
+      const tbody = document.getElementById('transactionsBody');
+      if (tbody && data.connections.length > 0) {
+        tbody.innerHTML = data.connections.map(c => {
+          const expiry = new Date(c.expiresAt);
+          const initials = c.phone ? c.phone.slice(-4) : '??';
+          return `
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+              <td class="px-6 py-4 text-sm font-mono text-slate-500">${c.transactionId || 'N/A'}</td>
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">${initials}</div>
+                  <span class="text-sm font-medium">${c.phone}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4"><span class="text-sm">${c.package}</span></td>
+              <td class="px-6 py-4"><span class="text-sm font-bold">Active</span></td>
+              <td class="px-6 py-4"><span class="text-xs text-slate-500">Expires ${expiry.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span></td>
+              <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold rounded">ACTIVE</span></td>
+            </tr>`;
+        }).join('');
+      }
+    } catch (e) {
+      console.warn('Could not load admin stats:', e.message);
+    }
+  }
+
+  loadStats();
+  setInterval(loadStats, 15000); // refresh every 15s
+})();
+</script>
