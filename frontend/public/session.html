@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Active Session Status | GORNHOM INNOVATION LTD</title>
+<script src="/config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
@@ -181,7 +182,7 @@
 </div>
 <script>
 (function () {
-  const API_BASE_URL = 'http://localhost:3000/api';
+  const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000/api';
 
   const timerEl = document.getElementById('timerDisplay');
   const expiryEl = document.getElementById('expiryLabel');

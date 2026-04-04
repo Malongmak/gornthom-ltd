@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Support - GORNHOM INNOVATION LTD</title>
+<script src="/config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
@@ -117,7 +118,7 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","lo
 
 <script>
 (function(){
-  const API = (JSON.parse(localStorage.getItem('gh_admin_settings')||'{}').apiUrl || 'http://localhost:3000/api').replace('/api','');
+  const API = (JSON.parse(localStorage.getItem('gh_admin_settings')||'{}').apiUrl || window.API_BASE_URL || 'http://localhost:3000/api').replace('/api','');
 
   window.runDiagnostics = async function() {
     const list = document.getElementById('diagList');

@@ -45,7 +45,14 @@ app.get('/api/paystack/verify/:reference', async (req, res) => {
   }
 });
 
-// Serve frontend static files
+// Serve dynamic config to frontend — replaces hardcoded localhost:3000
+app.get('/config.js', (req, res) => {
+  const serverIP = process.env.SERVER_IP || 'localhost';
+  const port = process.env.PORT || 3000;
+  const apiBase = `http://${serverIP}:${port}/api`;
+  res.setHeader('Content-Type', 'application/javascript');
+  res.send(`window.API_BASE_URL = "${apiBase}";`);
+});
 const FRONTEND_PATH = path.join(__dirname, '../frontend');
 app.use('/static', express.static(path.join(FRONTEND_PATH, 'assets')));
 

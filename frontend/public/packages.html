@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Internet Package Selection - GORNHOM INNOVATION LTD</title>
+<script src="/config.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -379,7 +380,7 @@
     }
 
     // Configuration
-    const API_BASE_URL = "http://localhost:3000/api"; // Change to your production server URL
+    const API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/api"; // Change to your production server URL
     const ACTIVATE_CONNECTION_ENDPOINT = API_BASE_URL + "/connection/activate";
     const VERIFY_PAYMENT_ENDPOINT = API_BASE_URL + "/paystack/verify";
 
@@ -915,7 +916,7 @@
 
   // Load packages from API and render grid dynamically
   (function loadPackages() {
-    const API_BASE_URL = "http://localhost:3000/api";
+    const API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/api";
     const grid = document.getElementById("packageGrid");
 
     function renderPackages(pkgs) {
