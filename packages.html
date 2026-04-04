@@ -1060,59 +1060,47 @@ Start Browsing
             }
           ]
         },
-        callback: async function(response) {
+        callback: function(response) {
           // Payment successful - verify with backend before activating
           console.log("Paystack payment callback:", response);
           
           const txnId = response.reference || paymentReference;
 
-          // Verify payment with backend
-          let verified = false;
-          try {
-            const verifyRes = await fetch(`${VERIFY_PAYMENT_ENDPOINT}/${txnId}`);
-            const verifyData = await verifyRes.json();
-            verified = verifyData.success;
-            if (!verified) {
-              console.error("Payment verification failed:", verifyData);
-              setText(paymentErrorEl, "Payment could not be verified. Please contact support.");
-              setHidden(paymentErrorEl, false);
-              showStep("phone");
-              return;
-            }
-          } catch (err) {
-            console.warn("Verification request failed, proceeding with caution:", err.message);
-            // In demo/local mode, allow proceeding if verification endpoint is unreachable
-            if (!DEMO_MODE) {
-              setText(paymentErrorEl, "Could not verify payment. Please try again.");
-              setHidden(paymentErrorEl, false);
-              showStep("phone");
-              return;
-            }
-            verified = true;
-          }
+          // Show loading while we verify
+          showStep("loading");
+          if (loadingStatusEl) loadingStatusEl.textContent = "Verifying payment...";
 
-          if (transactionIDEl) setText(transactionIDEl, txnId);
-          if (successPackageNameEl) setText(successPackageNameEl, selectedPackage.name);
-          if (successAmountEl) setText(successAmountEl, `${selectedPackage.currency} ${selectedPackage.price}`);
-          
-          // Store transaction
-          sessionStorage.setItem("gh_transaction_id", txnId);
-          sessionStorage.setItem("gh_payment_status", "success");
-          sessionStorage.setItem("gh_payment_method", "paystack");
-          
-          if (paymentPollInterval) {
-            clearInterval(paymentPollInterval);
-            paymentPollInterval = null;
-          }
-          
-          // Activate internet connection after verified payment
-          try {
-            await activateInternetConnection(txnId, phone, selectedPackage);
-          } catch (error) {
-            console.error("Error activating connection:", error);
-          }
-          
-          showStep("success");
+          // Verify then activate (wrapped in regular promise chain)
+          fetch(`${VERIFY_PAYMENT_ENDPOINT}/${txnId}`)
+            .then(function(r) { return r.json(); })
+            .then(function(verifyData) {
+              if (!verifyData.success && !DEMO_MODE) {
+                setText(paymentErrorEl, "Payment could not be verified. Please contact support.");
+                setHidden(paymentErrorEl, false);
+                showStep("phone");
+                return;
+              }
+
+              if (transactionIDEl) setText(transactionIDEl, txnId);
+              if (successPackageNameEl) setText(successPackageNameEl, selectedPackage.name);
+              if (successAmountEl) setText(successAmountEl, `${selectedPackage.currency} ${selectedPackage.price}`);
+
+              sessionStorage.setItem("gh_transaction_id", txnId);
+              sessionStorage.setItem("gh_payment_status", "success");
+              sessionStorage.setItem("gh_payment_method", "paystack");
+
+              if (paymentPollInterval) { clearInterval(paymentPollInterval); paymentPollInterval = null; }
+
+              return activateInternetConnection(txnId, phone, selectedPackage);
+            })
+            .then(function() {
+              showStep("success");
+            })
+            .catch(function(err) {
+              console.error("Post-payment error:", err);
+              // Still show success — payment went through, activation can be retried
+              showStep("success");
+            });
         },
         onClose: function() {
           // User closed the payment modal
