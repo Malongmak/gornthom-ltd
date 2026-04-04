@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Captive Portal | GORNHOM INNOVATION LTD</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#22c55e",
+                        "primary-blue": "#137fec",
+                        "logo-green": "#22c55e",
+                        "logo-red": "#ef4444",
+                        "logo-black": "#1e293b",
+                        "logo-blue": "#1e40af",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); }
+        }
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col">
+<!-- Navbar/Header area -->
+<header class="w-full py-6 px-8 flex justify-between items-center bg-white dark:bg-background-dark border-b border-primary/10 shadow-sm">
+<div class="flex items-center space-x-3">
+<img src="images/logo.jpeg" alt="GORNHOM Innovation Ltd Logo" class="h-12 w-auto object-contain mr-2"/>
+<div class="flex flex-col">
+<span class="font-bold text-xl tracking-tight text-slate-800 dark:text-white uppercase">
+    <span class="text-logo-green">GORNHOM</span> 
+    <span class="text-logo-red">INNOVATION</span> 
+    <span class="text-logo-black dark:text-slate-300">LTD</span>
+</span>
+<p class="text-[10px] text-logo-blue font-medium italic">Together For a Better Internet</p>
+</div>
+</div>
+<div class="hidden md:flex items-center space-x-4 text-sm text-slate-500 dark:text-slate-400">
+<div class="flex items-center">
+<span class="material-icons text-xs mr-1 text-green-500">circle</span>
+                Hotspot Active
+            </div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex items-center justify-center p-6 relative overflow-hidden">
+<!-- Abstract Background Decorative Elements -->
+<div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-30">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-logo-green/20 rounded-full blur-3xl animate-float"></div>
+<div class="absolute top-1/2 -right-24 w-80 h-80 bg-logo-blue/15 rounded-full blur-3xl animate-float" style="animation-delay: 1s;"></div>
+<div class="absolute bottom-0 left-1/2 w-72 h-72 bg-logo-red/10 rounded-full blur-3xl animate-float" style="animation-delay: 2s;"></div>
+</div>
+<div class="w-full max-w-lg">
+<!-- Hero Branding Section (Desktop focus) -->
+<div class="text-center mb-8">
+<h1 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">Welcome to High-Speed Wi-Fi</h1>
+<p class="text-slate-600 dark:text-slate-400">Connect to the GORNHOM network and enjoy seamless browsing.</p>
+</div>
+<!-- Login Card -->
+<div class="bg-white dark:bg-slate-900 shadow-xl rounded-xl p-8 border border-slate-200 dark:border-slate-800 transform transition-all hover:scale-[1.01] hover:shadow-2xl">
+<div class="mb-8">
+<h2 class="text-xl font-semibold text-slate-800 dark:text-white mb-1">Internet Access</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400">Enter your phone number to receive a verification code or connect directly.</p>
+</div>
+<form id="loginForm" class="space-y-6" novalidate>
+<!-- Phone Input Group -->
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="phone">Phone Number</label>
+<div class="flex">
+<div class="relative">
+<select id="countryCode" name="countryCode" class="h-full rounded-l-lg border-r-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-sm focus:ring-primary focus:border-primary">
+<option>+254</option>
+<option>+1</option>
+<option>+44</option>
+<option>+234</option>
+</select>
+</div>
+<input class="flex-1 block w-full rounded-r-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-primary focus:border-primary sm:text-sm" id="phone" name="phone" placeholder="712 345 678" type="tel" inputmode="tel" autocomplete="tel" required/>
+</div>
+<p id="phoneError" class="mt-2 text-sm text-rose-600 hidden"></p>
+</div>
+<!-- Options -->
+<div class="flex items-start">
+<div class="flex items-center h-5">
+<input checked="" class="h-4 w-4 text-primary focus:ring-primary border-slate-300 dark:border-slate-700 rounded" id="terms" name="terms" type="checkbox" required/>
+</div>
+<div class="ml-3 text-sm">
+<label class="text-slate-600 dark:text-slate-400" for="terms">I agree to the <a class="text-primary hover:underline" href="#">Terms of Service</a> and <a class="text-primary hover:underline" href="#">Privacy Policy</a>.</label>
+</div>
+</div>
+<p id="formError" class="text-sm text-rose-600 hidden"></p>
+<!-- Main CTA -->
+<button id="connectBtn" class="w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-lg shadow-lg text-base font-semibold text-white bg-gradient-to-r from-logo-green to-logo-green/90 hover:from-logo-green/90 hover:to-logo-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-logo-green transition-all transform hover:scale-[1.02] active:scale-[0.98] pulse-glow" type="submit">
+<span class="material-icons mr-2 text-xl animate-pulse">wifi</span>
+                        Connect to Internet
+                    </button>
+</form>
+<!-- Divider -->
+<div class="relative my-8">
+<div aria-hidden="true" class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-slate-200 dark:border-slate-800"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-2 bg-white dark:bg-slate-900 text-slate-500">Other ways to connect</span>
+</div>
+</div>
+<!-- Secondary Actions -->
+<div class="grid grid-cols-2 gap-4">
+<button id="guestBtn" type="button" class="flex items-center justify-center py-2.5 px-4 border-2 border-logo-blue/30 dark:border-logo-blue/50 rounded-lg text-sm font-medium text-logo-blue dark:text-logo-blue/80 hover:bg-logo-blue/10 dark:hover:bg-logo-blue/20 transition-all transform hover:scale-105 active:scale-95">
+<span class="material-icons mr-2 text-base">person</span>
+                        Guest Login
+                    </button>
+<button id="voucherBtn" type="button" class="flex items-center justify-center py-2.5 px-4 border-2 border-logo-red/30 dark:border-logo-red/50 rounded-lg text-sm font-medium text-logo-red dark:text-logo-red/80 hover:bg-logo-red/10 dark:hover:bg-logo-red/20 transition-all transform hover:scale-105 active:scale-95">
+<span class="material-icons mr-2 text-base">voucher</span>
+                        Use Voucher
+                    </button>
+</div>
+</div>
+<!-- Support Area -->
+<div class="mt-8 text-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm">
+                    Having trouble? <a class="text-primary font-medium hover:underline" href="#">Contact Support</a> or call 0800-GORNHOM
+                </p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-6 text-center text-slate-400 dark:text-slate-600 text-xs">
+<div class="flex justify-center space-x-6 mb-4">
+<div class="flex items-center">
+<span class="material-icons text-sm mr-1">security</span>
+                Secure Connection
+            </div>
+<div class="flex items-center">
+<span class="material-icons text-sm mr-1">speed</span>
+                Up to 100 Mbps
+            </div>
+</div>
+        © 2024 GORNHOM INNOVATION LTD. All rights reserved.
+    </footer>
+<!-- Background Images / Data Alt Attributes for UI Designer requirement -->
+<div class="hidden">
+<img alt="Logo" data-alt="Corporate logo of Gornhom Innovation Ltd" src="images/logo.jpeg"/>
+<img alt="Background" data-alt="Abstract blue technology network gradient background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh9Wk4tEjZrQ9PfVZBBnw6aemfD0k1OCcKfux0U6jg8G4wI__ZxrYhXsyWpe5LS8xlzB8EUmJZ7dIfoYnB1twsRk2LxwUD4XcRrpqlY4ni2oe1hzU4k742iB6B11QTwaI2mwBwXLC2TKRwkQRKWposgaZOXtgLsrzkNlDk9Zoie9JBSgL-SqXwQWe21MIuhAppKsaISyly65UY5vZgJWfIMKmpj9bR5HO9-IwVwJ-Vf8nK4-LPNClEWmgX4e-7w887l_V6DrlMIEA"/>
+</div>
+
+<script>
+  (function () {
+    const loginForm = document.getElementById("loginForm");
+    const countryCodeEl = document.getElementById("countryCode");
+    const phoneEl = document.getElementById("phone");
+    const termsEl = document.getElementById("terms");
+    const phoneErrorEl = document.getElementById("phoneError");
+    const formErrorEl = document.getElementById("formError");
+    const guestBtn = document.getElementById("guestBtn");
+    const voucherBtn = document.getElementById("voucherBtn");
+
+    function setHidden(el, hidden) {
+      if (!el) return;
+      el.classList.toggle("hidden", hidden);
+    }
+
+    function setText(el, text) {
+      if (!el) return;
+      el.textContent = text;
+    }
+
+    function normalizeMsisdn(countryCode, rawPhone) {
+      const ccDigits = String(countryCode || "").replace(/\D/g, "");
+      const rawDigits = String(rawPhone || "").replace(/\D/g, "");
+      let national = rawDigits;
+
+      // Common formatting: users type leading 0 for national number (e.g. 0712...)
+      if (national.length >= 10 && national.startsWith("0")) national = national.slice(1);
+
+      if (!ccDigits) return null;
+      if (national.length < 7 || national.length > 15) return null;
+
+      return `+${ccDigits}${national}`;
+    }
+
+    function randomGuest() {
+      const n = Math.floor(100 + Math.random() * 900);
+      return `Guest_User_${n}`;
+    }
+
+    function goPackages() {
+      window.location.href = "packages.html";
+    }
+
+    if (guestBtn) {
+      guestBtn.addEventListener("click", function () {
+        sessionStorage.setItem("gh_auth_type", "guest");
+        sessionStorage.setItem("gh_user", randomGuest());
+        sessionStorage.removeItem("gh_msisdn");
+        goPackages();
+      });
+    }
+
+    if (voucherBtn) {
+      voucherBtn.addEventListener("click", function () {
+        sessionStorage.setItem("gh_auth_type", "voucher");
+        sessionStorage.setItem("gh_user", randomGuest());
+        sessionStorage.removeItem("gh_msisdn");
+        goPackages();
+      });
+    }
+
+    if (!loginForm) return;
+
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      setHidden(phoneErrorEl, true);
+      setHidden(formErrorEl, true);
+
+      if (!termsEl || !termsEl.checked) {
+        setText(formErrorEl, "Please accept the Terms of Service to continue.");
+        setHidden(formErrorEl, false);
+        return;
+      }
+
+      const msisdn = normalizeMsisdn(countryCodeEl && countryCodeEl.value, phoneEl && phoneEl.value);
+      if (!msisdn) {
+        setText(phoneErrorEl, "Enter a valid phone number (digits only).");
+        setHidden(phoneErrorEl, false);
+        if (phoneEl) phoneEl.focus();
+        return;
+      }
+
+      sessionStorage.setItem("gh_auth_type", "phone");
+      sessionStorage.setItem("gh_msisdn", msisdn);
+      sessionStorage.setItem("gh_user", msisdn);
+      goPackages();
+    });
+  })();
+</script>
+</body></html>
