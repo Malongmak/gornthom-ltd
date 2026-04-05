@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "build": "tailwindcss -i src/input.css -o assets/tailwind.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.11"
+  }
+}
