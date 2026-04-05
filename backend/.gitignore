@@ -1,7 +1,19 @@
-node_modules/
+# Go
+/backend
+*.exe
+
+# Env
 .env
+
+# Logs
 logs/
 *.log
+
+# SQLite temp files
+data/*.db-shm
+data/*.db-wal
+
+# Editor
 .DS_Store
 .vscode/
 .idea/
