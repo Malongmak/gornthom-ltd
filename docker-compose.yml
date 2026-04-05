@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: gornhom-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      SERVER_IP: ${SERVER_IP:-localhost}
+      ROUTER_TYPE: ${ROUTER_TYPE:-generic}
+      MIKROTIK_HOST: ${MIKROTIK_HOST:-192.168.88.1}
+      MIKROTIK_USER: ${MIKROTIK_USER:-admin}
+      MIKROTIK_PASSWORD: ${MIKROTIK_PASSWORD}
+      PAYSTACK_SECRET_KEY: ${PAYSTACK_SECRET_KEY}
+      PAYSTACK_PUBLIC_KEY: ${PAYSTACK_PUBLIC_KEY}
+      MPESA_CONSUMER_KEY: ${MPESA_CONSUMER_KEY}
+      MPESA_CONSUMER_SECRET: ${MPESA_CONSUMER_SECRET}
+      MPESA_SHORTCODE: ${MPESA_SHORTCODE}
+      MPESA_PASSKEY: ${MPESA_PASSKEY}
+      MPESA_CALLBACK_URL: ${MPESA_CALLBACK_URL}
+      BUSINESS_PHONE: ${BUSINESS_PHONE:-+254116465399}
+      BUSINESS_EMAIL: ${BUSINESS_EMAIL}
+      MAX_DEVICES_PER_SESSION: ${MAX_DEVICES_PER_SESSION:-1}
+
+  frontend:
+    build: ./frontend
+    container_name: gornhom-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
