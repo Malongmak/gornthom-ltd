@@ -150,23 +150,30 @@ app.use((req, res) => {
 
 // Admin stats endpoint
 app.get('/api/admin/stats', (req, res) => {
-  const routerSvc = require('./services/routerService');
-  const connections = Array.from(routerSvc.activeConnections.values());
+  const { getAllActive, getAllSessions, getAllTransactions } = require('./db');
   const now = Date.now();
 
-  const active = connections.filter(c => new Date(c.expiryTime).getTime() > now);
-  const expired = connections.filter(c => new Date(c.expiryTime).getTime() <= now);
-  const totalRevenue = connections.reduce((sum, c) => sum + (parseFloat(c.packagePrice) || 0), 0);
+  let connections = [];
+  let transactions = [];
+  try {
+    connections = getAllSessions.all();
+    transactions = getAllTransactions.all();
+  } catch (e) {
+    // Fall back to in-memory if DB not ready
+    const routerSvc = require('./services/routerService');
+    connections = Array.from(routerSvc.activeConnections.values()).map(c => ({
+      phone: c.phoneNumber, package: c.packageName, price: c.packagePrice,
+      start_time: c.startTime, expiry_time: c.expiryTime, txn_id: c.transactionId, active: 1
+    }));
+  }
 
-  // Package breakdown
+  const active = connections.filter(c => new Date(c.expiry_time).getTime() > now && c.active);
+  const expired = connections.filter(c => new Date(c.expiry_time).getTime() <= now || !c.active);
+  const totalRevenue = transactions.reduce((s, t) => s + (parseFloat(t.amount) || 0), 0);
+
   const packageCounts = {};
-  connections.forEach(c => {
-    packageCounts[c.packageName] = (packageCounts[c.packageName] || 0) + 1;
-  });
-  const topPackages = Object.entries(packageCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([name, count]) => ({ name, count }));
+  connections.forEach(c => { packageCounts[c.package] = (packageCounts[c.package] || 0) + 1; });
+  const topPackages = Object.entries(packageCounts).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([name,count])=>({name,count}));
 
   res.json({
     activeConnections: active.length,
@@ -177,14 +184,14 @@ app.get('/api/admin/stats', (req, res) => {
     topPackages,
     serverUptime: Math.floor(process.uptime()),
     connections: connections.map(c => ({
-      phone: c.phoneNumber,
-      package: c.packageName,
-      packagePrice: c.packagePrice || 0,
-      startTime: c.startTime,
-      expiresAt: c.expiryTime,
-      transactionId: c.transactionId,
-      active: new Date(c.expiryTime).getTime() > now
-    })).sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
+      phone: c.phone || c.phoneNumber,
+      package: c.package || c.packageName,
+      packagePrice: c.price || c.packagePrice || 0,
+      startTime: c.start_time || c.startTime,
+      expiresAt: c.expiry_time || c.expiryTime,
+      transactionId: c.txn_id || c.transactionId,
+      active: new Date(c.expiry_time || c.expiryTime).getTime() > now && (c.active !== 0)
+    })).sort((a,b) => new Date(b.startTime) - new Date(a.startTime))
   });
 });
 if (require.main === module) {

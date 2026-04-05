@@ -3,6 +3,7 @@ const router = express.Router();
 const crypto = require('crypto');
 const axios = require('axios');
 const routerService = require('../services/routerService');
+const { saveTransaction } = require('../db');
 
 const PACKAGE_DURATIONS = {
   '30 Minutes': 30,
@@ -72,6 +73,11 @@ router.post('/paystack', express.raw({ type: 'application/json' }), async (req, 
       const durationMinutes = PACKAGE_DURATIONS[packageName];
 
       if (packageName && durationMinutes && customerPhone) {
+        // Save transaction to DB
+        try {
+          saveTransaction.run({ txnId: reference, phone: customerPhone, package: packageName, amount: amount / 100, currency: 'KES', status: 'success', paymentMethod: 'paystack' });
+        } catch (e) {}
+
         // Activate connection via router
         const result = await routerService.activateConnection({
           transactionId: reference,

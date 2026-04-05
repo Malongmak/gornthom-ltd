@@ -1,13 +1,39 @@
 const routerConfig = require('../config/router');
 const fs = require('fs').promises;
 const path = require('path');
+const { saveSession, getSessionByToken, getSessionByPhone, expireSession, getAllActive } = require('../db');
 
 class RouterService {
   constructor() {
     this.routerType = process.env.ROUTER_TYPE || 'mikrotik';
     this.config = routerConfig[this.routerType];
-    this.activeConnections = new Map(); // keyed by token
-    this.phoneIndex = new Map();        // phone → token (for reconnect lookup)
+    // Keep a lightweight in-memory index for fast lookups (DB is source of truth)
+    this.activeConnections = new Map();
+    this._loadFromDB();
+  }
+
+  // Restore active sessions from DB on startup
+  _loadFromDB() {
+    try {
+      const rows = getAllActive.all();
+      rows.forEach(row => {
+        this.activeConnections.set(row.token, {
+          token: row.token,
+          phoneNumber: row.phone,
+          packageName: row.package,
+          packagePrice: row.price,
+          userIP: row.user_ip,
+          macAddress: row.mac_address,
+          startTime: row.start_time,
+          expiryTime: row.expiry_time,
+          durationMinutes: row.duration,
+          transactionId: row.txn_id,
+        });
+      });
+      if (rows.length > 0) console.log(`📦 Restored ${rows.length} active session(s) from database`);
+    } catch (e) {
+      console.warn('Could not load sessions from DB:', e.message);
+    }
   }
 
   async activateConnection(data) {
@@ -136,35 +162,55 @@ class RouterService {
 
   // ─── Reconnect: find active session by phone, re-whitelist new IP/MAC ────────
   async reconnectByPhone(phoneNumber, newIP, newMAC) {
-    const token = this.phoneIndex.get(phoneNumber);
-    if (!token) return { success: false, message: 'No active session for this phone number' };
+    // Check DB first (survives restarts)
+    let conn = null;
+    try {
+      const row = getSessionByPhone.get(phoneNumber);
+      if (row) {
+        conn = {
+          token: row.token,
+          phoneNumber: row.phone,
+          packageName: row.package,
+          packagePrice: row.price,
+          userIP: row.user_ip,
+          macAddress: row.mac_address,
+          expiryTime: row.expiry_time,
+          durationMinutes: row.duration,
+          transactionId: row.txn_id,
+        };
+      }
+    } catch (e) { /* fall through to memory */ }
 
-    const conn = this.activeConnections.get(token);
-    if (!conn) { this.phoneIndex.delete(phoneNumber); return { success: false, message: 'Session expired' }; }
+    // Fall back to in-memory
+    if (!conn) {
+      for (const c of this.activeConnections.values()) {
+        if (c.phoneNumber === phoneNumber) { conn = c; break; }
+      }
+    }
 
-    const now = Date.now();
-    const remaining = new Date(conn.expiryTime).getTime() - now;
+    if (!conn) return { success: false, message: 'No active session for this phone number' };
+
+    const remaining = new Date(conn.expiryTime).getTime() - Date.now();
     if (remaining <= 0) {
-      this.activeConnections.delete(token);
-      this.phoneIndex.delete(phoneNumber);
+      expireSession.run(conn.token);
+      this.activeConnections.delete(conn.token);
       return { success: false, message: 'Session has expired. Please purchase a new package.' };
     }
 
     const remainingMinutes = Math.ceil(remaining / 60000);
     console.log(`🔄 Reconnecting ${phoneNumber} — ${remainingMinutes}m remaining`);
 
-    // Re-activate with new IP/MAC and remaining time
-    const result = await this.activateConnection({
+    await this.activateConnection({
       ...conn,
       userIP: newIP || conn.userIP,
       macAddress: newMAC || conn.macAddress,
       durationMinutes: remainingMinutes,
-      transactionId: conn.transactionId // reuse same token
+      transactionId: conn.transactionId
     });
 
     return {
       success: true,
-      connectionToken: token,
+      connectionToken: conn.token,
       remainingMinutes,
       expiresAt: conn.expiryTime,
       packageName: conn.packageName,
@@ -180,7 +226,9 @@ class RouterService {
       const pkg = getPackages().find(p => p.name === data.packageName);
       if (pkg) maxDevices = pkg.maxDevices;
     } catch (e) { /* packages route not loaded yet, use default */ }
+
     const expiryTime = data.expiryTime || new Date(Date.now() + data.durationMinutes * 60 * 1000).toISOString();
+    const startTime = new Date().toISOString();
 
     const connection = {
       token,
@@ -189,7 +237,7 @@ class RouterService {
       phoneNumber: data.phoneNumber,
       packageName: data.packageName,
       packagePrice: data.packagePrice,
-      startTime: new Date().toISOString(),
+      startTime,
       expiryTime,
       durationMinutes: data.durationMinutes,
       transactionId: data.transactionId,
@@ -197,15 +245,34 @@ class RouterService {
       connectedDevices: [data.macAddress || data.userIP].filter(Boolean)
     };
 
-    this.activeConnections.set(token, connection);
-    if (data.phoneNumber) this.phoneIndex.set(data.phoneNumber, token);
+    // Persist to database
+    try {
+      saveSession.run({
+        token,
+        phone: data.phoneNumber,
+        package: data.packageName,
+        price: data.packagePrice || 0,
+        currency: data.packageCurrency || 'KES',
+        duration: data.durationMinutes,
+        userIP: data.userIP,
+        macAddress: data.macAddress || null,
+        txnId: data.transactionId,
+        paymentMethod: data.paymentMethod || 'paystack',
+        startTime,
+        expiryTime,
+      });
+    } catch (e) {
+      console.warn('DB save failed, using memory only:', e.message);
+    }
 
-    // Auto-expire
+    this.activeConnections.set(token, connection);
+
+    // Auto-expire from memory (DB handles persistence)
     const ttl = new Date(expiryTime).getTime() - Date.now();
     if (ttl > 0) {
       setTimeout(() => {
         this.activeConnections.delete(token);
-        this.phoneIndex.delete(data.phoneNumber);
+        try { expireSession.run(token); } catch (e) {}
         console.log(`⏰ Session expired: ${token}`);
       }, ttl);
     }
@@ -224,20 +291,26 @@ class RouterService {
   }
 
   async checkConnectionStatus(token) {
-    const conn = this.activeConnections.get(token);
+    // Check DB first
+    let conn = this.activeConnections.get(token);
+    if (!conn) {
+      try {
+        const row = getSessionByToken.get(token);
+        if (row) conn = { expiryTime: row.expiry_time, packageName: row.package, userIP: row.user_ip, connectedDevices: [], maxDevices: 1 };
+      } catch (e) {}
+    }
     if (!conn) return { active: false, message: 'Session not found' };
 
     const remaining = new Date(conn.expiryTime).getTime() - Date.now();
     const remainingMinutes = Math.max(0, Math.floor(remaining / 60000));
-
     return {
       active: remainingMinutes > 0,
       remainingMinutes,
       expiresAt: conn.expiryTime,
       packageName: conn.packageName,
       userIP: conn.userIP,
-      connectedDevices: conn.connectedDevices.length,
-      maxDevices: conn.maxDevices
+      connectedDevices: conn.connectedDevices ? conn.connectedDevices.length : 1,
+      maxDevices: conn.maxDevices || 1
     };
   }
 
@@ -245,7 +318,7 @@ class RouterService {
     for (const [token, conn] of this.activeConnections.entries()) {
       if (conn.userIP === identifier || token === identifier || conn.phoneNumber === identifier) {
         this.activeConnections.delete(token);
-        this.phoneIndex.delete(conn.phoneNumber);
+        try { expireSession.run(token); } catch (e) {}
         console.log(`🔒 Revoked session for ${conn.phoneNumber}`);
         return { success: true, message: 'Connection revoked', userIP: conn.userIP };
       }
