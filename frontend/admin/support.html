@@ -23,14 +23,14 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","lo
     </div>
   </div>
   <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
-    <a href="admin.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">dashboard</span><span class="font-medium">Dashboard</span></a>
-    <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">people</span><span class="font-medium">Users</span></a>
-    <a href="admin-packages.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">inventory_2</span><span class="font-medium">Packages</span></a>
-    <a href="locations.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">location_on</span><span class="font-medium">Locations</span></a>
-    <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">bar_chart</span><span class="font-medium">Analytics</span></a>
+    <a href="/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">dashboard</span><span class="font-medium">Dashboard</span></a>
+    <a href="/admin/users" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">people</span><span class="font-medium">Users</span></a>
+    <a href="/admin/packages" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">inventory_2</span><span class="font-medium">Packages</span></a>
+    <a href="/admin/locations" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">location_on</span><span class="font-medium">Locations</span></a>
+    <a href="/admin/analytics" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">bar_chart</span><span class="font-medium">Analytics</span></a>
     <div class="pt-8 pb-2 px-4"><p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Management</p></div>
-    <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">settings</span><span class="font-medium">Settings</span></a>
-    <a href="support.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-logo-green text-white transition-colors"><span class="material-icons-outlined">help_outline</span><span class="font-medium">Support</span></a>
+    <a href="/admin/settings" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">settings</span><span class="font-medium">Settings</span></a>
+    <a href="/admin/support" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-logo-green text-white transition-colors"><span class="material-icons-outlined">help_outline</span><span class="font-medium">Support</span></a>
   </nav>
 </aside>
 
@@ -61,15 +61,15 @@ tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#22c55e","lo
             <span class="material-icons-outlined text-amber-500">cleaning_services</span>
             <div><p class="text-sm font-semibold">Clear Expired Sessions</p><p class="text-xs text-slate-500">Remove expired connections from memory</p></div>
           </button>
-          <a href="admin.html" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+          <a href="/admin" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
             <span class="material-icons-outlined text-blue-500">dashboard</span>
             <div><p class="text-sm font-semibold">Go to Dashboard</p><p class="text-xs text-slate-500">View live stats and transactions</p></div>
           </a>
-          <a href="../public/index.html" target="_blank" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+          <a href="/portal" target="_blank" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
             <span class="material-icons-outlined text-logo-green">wifi</span>
             <div><p class="text-sm font-semibold">Open Captive Portal</p><p class="text-xs text-slate-500">Test the user-facing login page</p></div>
           </a>
-          <a href="../public/packages.html" target="_blank" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+          <a href="/portal/packages" target="_blank" class="flex items-center gap-3 p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
             <span class="material-icons-outlined text-purple-500">shopping_cart</span>
             <div><p class="text-sm font-semibold">Open Packages Page</p><p class="text-xs text-slate-500">Test the payment flow</p></div>
           </a>

@@ -234,7 +234,7 @@
     function goPackages() {
       // Works both when opened as a file and when served via /portal
       const isServed = window.location.pathname.startsWith('/portal');
-      window.location.href = isServed ? "/portal/packages" : "packages.html";
+      window.location.href = "/portal/packages";
     }
 
     if (guestBtn) {
