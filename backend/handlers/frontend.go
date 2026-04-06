@@ -29,7 +29,6 @@ func RegisterFrontend(r *gin.Engine, cfg *config.Config) {
 	r.GET("/portal", func(c *gin.Context) { c.File(fe + "/public/index.html") })
 	r.GET("/portal/packages", func(c *gin.Context) { c.File(fe + "/public/packages.html") })
 	r.GET("/portal/session", func(c *gin.Context) { c.File(fe + "/public/session.html") })
-
 	// Admin pages
 	r.GET("/admin", func(c *gin.Context) { c.File(fe + "/admin/admin.html") })
 	r.GET("/admin/packages", func(c *gin.Context) { c.File(fe + "/admin/admin-packages.html") })

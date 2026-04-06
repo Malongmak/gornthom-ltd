@@ -26,6 +26,23 @@ type ConnectionEntry struct {
 	MaxDevices       int
 }
 
+// packageMaxDevices maps package names to their device limits
+var packageMaxDevices = map[string]int{
+	"30 Minutes":      1,
+	"1 Hour":          1,
+	"1 Day":           2,
+	"1 Week":          3,
+	"1 Month":         5,
+	"Enterprise Plan": 25,
+}
+
+func maxDevicesForPackage(name string) int {
+	if n, ok := packageMaxDevices[name]; ok {
+		return n
+	}
+	return 1
+}
+
 type RouterService struct {
 	cfg               *config.Config
 	mu                sync.RWMutex
@@ -143,7 +160,7 @@ func (rs *RouterService) storeConnection(data *models.ActivationData, token stri
 		ExpiryTime:      session.ExpiryTime,
 		DurationMinutes: data.DurationMinutes,
 		TransactionID:   data.TransactionID,
-		MaxDevices:      1,
+		MaxDevices:      maxDevicesForPackage(data.PackageName),
 	}
 
 	rs.mu.Lock()

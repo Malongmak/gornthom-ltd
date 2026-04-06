@@ -86,6 +86,11 @@ func GetSessionByPhone(phone string) (*models.Session, error) {
 	return scanSession(row)
 }
 
+func GetSessionByTxn(txnID string) (*models.Session, error) {
+	row := DB.QueryRow(`SELECT id,token,phone,package,price,currency,duration,user_ip,mac_address,txn_id,payment_method,start_time,expiry_time,active,created_at FROM sessions WHERE txn_id=? ORDER BY created_at DESC LIMIT 1`, txnID)
+	return scanSession(row)
+}
+
 func ExpireSession(token string) error {
 	_, err := DB.Exec(`UPDATE sessions SET active=0 WHERE token=?`, token)
 	return err

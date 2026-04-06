@@ -1,6 +1,16 @@
 package config
 
-import "os"
+import (
+	"os"
+)
+
+func resolveFrontendDir() string {
+	// Prefer a local frontend/ copy (allows per-branch overrides)
+	if _, err := os.Stat("frontend"); err == nil {
+		return "frontend"
+	}
+	return "../frontend"
+}
 
 type RouterConfig struct {
 	Host     string
@@ -32,7 +42,7 @@ func Load() *Config {
 		NodeEnv:             getEnv("NODE_ENV", "development"),
 		RouterType:          getEnv("ROUTER_TYPE", "mikrotik"),
 		ServerIP:            getEnv("SERVER_IP", "localhost"),
-		FrontendDir:         getEnv("FRONTEND_DIR", "../frontend"),
+		FrontendDir:         getEnv("FRONTEND_DIR", resolveFrontendDir()),
 		PaystackKey:         getEnv("PAYSTACK_SECRET_KEY", ""),
 		MpesaEnv:            getEnv("MPESA_ENV", "sandbox"),
 		MpesaConsumerKey:    getEnv("MPESA_CONSUMER_KEY", ""),
