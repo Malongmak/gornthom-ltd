@@ -59,6 +59,26 @@ func migrate() {
 			payment_method TEXT DEFAULT 'paystack',
 			created_at  TEXT    DEFAULT (datetime('now'))
 		);
+		CREATE TABLE IF NOT EXISTS packages (
+			id               TEXT PRIMARY KEY,
+			name             TEXT NOT NULL,
+			duration         TEXT NOT NULL,
+			duration_minutes INTEGER NOT NULL,
+			price            REAL NOT NULL,
+			currency         TEXT DEFAULT 'KES',
+			speed            TEXT NOT NULL,
+			tier             TEXT NOT NULL,
+			max_devices      INTEGER DEFAULT 1,
+			active           INTEGER DEFAULT 1,
+			popular          INTEGER DEFAULT 0,
+			enterprise       INTEGER DEFAULT 0
+		);
+		CREATE TABLE IF NOT EXISTS locations (
+			id     TEXT PRIMARY KEY,
+			name   TEXT NOT NULL,
+			status TEXT DEFAULT 'online',
+			region TEXT NOT NULL
+		);
 	`)
 	if err != nil {
 		log.Fatalf("migration failed: %v", err)
@@ -171,4 +191,132 @@ func scanSessions(rows *sql.Rows) ([]models.Session, error) {
 		sessions = append(sessions, s)
 	}
 	return sessions, nil
+}
+
+// ── Packages ──────────────────────────────────────────────────────────────
+
+func GetAllPackages() ([]models.Package, error) {
+	rows, err := DB.Query(`SELECT id,name,duration,duration_minutes,price,currency,speed,tier,max_devices,active,popular,enterprise FROM packages ORDER BY price ASC`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var pkgs []models.Package
+	for rows.Next() {
+		var p models.Package
+		var active, popular, enterprise int
+		if err := rows.Scan(&p.ID, &p.Name, &p.Duration, &p.DurationMinutes, &p.Price, &p.Currency, &p.Speed, &p.Tier, &p.MaxDevices, &active, &popular, &enterprise); err != nil {
+			return nil, err
+		}
+		p.Active = active == 1
+		p.Popular = popular == 1
+		p.Enterprise = enterprise == 1
+		pkgs = append(pkgs, p)
+	}
+	return pkgs, nil
+}
+
+func UpsertPackage(p models.Package) error {
+	active, popular, enterprise := 0, 0, 0
+	if p.Active {
+		active = 1
+	}
+	if p.Popular {
+		popular = 1
+	}
+	if p.Enterprise {
+		enterprise = 1
+	}
+	_, err := DB.Exec(`INSERT OR REPLACE INTO packages (id,name,duration,duration_minutes,price,currency,speed,tier,max_devices,active,popular,enterprise)
+		VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
+		p.ID, p.Name, p.Duration, p.DurationMinutes, p.Price, p.Currency, p.Speed, p.Tier, p.MaxDevices, active, popular, enterprise)
+	return err
+}
+
+func UpdatePackage(id string, name *string, price *float64, speed *string, maxDevices *int, active *bool) error {
+	if name != nil {
+		if _, err := DB.Exec(`UPDATE packages SET name=? WHERE id=?`, *name, id); err != nil {
+			return err
+		}
+	}
+	if price != nil {
+		if _, err := DB.Exec(`UPDATE packages SET price=? WHERE id=?`, *price, id); err != nil {
+			return err
+		}
+	}
+	if speed != nil {
+		if _, err := DB.Exec(`UPDATE packages SET speed=? WHERE id=? `, *speed, id); err != nil {
+			return err
+		}
+	}
+	if maxDevices != nil {
+		if _, err := DB.Exec(`UPDATE packages SET max_devices=? WHERE id=?`, *maxDevices, id); err != nil {
+			return err
+		}
+	}
+	if active != nil {
+		v := 0
+		if *active {
+			v = 1
+		}
+		if _, err := DB.Exec(`UPDATE packages SET active=? WHERE id=?`, v, id); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func PackageExists() (bool, error) {
+	var count int
+	err := DB.QueryRow(`SELECT COUNT(*) FROM packages`).Scan(&count)
+	return count > 0, err
+}
+
+// ── Locations ─────────────────────────────────────────────────────────────
+
+func GetAllLocations() ([]models.Location, error) {
+	rows, err := DB.Query(`SELECT id,name,status,region FROM locations`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var locs []models.Location
+	for rows.Next() {
+		var l models.Location
+		if err := rows.Scan(&l.ID, &l.Name, &l.Status, &l.Region); err != nil {
+			return nil, err
+		}
+		locs = append(locs, l)
+	}
+	return locs, nil
+}
+
+func InsertLocation(l models.Location) error {
+	_, err := DB.Exec(`INSERT INTO locations (id,name,status,region) VALUES (?,?,?,?)`, l.ID, l.Name, l.Status, l.Region)
+	return err
+}
+
+func UpdateLocation(id, status, name string) error {
+	if status != "" {
+		if _, err := DB.Exec(`UPDATE locations SET status=? WHERE id=?`, status, id); err != nil {
+			return err
+		}
+	}
+	if name != "" {
+		if _, err := DB.Exec(`UPDATE locations SET name=? WHERE id=?`, name, id); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func DeleteLocation(id string) error {
+	_, err := DB.Exec(`DELETE FROM locations WHERE id=?`, id)
+	return err
+}
+
+func LocationExists() (bool, error) {
+	var count int
+	err := DB.QueryRow(`SELECT COUNT(*) FROM locations`).Scan(&count)
+	return count > 0, err
 }
