@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GORNHOM · Admin Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#0a0f1e;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#1e293b;border:1px solid #334155;border-radius:20px;padding:36px;width:100%;max-width:380px;box-shadow:0 25px 60px rgba(0,0,0,.5)}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;justify-content:center}
+.logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(34,197,94,.3)}
+h1{font-size:22px;font-weight:800;color:#f1f5f9;text-align:center;margin-bottom:4px}
+p.sub{font-size:13px;color:#475569;text-align:center;margin-bottom:28px}
+label{font-size:11px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px}
+.inp-wrap{position:relative;margin-bottom:20px}
+input{width:100%;background:#0f172a;border:1px solid #334155;color:#f1f5f9;border-radius:10px;padding:11px 44px 11px 14px;font-size:14px;outline:none;transition:border .15s}
+input:focus{border-color:#22c55e}
+input::placeholder{color:#334155}
+.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#475569;cursor:pointer;display:flex;align-items:center}
+.btn{width:100%;padding:12px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{opacity:.9}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.err{font-size:12px;color:#f87171;text-align:center;margin-top:12px;display:none}
+.hint{font-size:11px;color:#334155;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">
+      <span class="material-icons-round" style="color:#fff;font-size:20px">wifi</span>
+    </div>
+  </div>
+  <h1>Admin Login</h1>
+  <p class="sub">GORNHOM Admin Console</p>
+
+  <form onsubmit="login(event)">
+    <label>Password</label>
+    <div class="inp-wrap">
+      <input id="pwd" type="password" placeholder="Enter admin password" autocomplete="current-password" required/>
+      <button type="button" class="eye" onclick="togglePwd()">
+        <span id="eye-icon" class="material-icons-round" style="font-size:18px">visibility</span>
+      </button>
+    </div>
+    <button class="btn" id="login-btn" type="submit">
+      <span class="material-icons-round" style="font-size:16px">lock_open</span>Sign In
+    </button>
+    <p class="err" id="err-msg"></p>
+  </form>
+  <p class="hint">Set ADMIN_PASSWORD in your .env file</p>
+</div>
+
+<script src="/config.js"></script>
+<script>
+const API = window.API_BASE_URL || 'http://localhost:3000/api';
+
+// Already logged in?
+if (localStorage.getItem('gh_admin_token')) {
+  window.location.replace('/admin');
+}
+
+function togglePwd() {
+  const inp = document.getElementById('pwd');
+  const icon = document.getElementById('eye-icon');
+  if (inp.type === 'password') { inp.type = 'text'; icon.textContent = 'visibility_off'; }
+  else { inp.type = 'password'; icon.textContent = 'visibility'; }
+}
+
+async function login(e) {
+  e.preventDefault();
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('err-msg');
+  const pwd = document.getElementById('pwd').value;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="material-icons-round" style="font-size:16px;animation:spin 1s linear infinite">refresh</span>Signing in…';
+  err.style.display = 'none';
+  try {
+    const r = await fetch(API + '/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pwd })
+    });
+    const d = await r.json();
+    if (d.success) {
+      localStorage.setItem('gh_admin_token', d.token);
+      window.location.replace('/admin');
+    } else {
+      err.textContent = d.message || 'Invalid password';
+      err.style.display = 'block';
+    }
+  } catch(e) {
+    err.textContent = 'Could not reach server';
+    err.style.display = 'block';
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<span class="material-icons-round" style="font-size:16px">lock_open</span>Sign In';
+}
+</script>
+</body>
+</html>

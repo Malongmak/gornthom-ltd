@@ -116,6 +116,7 @@ html,body{font-family:'Inter',sans-serif;background:#0a0f1e;color:#f1f5f9}
       <div>
         <p style="font-size:12px;font-weight:600;color:#f1f5f9">Administrator</p>
         <p style="font-size:10px;color:#475569">Super Admin</p>
+      <button onclick="logout()" title="Logout" style="background:none;border:none;color:#475569;cursor:pointer;margin-left:auto;display:flex;align-items:center" onmouseover="this.style.color='#f87171'" onmouseout="this.style.color='#475569'"><span class="material-icons-round" style="font-size:18px">logout</span></button>
       </div>
     </div>
   </div>
@@ -331,25 +332,127 @@ html,body{font-family:'Inter',sans-serif;background:#0a0f1e;color:#f1f5f9}
 
 <!-- ══════════ SETTINGS ══════════ -->
 <section id="s-settings" class="section fade-up">
-  <div style="margin-bottom:20px">
-    <h2 style="font-size:18px;font-weight:800;color:#f1f5f9">Settings</h2>
-    <p style="font-size:12px;color:#475569;margin-top:2px">System health and configuration</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div>
+      <h2 style="font-size:18px;font-weight:800;color:#f1f5f9">Settings</h2>
+      <p style="font-size:12px;color:#475569;margin-top:2px">Configure server, router, payments and business info</p>
+    </div>
+    <div id="settings-save-bar" style="display:none;align-items:center;gap:8px">
+      <span style="font-size:12px;color:#fbbf24">Unsaved changes</span>
+      <button onclick="saveSettings()" class="btn btn-green btn-sm">Save All</button>
+    </div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-    <div class="card">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
-        <span class="material-icons-round" style="font-size:16px;color:#22c55e">monitor_heart</span>
-        <h3 style="font-size:13px;font-weight:700;color:#f1f5f9">System Health</h3>
+
+  <!-- Tabs -->
+  <div style="display:flex;gap:4px;margin-bottom:20px;background:#0f172a;padding:4px;border-radius:12px;width:fit-content">
+    <button class="settings-tab active" data-tab="server"  onclick="switchTab('server')"  style="padding:7px 16px;border-radius:9px;font-size:12px;font-weight:600;border:none;cursor:pointer;background:#1e293b;color:#f1f5f9">Server</button>
+    <button class="settings-tab"        data-tab="router"  onclick="switchTab('router')"  style="padding:7px 16px;border-radius:9px;font-size:12px;font-weight:600;border:none;cursor:pointer;background:transparent;color:#475569">Router</button>
+    <button class="settings-tab"        data-tab="payment" onclick="switchTab('payment')" style="padding:7px 16px;border-radius:9px;font-size:12px;font-weight:600;border:none;cursor:pointer;background:transparent;color:#475569">Payments</button>
+    <button class="settings-tab"        data-tab="business" onclick="switchTab('business')" style="padding:7px 16px;border-radius:9px;font-size:12px;font-weight:600;border:none;cursor:pointer;background:transparent;color:#475569">Business</button>
+    <button class="settings-tab"        data-tab="health"  onclick="switchTab('health')"  style="padding:7px 16px;border-radius:9px;font-size:12px;font-weight:600;border:none;cursor:pointer;background:transparent;color:#475569">Health</button>
+  </div>
+
+  <!-- Server Tab -->
+  <div id="tab-server" class="settings-tab-content">
+    <div class="card" style="max-width:600px">
+      <h3 style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:16px;display:flex;align-items:center;gap:8px"><span class="material-icons-round" style="font-size:16px;color:#22c55e">dns</span>Server Configuration</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">PORT</label><input class="inp settings-inp" data-key="PORT" type="text" placeholder="3000"/></div>
+        <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">SERVER IP</label><input class="inp settings-inp" data-key="SERVER_IP" type="text" placeholder="192.168.10.2"/></div>
+        <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">ENVIRONMENT</label>
+          <select class="inp settings-inp" data-key="NODE_ENV" style="cursor:pointer">
+            <option value="development">development</option>
+            <option value="production">production</option>
+          </select>
+        </div>
+        <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">ROUTER TYPE</label>
+          <select class="inp settings-inp" data-key="ROUTER_TYPE" style="cursor:pointer">
+            <option value="mikrotik">mikrotik</option>
+            <option value="openwrt">openwrt</option>
+            <option value="generic">generic</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1"><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">FRONTEND DIR</label><input class="inp settings-inp" data-key="FRONTEND_DIR" type="text"/></div>
       </div>
-      <div id="health-rows" style="display:flex;flex-direction:column;gap:0"></div>
+      <p style="font-size:11px;color:#f59e0b;margin-top:12px;display:flex;align-items:center;gap:4px"><span class="material-icons-round" style="font-size:13px">info</span>Server restart required for changes to take effect.</p>
     </div>
-    <div class="card">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
-        <span class="material-icons-round" style="font-size:16px;color:#22c55e">api</span>
-        <h3 style="font-size:13px;font-weight:700;color:#f1f5f9">Endpoint Status</h3>
+  </div>
+
+  <!-- Router Tab -->
+  <div id="tab-router" class="settings-tab-content" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px">
+      <div class="card">
+        <h3 style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:16px;display:flex;align-items:center;gap:8px"><span class="material-icons-round" style="font-size:16px;color:#22c55e">router</span>MikroTik</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">HOST</label><input class="inp settings-inp" data-key="MIKROTIK_HOST" type="text" placeholder="192.168.88.1"/></div>
+          <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">USERNAME</label><input class="inp settings-inp" data-key="MIKROTIK_USER" type="text" placeholder="admin"/></div>
+          <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">PASSWORD</label><input class="inp settings-inp" data-key="MIKROTIK_PASSWORD" type="password" placeholder="••••••••"/></div>
+          <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">API PORT</label><input class="inp settings-inp" data-key="MIKROTIK_PORT" type="text" placeholder="8728"/></div>
+        </div>
       </div>
-      <div id="ep-rows" style="display:flex;flex-direction:column;gap:0"></div>
+      <div class="card">
+        <h3 style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:16px;display:flex;align-items:center;gap:8px"><span class="material-icons-round" style="font-size:16px;color:#60a5fa">router</span>OpenWrt</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">HOST</label><input class="inp settings-inp" data-key="OPENWRT_HOST" type="text" placeholder="192.168.1.1"/></div>
+          <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">USERNAME</label><input class="inp settings-inp" data-key="OPENWRT_USER" type="text" placeholder="root"/></div>
+          <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">PASSWORD</label><input class="inp settings-inp" data-key="OPENWRT_PASSWORD" type="password" placeholder="••••••••"/></div>
+          <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">SSH PORT</label><input class="inp settings-inp" data-key="OPENWRT_SSH_PORT" type="text" placeholder="22"/></div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Payment Tab -->
+  <div id="tab-payment" class="settings-tab-content" style="display:none">
+    <div class="card" style="max-width:500px">
+      <h3 style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:4px;display:flex;align-items:center;gap:8px">
+        <span class="material-icons-round" style="font-size:16px;color:#22c55e">payments</span>Paystack
+      </h3>
+      <p style="font-size:11px;color:#475569;margin-bottom:16px">Get your keys from <a href="https://dashboard.paystack.com/#/settings/developer" target="_blank" style="color:#22c55e">dashboard.paystack.com</a></p>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">PUBLIC KEY</label>
+          <input class="inp settings-inp" data-key="PAYSTACK_PUBLIC_KEY" type="text" placeholder="pk_live_..."/>
+          <p style="font-size:10px;color:#475569;margin-top:4px">Used in the frontend to initialize payments</p>
+        </div>
+        <div>
+          <label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">SECRET KEY</label>
+          <input class="inp settings-inp" data-key="PAYSTACK_SECRET_KEY" type="password" placeholder="sk_live_..."/>
+          <p style="font-size:10px;color:#475569;margin-top:4px">Used server-side to verify transactions</p>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:10px">
+        <p style="font-size:11px;color:#4ade80;font-weight:600;margin-bottom:4px">Webhook URL</p>
+        <p id="webhook-url" style="font-size:11px;font-family:monospace;color:#94a3b8">loading...</p>
+        <p style="font-size:10px;color:#475569;margin-top:4px">Add this to your Paystack dashboard → Settings → Webhooks</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Business Tab -->
+  <div id="tab-business" class="settings-tab-content" style="display:none">
+    <div class="card" style="max-width:500px">
+      <h3 style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:16px;display:flex;align-items:center;gap:8px"><span class="material-icons-round" style="font-size:16px;color:#22c55e">business</span>Business Info</h3>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">BUSINESS PHONE</label><input class="inp settings-inp" data-key="BUSINESS_PHONE" type="text" placeholder="+254..."/></div>
+        <div><label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">BUSINESS EMAIL</label><input class="inp settings-inp" data-key="BUSINESS_EMAIL" type="email" placeholder="admin@example.com"/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Health Tab -->
+  <div id="tab-health" class="settings-tab-content" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px">
+      <div class="card">
+        <h3 style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:16px;display:flex;align-items:center;gap:8px"><span class="material-icons-round" style="font-size:16px;color:#22c55e">monitor_heart</span>System Health</h3>
+        <div id="health-rows"></div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:16px;display:flex;align-items:center;gap:8px"><span class="material-icons-round" style="font-size:16px;color:#22c55e">api</span>Endpoint Status</h3>
+        <div id="ep-rows"></div>
+      </div>
+    </div>
+  </div>
     <div class="card" style="grid-column:1/-1">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
         <span class="material-icons-round" style="font-size:16px;color:#22c55e">bolt</span>
@@ -427,13 +530,13 @@ html,body{font-family:'Inter',sans-serif;background:#0a0f1e;color:#f1f5f9}
 <div id="m-loc" class="modal-bg" style="display:none">
   <div class="modal-box fade-up">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-      <h3 style="font-size:15px;font-weight:700;color:#f1f5f9">Add Location</h3>
+      <h3 id="loc-modal-title" style="font-size:15px;font-weight:700;color:#f1f5f9">Add Location</h3>
       <button onclick="closeLoc()" style="background:none;border:none;color:#475569;cursor:pointer"><span class="material-icons-round">close</span></button>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
       <div>
         <label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">LOCATION NAME</label>
-        <input id="l-name" class="inp" type="text" placeholder="e.g. Westlands Hub"/>
+        <input type="hidden" id="l-edit-id"/><input id="l-name" class="inp" type="text" placeholder="e.g. Westlands Hub"/>
       </div>
       <div>
         <label style="font-size:11px;color:#475569;font-weight:600;display:block;margin-bottom:5px">REGION</label>
@@ -442,7 +545,7 @@ html,body{font-family:'Inter',sans-serif;background:#0a0f1e;color:#f1f5f9}
     </div>
     <p id="l-err" style="font-size:12px;color:#f87171;margin-top:8px;display:none"></p>
     <div style="display:flex;gap:8px;margin-top:20px">
-      <button onclick="saveLoc()" class="btn btn-green" style="flex:1;justify-content:center">Add Location</button>
+      <button id="loc-save-btn" onclick="saveLoc()" class="btn btn-green" style="flex:1;justify-content:center">Add Location</button>
       <button onclick="closeLoc()" class="btn btn-outline">Cancel</button>
     </div>
   </div>
@@ -476,6 +579,19 @@ html,body{font-family:'Inter',sans-serif;background:#0a0f1e;color:#f1f5f9}
 (function(){
 'use strict';
 const API = window.API_BASE_URL || 'http://localhost:3000/api';
+
+// ── Auth guard ───────────────────────────────────────────────
+const ADMIN_TOKEN = localStorage.getItem('gh_admin_token');
+if (!ADMIN_TOKEN) { window.location.replace('/admin/login'); }
+
+// Patch fetch to always send token
+const _fetch = window.fetch;
+window.fetch = function(url, opts = {}) {
+  if (typeof url === 'string' && url.includes('/api/')) {
+    opts.headers = Object.assign({ 'X-Admin-Token': ADMIN_TOKEN }, opts.headers || {});
+  }
+  return _fetch(url, opts);
+};
 let allConn = [], allTxn = [], revokeId = null;
 
 const SECTIONS = {
@@ -750,7 +866,7 @@ async function loadLocs() {
           </div>
         </div>
         <div style="display:flex;gap:8px">
-          <button onclick="toggleLoc('${l.id}','${l.status==='online'?'offline':'online'}')" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">
+          <button onclick="openEditLoc('${l.id}','${l.name}','${l.region}')" class="btn btn-outline btn-sm"><span class="material-icons-round" style="font-size:13px">edit</span></button><button onclick="toggleLoc('${l.id}','${l.status==='online'?'offline':'online'}')" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">
             <span class="material-icons-round" style="font-size:13px">${l.status==='online'?'pause_circle':'play_circle'}</span>
             ${l.status==='online'?'Set Offline':'Set Online'}
           </button>
@@ -763,23 +879,38 @@ async function loadLocs() {
 }
 
 function openLocModal() {
+  document.getElementById('l-edit-id').value = '';
   document.getElementById('l-name').value = '';
   document.getElementById('l-region').value = '';
   document.getElementById('l-err').style.display = 'none';
+  document.getElementById('loc-modal-title').textContent = 'Add Location';
+  document.getElementById('loc-save-btn').textContent = 'Add Location';
+  document.getElementById('m-loc').style.display = 'flex';
+}
+function openEditLoc(id, name, region) {
+  document.getElementById('l-edit-id').value = id;
+  document.getElementById('l-name').value = name;
+  document.getElementById('l-region').value = region;
+  document.getElementById('l-err').style.display = 'none';
+  document.getElementById('loc-modal-title').textContent = 'Edit Location';
+  document.getElementById('loc-save-btn').textContent = 'Save Changes';
   document.getElementById('m-loc').style.display = 'flex';
 }
 function closeLoc() { document.getElementById('m-loc').style.display = 'none'; }
 async function saveLoc() {
+  const id = document.getElementById('l-edit-id').value;
   const name = document.getElementById('l-name').value.trim();
   const region = document.getElementById('l-region').value.trim();
   if (!name || !region) {
     const e = document.getElementById('l-err'); e.textContent = 'Name and region required'; e.style.display = 'block'; return;
   }
   try {
-    const d = await fetch(API + '/locations', {
-      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ name, region })
+    const url = id ? API + '/locations/' + id : API + '/locations';
+    const method = id ? 'PATCH' : 'POST';
+    const d = await fetch(url, {
+      method, headers:{'Content-Type':'application/json'}, body:JSON.stringify({ name, region })
     }).then(r => r.json());
-    if (d.success) { closeLoc(); toast('Location added'); loadLocs(); }
+    if (d.success) { closeLoc(); toast(id ? 'Location updated' : 'Location added'); loadLocs(); }
     else { const e = document.getElementById('l-err'); e.textContent = d.message || 'Failed'; e.style.display = 'block'; }
   } catch(e) { toast('Request failed', 'error'); }
 }
@@ -832,6 +963,32 @@ function filterTxn() {
 
 // ── Settings ─────────────────────────────────────────────────
 async function loadSettings() {
+  // Load current values into inputs
+  try {
+    const d = await fetch(API + '/settings').then(r => r.json());
+    const map = {
+      PORT: d.server?.port, SERVER_IP: d.server?.serverIP,
+      NODE_ENV: d.server?.nodeEnv, ROUTER_TYPE: d.server?.routerType,
+      FRONTEND_DIR: d.server?.frontendDir,
+      MIKROTIK_HOST: d.router?.mikrotikHost, MIKROTIK_USER: d.router?.mikrotikUser,
+      MIKROTIK_PORT: d.router?.mikrotikPort,
+      OPENWRT_HOST: d.router?.openwrtHost, OPENWRT_USER: d.router?.openwrtUser,
+      OPENWRT_SSH_PORT: d.router?.openwrtPort,
+
+      BUSINESS_PHONE: d.business?.businessPhone, BUSINESS_EMAIL: d.business?.businessEmail,
+    };
+    const whEl = document.getElementById('webhook-url');
+    if (whEl) whEl.textContent = (window.location.origin || API.replace('/api','')) + '/api/webhooks/paystack';
+    document.querySelectorAll('.settings-inp').forEach(el => {
+      const key = el.dataset.key;
+      if (map[key] !== undefined && map[key] !== null) {
+        el.value = map[key];
+        el._original = map[key];
+      }
+    });
+  } catch(e) { toast('Failed to load settings', 'error'); }
+
+  // Health check
   const eps = [
     { label:'GET /api/admin/stats', url: API + '/admin/stats' },
     { label:'GET /api/packages',    url: API + '/packages' },
@@ -846,21 +1003,69 @@ async function loadSettings() {
       <span class="${ok ? 'badge-on' : 'badge-red'}">${ok ? '✓ ' + code : '✗ ' + code}</span>
     </div>`;
   }));
-  document.getElementById('ep-rows').innerHTML = rows.join('');
+  const epEl = document.getElementById('ep-rows');
+  if (epEl) epEl.innerHTML = rows.join('');
 
   try {
     const d = await fetch(API.replace('/api','') + '/health').then(r => r.json());
-    document.getElementById('health-rows').innerHTML = [
-      { k:'Status',      v: d.status || 'ok' },
+    const hEl = document.getElementById('health-rows');
+    if (hEl) hEl.innerHTML = [
+      { k:'Status', v: d.status || 'ok' },
       { k:'Router Type', v: d.routerType || '—' },
-      { k:'Message',     v: d.message || '—' },
-      { k:'API Base',    v: API },
-    ].map(row => `
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #1e293b">
-        <span style="font-size:12px;color:#475569">${row.k}</span>
-        <span style="font-size:12px;color:#cbd5e1;font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${row.v}</span>
-      </div>`).join('');
+      { k:'Message', v: d.message || '—' },
+      { k:'API Base', v: API },
+    ].map(row => `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #1e293b">
+      <span style="font-size:12px;color:#475569">${row.k}</span>
+      <span style="font-size:12px;color:#cbd5e1;font-weight:600">${row.v}</span>
+    </div>`).join('');
   } catch(e) {}
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.settings-tab-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.settings-tab').forEach(el => {
+    const active = el.dataset.tab === tab;
+    el.style.background = active ? '#1e293b' : 'transparent';
+    el.style.color = active ? '#f1f5f9' : '#475569';
+  });
+  const el = document.getElementById('tab-' + tab);
+  if (el) el.style.display = 'block';
+  if (tab === 'health') loadSettings();
+}
+
+function markSettingsDirty() {
+  document.getElementById('settings-save-bar').style.display = 'flex';
+}
+
+async function saveSettings() {
+  const updates = {};
+  const whEl = document.getElementById('webhook-url');
+    if (whEl) whEl.textContent = (window.location.origin || API.replace('/api','')) + '/api/webhooks/paystack';
+    document.querySelectorAll('.settings-inp').forEach(el => {
+    if (el.value !== '' && el.value !== el._original) {
+      updates[el.dataset.key] = el.value;
+    }
+  });
+  if (!Object.keys(updates).length) { toast('No changes to save', 'info'); return; }
+  try {
+    const d = await fetch(API + '/settings', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    }).then(r => r.json());
+    if (d.success) {
+      toast(d.message || 'Settings saved');
+      document.getElementById('settings-save-bar').style.display = 'none';
+      document.querySelectorAll('.settings-inp').forEach(el => el._original = el.value);
+    } else {
+      toast(d.message || 'Save failed', 'error');
+    }
+  } catch(e) { toast('Request failed', 'error'); }
+}
+
+function logout() {
+  localStorage.removeItem('gh_admin_token');
+  window.location.replace('/admin/login');
 }
 
 // ── Auto-refresh ─────────────────────────────────────────────
@@ -870,9 +1075,11 @@ setInterval(() => {
 
 // ── Init ─────────────────────────────────────────────────────
 go('dashboard');
+// Mark settings dirty on any input change
+document.addEventListener('input', e => { if (e.target.classList.contains('settings-inp')) markSettingsDirty(); });
 
 // expose globals for inline handlers
-Object.assign(window, { go, toggleSidebar, refreshCurrent, openPkg, closePkg, savePkg, openLocModal, closeLoc, saveLoc, toggleLoc, delLoc, openRevoke, closeRevoke, doRevoke, loadConn, loadPkgs, filterConn, filterTxn });
+Object.assign(window, { logout, go, toggleSidebar, refreshCurrent, openPkg, closePkg, savePkg, openLocModal, openEditLoc, closeLoc, saveLoc, toggleLoc, delLoc, openRevoke, closeRevoke, doRevoke, loadConn, loadPkgs, filterConn, filterTxn, switchTab, saveSettings, markSettingsDirty });
 })();
 </script>
 </body>

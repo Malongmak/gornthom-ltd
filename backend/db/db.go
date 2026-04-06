@@ -296,7 +296,7 @@ func InsertLocation(l models.Location) error {
 	return err
 }
 
-func UpdateLocation(id, status, name string) error {
+func UpdateLocation(id, status, name, region string) error {
 	if status != "" {
 		if _, err := DB.Exec(`UPDATE locations SET status=? WHERE id=?`, status, id); err != nil {
 			return err
@@ -304,6 +304,11 @@ func UpdateLocation(id, status, name string) error {
 	}
 	if name != "" {
 		if _, err := DB.Exec(`UPDATE locations SET name=? WHERE id=?`, name, id); err != nil {
+			return err
+		}
+	}
+	if region != "" {
+		if _, err := DB.Exec(`UPDATE locations SET region=? WHERE id=?`, region, id); err != nil {
 			return err
 		}
 	}

@@ -1,1010 +1,354 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Internet Package Selection - GORNHOM INNOVATION LTD</title>
-<script src="config.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GORNHOM WiFi — Choose a Plan</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: { extend: { colors: { brand: '#22c55e', 'brand-d': '#16a34a' }, fontFamily: { sans: ['Inter','sans-serif'] } } }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
 <script src="https://js.paystack.co/v1/inline.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#22c55e",
-                        "primary-blue": "#137fec",
-                        "logo-green": "#22c55e",
-                        "logo-red": "#ef4444",
-                        "logo-black": "#1e293b",
-                        "logo-blue": "#1e40af",
-                        "background-light": "#f6f7f8",
-                        "background-dark": "#101922",
-                    },
-                    fontFamily: {
-                        "display": ["Inter"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
+<script src="/config.js"></script>
 <style>
-        body { font-family: 'Inter', sans-serif; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-        .shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            background-size: 1000px 100%;
-            animation: shimmer 2s infinite;
-        }
-        .payment-step {
-            animation: fadeIn 0.3s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        #mpesaPIN::placeholder {
-            letter-spacing: 0.5em;
-            text-align: center;
-        }
-        button, .buyBtn, #initiatePaymentBtn, #closeModalBtn {
-            cursor: pointer !important;
-            pointer-events: auto !important;
-            position: relative !important;
-            z-index: 10 !important;
-        }
-        .buyBtn {
-            cursor: pointer !important;
-            pointer-events: auto !important;
-            position: relative !important;
-            z-index: 9999 !important;
-            display: block !important;
-            width: 100% !important;
-        }
-        /* Ensure package cards don't block button clicks */
-        .grid > div {
-            position: relative;
-            pointer-events: auto;
-            overflow: visible;
-        }
-        .grid > div > button.buyBtn {
-            position: relative !important;
-            z-index: 9999 !important;
-            pointer-events: auto !important;
-            cursor: pointer !important;
-            display: block !important;
-            margin-top: auto !important;
-        }
-        /* Prevent parent divs from blocking button clicks */
-        .grid > div > .flex-grow {
-            pointer-events: none;
-        }
-        .grid > div > .flex-grow > * {
-            pointer-events: auto;
-        }
-        /* Ensure button text/spans don't block clicks */
-        .buyBtn *,
-        .buyBtn span,
-        .buyBtn::before,
-        .buyBtn::after {
-            pointer-events: none !important;
-        }
-        /* Make sure nothing overlays the buttons */
-        .grid > div::before,
-        .grid > div::after {
-            pointer-events: none;
-        }
-        #paymentModal {
-            pointer-events: auto !important;
-        }
-        #paymentModal > div {
-            pointer-events: auto !important;
-        }
-    </style>
+*{font-family:'Inter',sans-serif}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .3s ease both}
+.pkg-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:20px;padding:24px;display:flex;flex-direction:column;transition:all .2s}
+.pkg-card:hover{border-color:#22c55e;box-shadow:0 8px 32px rgba(34,197,94,.12);transform:translateY(-2px)}
+.pkg-card.popular{border-color:#22c55e;box-shadow:0 4px 24px rgba(34,197,94,.12)}
+.pkg-card.enterprise{background:linear-gradient(135deg,#f0fdf4,#fff);border-color:#16a34a}
+.buy-btn{width:100%;padding:12px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:20px}
+.buy-btn:hover{opacity:.9}.buy-btn:active{transform:scale(.98)}
+.modal-bg{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);padding:16px}
+.modal-box{background:#fff;border-radius:24px;width:100%;max-width:400px;box-shadow:0 25px 60px rgba(0,0,0,.2);overflow:hidden}
+.inp{width:100%;background:#f8fafc;border:1.5px solid #e2e8f0;color:#0f172a;border-radius:12px;padding:11px 14px;font-size:15px;outline:none;transition:border .15s}
+.inp:focus{border-color:#22c55e}
+.step{display:none}.step.active{display:flex;flex-direction:column}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .8s linear infinite;display:inline-block}
+</style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-display">
-<!-- Navigation -->
-<nav class="bg-white dark:bg-slate-900 border-b border-primary/10 sticky top-0 z-50">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex justify-between h-16 items-center">
-<div class="flex items-center gap-2">
-<img src="../assets/images/logo.jpeg" alt="GORNHOM Innovation Ltd Logo" class="h-10 w-auto object-contain mr-2"/>
-<div class="flex flex-col">
-<span class="font-extrabold text-xl tracking-tight uppercase">
-    <span class="text-logo-green">GORNHOM</span> 
-    <span class="text-logo-red">INNOVATION</span> 
-    <span class="text-logo-black dark:text-slate-300">LTD</span>
-</span>
-<p class="text-[10px] text-logo-blue font-medium italic leading-none">Together For a Better Internet</p>
-</div>
-</div>
-<div class="flex items-center gap-4">
-<div class="hidden md:flex flex-col items-end mr-2">
-<span class="text-xs text-slate-500">Connected as</span>
-<span id="connectedAs" class="text-sm font-semibold">...</span>
-</div>
-<button id="logoutBtn" type="button" class="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800">
-<span class="material-icons text-sm">logout</span>
-<span class="text-sm font-medium">Logout</span>
-</button>
-</div>
-</div>
-</div>
-</nav>
-<!-- Main Content -->
-<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
-<!-- Header Section -->
-<div class="mb-12 text-center max-w-2xl mx-auto">
-<h1 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Choose Your Connection Plan</h1>
-                <p class="text-lg text-slate-600 dark:text-slate-400">Select a package that fits your needs. High-speed internet is just a payment away.</p>
-</div>
-<!-- Package Grid — rendered dynamically from /api/packages -->
-<div id="packageGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-  <div class="col-span-full text-center py-12 text-slate-400">Loading packages...</div>
-</div>
-<!-- M-Pesa Info Section -->
-<div class="max-w-2xl mx-auto bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-<div class="flex flex-col md:flex-row items-center gap-8">
-<div class="flex-shrink-0">
-<div class="w-24 h-24 bg-logo-green/10 rounded-full flex items-center justify-center animate-float">
-<span class="material-icons text-4xl text-logo-green">payments</span>
-</div>
-</div>
-<div class="flex-grow text-center md:text-left">
-                    <h2 class="text-xl font-bold mb-2">Secure Paystack Payment</h2>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 leading-relaxed">
-                        After clicking 'Buy Now', you will be prompted to enter your phone number. A secure payment window will open where you can complete your transaction using your preferred payment method.
-                    </p>
-<div class="flex flex-wrap justify-center md:justify-start gap-4">
-<div class="flex items-center gap-2">
-<span class="material-icons text-xs text-logo-green">verified</span>
-<span class="text-xs font-semibold text-slate-500">Instant Activation</span>
-</div>
-<div class="flex items-center gap-2">
-<span class="material-icons text-xs text-logo-green">verified</span>
-<span class="text-xs font-semibold text-slate-500">Secure Transaction</span>
-</div>
-<div class="flex items-center gap-2">
-<span class="material-icons text-xs text-logo-green">verified</span>
-<span class="text-xs font-semibold text-slate-500">24/7 Service</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</main>
-<!-- Footer -->
-<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-10 mt-auto">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-<div class="text-center md:text-left">
-<p class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">GORNHOM INNOVATION LTD</p>
-<p class="text-xs text-slate-500 mt-1">Providing reliable connectivity solutions since 2024.</p>
-</div>
-<div class="flex justify-center gap-6">
-<a class="text-slate-400 hover:text-primary transition-colors" href="#">Terms of Service</a>
-<a class="text-slate-400 hover:text-primary transition-colors" href="#">Privacy Policy</a>
-<a class="text-slate-400 hover:text-primary transition-colors" href="#">Help Center</a>
-</div>
-<div class="text-center md:text-right">
-<p class="text-xs font-medium text-slate-500">Customer Support:</p>
-<p class="text-sm font-bold text-primary">+254116465399</p>
-</div>
-</div>
-<div class="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 text-center">
-<p id="footerYear" class="text-[10px] text-slate-400 uppercase tracking-[0.2em]">© 2025 GORNHOM INNOVATION LTD. All Rights Reserved.</p>
-</div>
-</div>
-</footer>
-<script>document.getElementById('footerYear').textContent = '© ' + new Date().getFullYear() + ' GORNHOM INNOVATION LTD. All Rights Reserved.';</script>
-<!-- Payment Modal -->
-<div id="paymentModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center px-4 py-6 bg-black/70 backdrop-blur-sm">
-<div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+<body style="background:#f8fafc;min-height:100vh">
 
-  <!-- Step 1: Phone Entry -->
-  <div id="stepPhone" class="payment-step flex flex-col overflow-y-auto">
-    <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center flex-shrink-0">
-      <h3 class="font-bold text-lg flex items-center gap-2">
-        <span class="material-icons text-logo-green text-xl">payments</span>Confirm Purchase
-      </h3>
-      <button id="closeModalBtn" type="button" class="text-slate-400 hover:text-slate-600 transition-colors p-1">
-        <span class="material-icons">close</span>
+<!-- Nav -->
+<nav style="background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:40">
+  <div style="max-width:1100px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:10px;display:flex;align-items:center;justify-content:center">
+        <span class="material-icons-round" style="color:#fff;font-size:18px">wifi</span>
+      </div>
+      <div>
+        <p style="font-size:14px;font-weight:800;color:#0f172a;line-height:1">GORNHOM</p>
+        <p style="font-size:10px;color:#64748b;line-height:1;margin-top:1px">WiFi Billing</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;background:#f0fdf4;border:1px solid #bbf7d0;padding:5px 12px;border-radius:999px">
+      <span class="material-icons-round" style="font-size:14px;color:#22c55e">lock</span>
+      <span style="font-size:12px;color:#16a34a;font-weight:600">Secured by Paystack</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div style="max-width:1100px;margin:0 auto;padding:48px 20px 32px;text-align:center">
+  <div class="fade-up">
+    <span style="display:inline-flex;align-items:center;gap:6px;background:#f0fdf4;border:1px solid #bbf7d0;padding:5px 14px;border-radius:999px;font-size:12px;font-weight:600;color:#16a34a;margin-bottom:16px">
+      <span class="material-icons-round" style="font-size:14px">bolt</span>Instant Activation
+    </span>
+    <h1 style="font-size:clamp(28px,5vw,44px);font-weight:800;color:#0f172a;line-height:1.15;margin-bottom:12px">
+      Fast, Reliable WiFi<br/>Pick Your Plan
+    </h1>
+    <p style="font-size:16px;color:#64748b;max-width:480px;margin:0 auto">Connect instantly after payment. No contracts, no hidden fees.</p>
+  </div>
+</div>
+
+<!-- Package Grid -->
+<div style="max-width:1100px;margin:0 auto;padding:0 20px 60px">
+  <div id="pkg-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px">
+    <!-- skeleton -->
+    <div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:20px;padding:24px;height:280px;animation:pulse 1.5s ease infinite">
+      <div style="background:#f1f5f9;border-radius:8px;height:16px;width:60%;margin-bottom:12px"></div>
+      <div style="background:#f1f5f9;border-radius:8px;height:32px;width:40%;margin-bottom:20px"></div>
+      <div style="background:#f1f5f9;border-radius:8px;height:12px;width:80%;margin-bottom:8px"></div>
+      <div style="background:#f1f5f9;border-radius:8px;height:12px;width:70%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer style="background:#fff;border-top:1px solid #e2e8f0;padding:24px 20px;text-align:center">
+  <p style="font-size:12px;color:#94a3b8">© <span id="yr"></span> GORNHOM INNOVATION LTD · <a href="tel:+254116465399" style="color:#22c55e;text-decoration:none">+254 116 465 399</a></p>
+</footer>
+
+<!-- Payment Modal -->
+<div id="modal" class="modal-bg" style="display:none">
+  <div class="modal-box">
+
+    <!-- Step: Phone -->
+    <div id="step-phone" class="step active" style="padding:28px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <h3 style="font-size:17px;font-weight:800;color:#0f172a">Complete Purchase</h3>
+        <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;color:#94a3b8;display:flex;align-items:center">
+          <span class="material-icons-round">close</span>
+        </button>
+      </div>
+      <div style="background:#f8fafc;border-radius:14px;padding:16px;margin-bottom:20px;text-align:center">
+        <p id="m-pkg-name" style="font-size:12px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Package</p>
+        <p id="m-pkg-price" style="font-size:28px;font-weight:800;color:#0f172a">KES 0</p>
+        <p id="m-pkg-duration" style="font-size:12px;color:#64748b;margin-top:2px">Duration</p>
+      </div>
+      <label style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Your Phone Number</label>
+      <div style="display:flex;align-items:center;gap:0;margin-bottom:6px">
+        <span style="background:#f1f5f9;border:1.5px solid #e2e8f0;border-right:none;border-radius:12px 0 0 12px;padding:11px 12px;font-size:14px;font-weight:600;color:#475569">+254</span>
+        <input id="phone-inp" class="inp" type="tel" inputmode="numeric" maxlength="9" placeholder="712 345 678" style="border-radius:0 12px 12px 0;border-left:none"/>
+      </div>
+      <p style="font-size:11px;color:#94a3b8;margin-bottom:20px">Used for payment confirmation only</p>
+      <button onclick="startPayment()" id="pay-btn" style="width:100%;padding:13px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <span class="material-icons-round" style="font-size:18px">payment</span>Pay Now
+      </button>
+      <p id="pay-err" style="font-size:12px;color:#ef4444;text-align:center;margin-top:10px;display:none"></p>
+    </div>
+
+    <!-- Step: Processing -->
+    <div id="step-loading" class="step" style="padding:40px;text-align:center;align-items:center">
+      <div style="width:64px;height:64px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px">
+        <span class="material-icons-round spin" style="font-size:32px;color:#22c55e">refresh</span>
+      </div>
+      <h3 style="font-size:17px;font-weight:700;color:#0f172a;margin-bottom:8px">Processing Payment</h3>
+      <p id="loading-msg" style="font-size:13px;color:#64748b;margin-bottom:20px">Opening payment window…</p>
+      <button onclick="closeModal()" style="font-size:13px;color:#94a3b8;background:none;border:none;cursor:pointer">Cancel</button>
+    </div>
+
+    <!-- Step: Success -->
+    <div id="step-success" class="step" style="padding:32px;text-align:center;align-items:center">
+      <div style="width:72px;height:72px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px">
+        <span class="material-icons-round" style="font-size:36px;color:#22c55e">check_circle</span>
+      </div>
+      <h3 style="font-size:20px;font-weight:800;color:#16a34a;margin-bottom:6px">Payment Successful!</h3>
+      <p style="font-size:13px;color:#64748b;margin-bottom:20px">Your internet is now active</p>
+      <div style="background:#f8fafc;border-radius:14px;padding:16px;width:100%;text-align:left;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e2e8f0">
+          <span style="font-size:12px;color:#64748b">Package</span>
+          <span id="s-pkg" style="font-size:12px;font-weight:700;color:#0f172a">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e2e8f0">
+          <span style="font-size:12px;color:#64748b">Amount</span>
+          <span id="s-amount" style="font-size:12px;font-weight:700;color:#0f172a">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e2e8f0">
+          <span style="font-size:12px;color:#64748b">Expires</span>
+          <span id="s-expiry" style="font-size:12px;font-weight:700;color:#22c55e">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0">
+          <span style="font-size:12px;color:#64748b">Ref</span>
+          <span id="s-ref" style="font-size:11px;font-family:monospace;color:#94a3b8">—</span>
+        </div>
+      </div>
+      <button onclick="closeModal()" style="width:100%;padding:12px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">
+        Start Browsing
       </button>
     </div>
-    <div class="px-6 py-5 flex-1">
-      <div class="text-center mb-5">
-        <div id="modalPackageName" class="inline-block px-3 py-1 bg-logo-green/10 text-logo-green rounded-full text-xs font-bold uppercase mb-2">Package</div>
-        <div id="modalPackagePrice" class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">KES 0</div>
-        <p class="text-sm text-slate-500">Enter your M-Pesa phone number</p>
-        <div id="testModeWarning" class="mt-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg hidden">
-          <p class="text-xs text-amber-800"><span class="font-semibold">⚠️ Test Mode:</span> Use test mobile numbers only.</p>
-        </div>
-      </div>
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Phone Number</label>
-          <div class="relative">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-semibold text-sm">+254</span>
-            <input id="mpesaPhone" class="w-full pl-16 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-logo-green focus:border-logo-green font-semibold text-base" placeholder="712345678" type="tel" inputmode="tel" autocomplete="tel" maxlength="9"/>
-          </div>
-        </div>
-        <button id="initiatePaymentBtn" type="button" class="w-full py-3 bg-gradient-to-r from-logo-green to-logo-green/90 text-white font-bold rounded-xl shadow-lg hover:from-logo-green/90 hover:to-logo-green transition-all flex items-center justify-center gap-2 cursor-pointer">
-          <span class="material-icons text-lg">payment</span>Proceed to Payment
-        </button>
-        <p id="paymentError" class="text-center text-sm text-rose-600 hidden"></p>
-      </div>
-    </div>
-  </div>
 
-  <!-- Step 2: Loading -->
-  <div id="stepLoading" class="payment-step hidden px-6 py-8 text-center">
-    <div class="w-20 h-20 mx-auto bg-logo-green/10 rounded-full flex items-center justify-center mb-4 animate-pulse">
-      <span class="material-icons text-4xl text-logo-green">phone_android</span>
-    </div>
-    <h3 class="text-xl font-bold mb-2">Processing Payment</h3>
-    <p class="text-slate-500 text-sm mb-4">Complete the payment in the popup window</p>
-    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4 text-left">
-      <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold mb-1">What to do:</p>
-      <ol class="text-xs text-blue-600 dark:text-blue-400 space-y-1 list-decimal list-inside">
-        <li>Complete payment in the popup</li>
-        <li>Wait for confirmation</li>
-      </ol>
-    </div>
-    <div class="flex items-center justify-center gap-2 text-sm text-slate-400 mb-3">
-      <span class="w-2 h-2 bg-logo-green rounded-full animate-pulse"></span>
-      <span id="loadingStatus">Waiting for confirmation...</span>
-    </div>
-    <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden mb-4">
-      <div class="bg-logo-green h-full rounded-full animate-pulse" style="width:60%"></div>
-    </div>
-    <button id="cancelPaymentBtn" type="button" class="text-sm text-slate-400 hover:text-slate-600 font-medium">Cancel</button>
   </div>
-
-  <!-- Step 3: PIN (hidden — user enters on phone) -->
-  <div id="stepPIN" class="payment-step hidden px-6 py-8 text-center">
-    <div class="w-16 h-16 mx-auto bg-logo-green/10 rounded-full flex items-center justify-center mb-4">
-      <span class="material-icons text-3xl text-logo-green">security</span>
-    </div>
-    <p class="text-sm text-slate-500 mb-1">Enter your M-Pesa PIN on your phone</p>
-    <p id="pinPhoneDisplay" class="text-xs text-slate-400 mb-4">+254 7XX XXX XXX</p>
-    <input id="mpesaPIN" class="hidden" type="password" inputmode="numeric" maxlength="4" autocomplete="off"/>
-    <p id="pinError" class="text-sm text-rose-600 hidden mb-2"></p>
-    <button id="confirmPINBtn" type="button" class="w-full py-3 bg-logo-green text-white font-bold rounded-xl mb-2">Confirm</button>
-    <button id="cancelPINBtn" type="button" class="w-full py-2 text-slate-500 text-sm font-medium">Cancel</button>
-  </div>
-
-  <!-- Step 4: Success -->
-  <div id="stepSuccess" class="payment-step hidden px-6 py-8 text-center">
-    <div class="w-20 h-20 mx-auto bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mb-4 animate-bounce">
-      <span class="material-icons text-4xl text-emerald-600">check_circle</span>
-    </div>
-    <h3 class="text-xl font-bold mb-1 text-emerald-600 dark:text-emerald-400">Payment Successful!</h3>
-    <p class="text-slate-500 text-sm mb-5">Your internet package has been activated</p>
-    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 mb-5 text-left space-y-2">
-      <div class="flex justify-between items-center">
-        <span class="text-sm text-slate-500">Package</span>
-        <span id="successPackageName" class="text-sm font-bold">-</span>
-      </div>
-      <div class="flex justify-between items-center">
-        <span class="text-sm text-slate-500">Amount</span>
-        <span id="successAmount" class="text-sm font-bold">-</span>
-      </div>
-      <div class="flex justify-between items-center">
-        <span class="text-sm text-slate-500">Duration</span>
-        <span id="successDuration" class="text-sm font-bold">-</span>
-      </div>
-      <div class="flex justify-between items-center">
-        <span class="text-sm text-slate-500">Expires At</span>
-        <span id="successExpiry" class="text-sm font-bold text-logo-green">-</span>
-      </div>
-      <div class="flex justify-between items-center border-t border-slate-200 dark:border-slate-700 pt-2 mt-1">
-        <span class="text-sm text-slate-500">Transaction ID</span>
-        <span id="transactionID" class="text-xs font-mono text-slate-400 truncate max-w-[160px]">-</span>
-      </div>
-      <div class="flex justify-between items-center">
-        <span class="text-sm text-slate-500">Token</span>
-        <span id="successToken" class="text-xs font-mono text-slate-400 truncate max-w-[160px]">-</span>
-      </div>
-    </div>
-    <button id="goToSessionBtn" type="button" class="w-full py-3 bg-gradient-to-r from-logo-green to-logo-green/90 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2">
-      <span class="material-icons">wifi</span>Start Browsing
-    </button>
-  </div>
-
-</div>
 </div>
 
 <script>
-  /**
-   * M-Pesa STK Push Integration
-   * 
-   * IMPORTANT: Update the API_BASE_URL below with your actual backend API endpoint
-   * Your backend should implement:
-   * 1. POST /api/mpesa/stk-push - Initiate STK Push
-   *    Request: { phoneNumber, amount, accountReference, transactionDesc }
-   *    Response: { success: true, checkoutRequestId: "..." }
-   * 
-   * 2. POST /api/mpesa/payment-status - Check payment status
-   *    Request: { checkoutRequestId: "..." }
-   *    Response: { status: "pending|success|failed", resultCode: "0", transactionId: "..." }
-   */
-  (function () {
-    'use strict';
-    
-    try {
-    const connectedAsEl = document.getElementById("connectedAs");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const modalEl = document.getElementById("paymentModal");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const modalPackageNameEl = document.getElementById("modalPackageName");
-    const modalPackagePriceEl = document.getElementById("modalPackagePrice");
-    const mpesaPhoneEl = document.getElementById("mpesaPhone");
-    const initiatePaymentBtn = document.getElementById("initiatePaymentBtn");
-    const paymentErrorEl = document.getElementById("paymentError");
-    
-    // Step elements
-    const stepPhone = document.getElementById("stepPhone");
-    const stepLoading = document.getElementById("stepLoading");
-    const stepPIN = document.getElementById("stepPIN");
-    const stepSuccess = document.getElementById("stepSuccess");
-    const mpesaPINEl = document.getElementById("mpesaPIN");
-    const confirmPINBtn = document.getElementById("confirmPINBtn");
-    const cancelPINBtn = document.getElementById("cancelPINBtn");
-    const pinErrorEl = document.getElementById("pinError");
-    const pinPhoneDisplayEl = document.getElementById("pinPhoneDisplay");
-    const goToSessionBtn = document.getElementById("goToSessionBtn");
-    const successPackageNameEl = document.getElementById("successPackageName");
-    const successAmountEl = document.getElementById("successAmount");
-    const transactionIDEl = document.getElementById("transactionID");
-    const successDurationEl = document.getElementById("successDuration");
-    const successExpiryEl = document.getElementById("successExpiry");
-    const successTokenEl = document.getElementById("successToken");
-    const cancelPaymentBtn = document.getElementById("cancelPaymentBtn");
-    const loadingStatusEl = document.getElementById("loadingStatus");
+(function() {
+'use strict';
 
-    function setHidden(el, hidden) {
-      if (!el) return;
-      el.classList.toggle("hidden", hidden);
-    }
+const API = window.API_BASE_URL || 'http://localhost:3000/api';
+const PAYSTACK_KEY = 'pk_live_e03c534b8da95187352d47eebd01aa769f3d19a1';
+const BUSINESS_EMAIL = 'kerubinotheng1977@gmail.com';
 
-    function setText(el, text) {
-      if (!el) return;
-      el.textContent = text;
-    }
+document.getElementById('yr').textContent = new Date().getFullYear();
 
-    function getLogin() {
-      const authType = sessionStorage.getItem("gh_auth_type");
-      const user = sessionStorage.getItem("gh_user");
-      const msisdn = sessionStorage.getItem("gh_msisdn");
-      return { authType, user, msisdn };
-    }
+let selected = null;
 
-    // Configuration
-    const API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/api"; // Change to your production server URL
-    const ACTIVATE_CONNECTION_ENDPOINT = API_BASE_URL + "/connection/activate";
-    const VERIFY_PAYMENT_ENDPOINT = API_BASE_URL + "/paystack/verify";
+// ── Load packages ────────────────────────────────────────────
+fetch(API + '/packages')
+  .then(r => r.json())
+  .then(renderPackages)
+  .catch(() => renderPackages([
+    {id:'30min',    name:'30 Minutes',    duration:'30 min',   price:5,    currency:'KES', speed:'5Mbps',     maxDevices:1, tier:'Lite'},
+    {id:'1hour',    name:'1 Hour',        duration:'1 hour',   price:10,   currency:'KES', speed:'5Mbps',     maxDevices:1, tier:'Basic'},
+    {id:'1day',     name:'1 Day',         duration:'24 hours', price:60,   currency:'KES', speed:'10Mbps',    maxDevices:2, tier:'Standard', popular:true},
+    {id:'1week',    name:'1 Week',        duration:'7 days',   price:260,  currency:'KES', speed:'20Mbps',    maxDevices:3, tier:'Premium'},
+    {id:'1month',   name:'1 Month',       duration:'30 days',  price:500,  currency:'KES', speed:'Unlimited', maxDevices:5, tier:'Ultimate'},
+    {id:'enterprise',name:'Enterprise Plan',duration:'30 days',price:2500, currency:'KES', speed:'100Mbps',   maxDevices:25,tier:'Business',enterprise:true},
+  ]));
 
-    // Paystack — live key
-    const PAYSTACK_PUBLIC_KEY = "pk_live_e03c534b8da95187352d47eebd01aa769f3d19a1";
-    const IS_TEST_MODE = PAYSTACK_PUBLIC_KEY.startsWith("pk_test");
-    const BUSINESS_PHONE = "+254116465399";
-    const BUSINESS_EMAIL = "kerubinotheng1977@gmail.com";
+function renderPackages(pkgs) {
+  const grid = document.getElementById('pkg-grid');
+  if (!pkgs || !pkgs.length) {
+    grid.innerHTML = '<p style="color:#64748b;text-align:center;grid-column:1/-1;padding:40px">No packages available</p>';
+    return;
+  }
+  grid.innerHTML = pkgs.map((p, i) => {
+    const pop = p.popular, ent = p.enterprise;
+    return `<div class="pkg-card fade-up ${pop?'popular':''} ${ent?'enterprise':''}" style="animation-delay:${i*0.05}s">
+      ${pop ? '<div style="text-align:center;margin-bottom:12px"><span style="background:#22c55e;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 10px;border-radius:999px">Most Popular</span></div>' : ''}
+      ${ent ? '<div style="text-align:center;margin-bottom:12px"><span style="background:#16a34a;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 10px;border-radius:999px">Enterprise</span></div>' : ''}
+      <div style="margin-bottom:4px">
+        <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:6px;background:${pop||ent?'rgba(34,197,94,.1)':'#f1f5f9'};color:${pop||ent?'#16a34a':'#64748b'}">${p.tier}</span>
+      </div>
+      <h3 style="font-size:18px;font-weight:800;color:#0f172a;margin:8px 0 2px">${p.name}</h3>
+      <p style="font-size:12px;color:#94a3b8;margin-bottom:16px">${p.duration}</p>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:16px">
+        <span style="font-size:30px;font-weight:800;color:#0f172a">${p.currency} ${Number(p.price).toLocaleString()}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:4px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#475569">
+          <span class="material-icons-round" style="font-size:16px;color:#22c55e">speed</span>${p.speed}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#475569">
+          <span class="material-icons-round" style="font-size:16px;color:#22c55e">devices</span>${p.maxDevices === 1 ? '1 Device' : p.maxDevices + ' Devices'}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#475569">
+          <span class="material-icons-round" style="font-size:16px;color:#22c55e">bolt</span>Instant activation
+        </div>
+      </div>
+      <button class="buy-btn" onclick="openModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+        <span class="material-icons-round" style="font-size:16px">shopping_cart</span>Buy Now
+      </button>
+    </div>`;
+  }).join('');
+}
 
-    // Show test mode warning if using test key
-    const testModeWarning = document.getElementById("testModeWarning");
-    if (IS_TEST_MODE && testModeWarning) setHidden(testModeWarning, false);
+// ── Modal ────────────────────────────────────────────────────
+function openModal(p) {
+  selected = p;
+  document.getElementById('m-pkg-name').textContent = p.name;
+  document.getElementById('m-pkg-price').textContent = p.currency + ' ' + Number(p.price).toLocaleString();
+  document.getElementById('m-pkg-duration').textContent = p.duration;
+  document.getElementById('phone-inp').value = '';
+  document.getElementById('pay-err').style.display = 'none';
+  showStep('phone');
+  document.getElementById('modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('phone-inp').focus(), 100);
+}
 
-    const login = getLogin();
-    if (!login.authType || !login.user) {
-      window.location.replace("index.html");
-      return;
-    }
-    setText(connectedAsEl, login.msisdn || login.user);
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+  selected = null;
+}
 
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", function () {
-        sessionStorage.clear();
-        window.location.href = "index.html";
-      });
-    }
+function showStep(name) {
+  ['phone','loading','success'].forEach(s => {
+    const el = document.getElementById('step-' + s);
+    el.classList.toggle('active', s === name);
+  });
+}
 
-    let selectedPackage = null;
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
 
-    function showStep(stepName) {
-      setHidden(stepPhone, stepName !== "phone");
-      setHidden(stepLoading, stepName !== "loading");
-      setHidden(stepPIN, true); // Always hide PIN step - users enter PIN on phone
-      setHidden(stepSuccess, stepName !== "success");
-    }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
 
-    function openModal(pkg) {
-      try {
-        if (!pkg) {
-          console.error("openModal called without package");
-          return;
-        }
-        selectedPackage = pkg;
-        setHidden(paymentErrorEl, true);
-        if (modalPackageNameEl) setText(modalPackageNameEl, `${pkg.name} Package`);
-        if (modalPackagePriceEl) setText(modalPackagePriceEl, `${pkg.currency} ${pkg.price}`);
+// ── Payment ──────────────────────────────────────────────────
+function startPayment() {
+  if (!selected) return;
+  const raw = document.getElementById('phone-inp').value.replace(/\D/g,'');
+  const err = document.getElementById('pay-err');
 
-        // Pre-fill with stored phone when available
-        if (login.msisdn) {
-          const digitsOnly = login.msisdn.replace(/\D/g, "");
-          const maybeKenyaNational = digitsOnly.startsWith("254") ? digitsOnly.slice(3) : digitsOnly;
-          if (mpesaPhoneEl) mpesaPhoneEl.value = maybeKenyaNational;
-        }
+  if (raw.length < 9) {
+    err.textContent = 'Enter a valid phone number';
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
 
-        showStep("phone");
-        setHidden(modalEl, false);
-        if (mpesaPhoneEl) {
-          mpesaPhoneEl.value = "";
-          mpesaPhoneEl.focus();
-        }
-      } catch (error) {
-        console.error("Error opening modal:", error);
-        setText(paymentErrorEl, "Error opening payment. Please refresh.");setHidden(paymentErrorEl, false);
-      }
-    }
+  const phone = raw.startsWith('254') ? raw : '254' + (raw.startsWith('0') ? raw.slice(1) : raw);
 
-    function closeModal() {
-      // Clear polling interval if active
-      if (paymentPollInterval) {
-        clearInterval(paymentPollInterval);
-        paymentPollInterval = null;
-      }
-      
-      setHidden(modalEl, true);
-      selectedPackage = null;
-      checkoutRequestId = null;
-      showStep("phone");
-      if (mpesaPhoneEl) mpesaPhoneEl.value = "";
-      if (mpesaPINEl) mpesaPINEl.value = "";
-      setHidden(paymentErrorEl, true);
-      setHidden(pinErrorEl, true);
-    }
+  if (typeof PaystackPop === 'undefined') {
+    err.textContent = 'Payment system not loaded. Please refresh.';
+    err.style.display = 'block';
+    return;
+  }
 
-    if (closeModalBtn) {
-      closeModalBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        closeModal();
-      });
-    }
-    if (modalEl) {
-      modalEl.addEventListener("click", function (e) {
-        // Only close if clicking the backdrop, not the modal content
-        if (e.target === modalEl) {
-          closeModal();
-        }
-      });
-    }
-    window.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && modalEl && !modalEl.classList.contains("hidden")) closeModal();
-    });
+  showStep('loading');
 
-    function normalizePhoneForPayment(raw) {
-      const digits = String(raw || "").replace(/\D/g, "");
-      if (digits.length < 7 || digits.length > 15) return null;
-      
-      // Convert to M-Pesa format (254XXXXXXXXX)
-      let mpesaPhone = digits;
-      if (digits.startsWith("0")) {
-        // Convert 07XXXXXXXX to 2547XXXXXXXX
-        mpesaPhone = "254" + digits.substring(1);
-      } else if (digits.startsWith("254")) {
-        // Already in correct format
-        mpesaPhone = digits;
-      } else if (digits.length === 9) {
-        // Assume it's a Kenyan number without country code
-        mpesaPhone = "254" + digits;
-      }
-      
-      return mpesaPhone;
-    }
+  const ref = 'GORNHOM_' + Date.now();
+  const amount = Math.round(selected.price * 100);
 
-    let paymentPollInterval = null;
-    let checkoutRequestId = null;
+  const handler = PaystackPop.setup({
+    key: PAYSTACK_KEY,
+    email: BUSINESS_EMAIL,
+    amount: amount,
+    currency: selected.currency || 'KES',
+    ref: ref,
+    metadata: {
+      custom_fields: [
+        { display_name:'Package',        variable_name:'package',        value: selected.name },
+        { display_name:'Customer Phone', variable_name:'customer_phone', value: phone },
+      ]
+    },
+    callback: function(response) {
+      const txnRef = response.reference || ref;
+      document.getElementById('loading-msg').textContent = 'Verifying payment…';
 
-    // Single clean click handler via event delegation
-    document.addEventListener("click", function(e) {
-      const btn = e.target.closest(".buyBtn");
-      if (!btn) return;
-      e.preventDefault();
-      e.stopPropagation();
-      openModal({
-        name: btn.getAttribute("data-package") || "Package",
-        price: btn.getAttribute("data-price") || "0",
-        currency: btn.getAttribute("data-currency") || "KES"
-      });
-    }, false);
-
-    // Function to poll payment status
-    function pollPaymentStatus(checkoutRequestId, maxAttempts = 60) {
-      // Skip polling in demo mode
-      if (DEMO_MODE) {
-        return;
-      }
-      
-      let attempts = 0;
-      
-      if (paymentPollInterval) {
-        clearInterval(paymentPollInterval);
-      }
-      
-      paymentPollInterval = setInterval(async function() {
-        attempts++;
-        
-        // Update status message
-        if (loadingStatusEl) {
-          loadingStatusEl.textContent = `Checking payment status... (${attempts}/${maxAttempts})`;
-        }
-        
-        if (attempts > maxAttempts) {
-          clearInterval(paymentPollInterval);
-          if (loadingStatusEl) {
-            loadingStatusEl.textContent = "Payment timeout";
+      fetch(API + '/paystack/verify/' + txnRef)
+        .then(r => r.json())
+        .then(d => {
+          if (!d.success) {
+            showStep('phone');
+            const e = document.getElementById('pay-err');
+            e.textContent = 'Payment could not be verified. Contact support if charged.';
+            e.style.display = 'block';
+            return;
           }
-          setText(paymentErrorEl, "Payment timeout. Please check your phone or try again.");
-          setHidden(paymentErrorEl, false);
-          showStep("phone");
-          return;
-        }
-        
-        try {
-          const response = await fetch(PAYMENT_STATUS_ENDPOINT, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
+          // Activate connection
+          const dur = selected.durationMinutes || 60;
+          const expiry = new Date(Date.now() + dur * 60000);
+          return fetch(API + '/connection/activate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              checkoutRequestId: checkoutRequestId
+              transactionId: txnRef,
+              phoneNumber: phone,
+              packageName: selected.name,
+              packagePrice: selected.price,
+              packageCurrency: selected.currency || 'KES',
+              durationMinutes: dur,
+              paymentMethod: 'paystack',
             })
+          }).then(() => {
+            document.getElementById('s-pkg').textContent = selected.name;
+            document.getElementById('s-amount').textContent = selected.currency + ' ' + Number(selected.price).toLocaleString();
+            document.getElementById('s-expiry').textContent = expiry.toLocaleString('en-KE', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+            document.getElementById('s-ref').textContent = txnRef;
+            showStep('success');
           });
-          
-          if (!response.ok) {
-            throw new Error("Failed to check payment status");
-          }
-          
-          const data = await response.json();
-          
-          if (data.status === "success" || data.resultCode === "0") {
-            clearInterval(paymentPollInterval);
-            
-            const txnId = data.transactionId || data.mpesaReceiptNumber || "TXN-" + Date.now().toString().slice(-8);
-            sessionStorage.setItem("gh_transaction_id", txnId);
-            sessionStorage.setItem("gh_payment_status", "success");
-            sessionStorage.setItem("gh_checkout_request_id", null);
-
-            const dur = ({"30 Minutes":30,"1 Hour":60,"1 Day":1440,"1 Week":10080,"1 Month":43200,"Enterprise Plan":43200})[selectedPackage.name] || 60;
-            const expiry = new Date(Date.now() + dur * 60 * 1000);
-            populateSuccess(txnId, selectedPackage, dur, expiry, "");
-            showStep("success");
-          } else if (data.status === "failed" || (data.resultCode && data.resultCode !== "0")) {
-            clearInterval(paymentPollInterval);
-            if (loadingStatusEl) {
-              loadingStatusEl.textContent = "Payment failed";
-            }
-            setText(paymentErrorEl, data.message || data.resultDesc || "Payment failed. Please try again.");
-            setHidden(paymentErrorEl, false);
-            showStep("phone");
-          }
-          // If status is "pending", continue polling
-        } catch (error) {
-          console.error("Error checking payment status:", error);
-          // Continue polling on error - network issues might be temporary
-          if (loadingStatusEl && attempts % 5 === 0) {
-            loadingStatusEl.textContent = "Connection issue. Retrying...";
-          }
-        }
-      }, 3000); // Poll every 3 seconds
-    }
-
-    // Populate the success card with full subscription details
-    function populateSuccess(txnId, pkg, durationMinutes, expiryTime, token) {
-      const pad = n => String(n).padStart(2, '0');
-      const h = Math.floor(durationMinutes / 60), m = durationMinutes % 60;
-      const durationLabel = h > 0
-        ? (m > 0 ? `${h}h ${m}m` : `${h} hour${h > 1 ? 's' : ''}`)
-        : `${m} minutes`;
-
-      if (successPackageNameEl) setText(successPackageNameEl, pkg.name);
-      if (successAmountEl) setText(successAmountEl, `${pkg.currency} ${pkg.price}`);
-      if (successDurationEl) setText(successDurationEl, durationLabel);
-      if (successExpiryEl) setText(successExpiryEl,
-        expiryTime.toLocaleDateString() + ' ' +
-        expiryTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      );
-      if (transactionIDEl) setText(transactionIDEl, txnId);
-      if (successTokenEl) setText(successTokenEl, token || sessionStorage.getItem("gh_connection_token") || "pending...");
-    }
-
-    // Function to activate internet connection after payment
-    async function activateInternetConnection(transactionId, phoneNumber, packageInfo) {
-      const packageDurations = {
-        "30 Minutes": 30,
-        "1 Hour": 60,
-        "1 Day": 1440,
-        "1 Week": 10080,
-        "1 Month": 43200,
-        "Enterprise Plan": 43200
-      };
-      
-      const durationMinutes = packageDurations[packageInfo.name] || 60;
-      const expiryTime = new Date(Date.now() + durationMinutes * 60 * 1000);
-      
-      const connectionData = {
-        transactionId: transactionId,
-        phoneNumber: phoneNumber,
-        businessPhone: "+254116465399",
-        recipientPhone: "+254116465399",
-        packageName: packageInfo.name,
-        packagePrice: packageInfo.price,
-        packageCurrency: packageInfo.currency,
-        durationMinutes: durationMinutes,
-        expiryTime: expiryTime.toISOString(),
-        deviceId: sessionStorage.getItem("gh_device_id") || navigator.userAgent.slice(0, 50),
-        userEmail: getLogin().user || BUSINESS_EMAIL,
-        paymentMethod: "paystack"
-      };
-      
-      sessionStorage.setItem("gh_connection_active", "true");
-      sessionStorage.setItem("gh_connection_start", new Date().toISOString());
-      sessionStorage.setItem("gh_connection_expiry", expiryTime.toISOString());
-      sessionStorage.setItem("gh_connection_duration", durationMinutes.toString());
-      sessionStorage.setItem("gh_connection_data", JSON.stringify(connectionData));
-      sessionStorage.setItem("gh_internet_active", "true");
-
-      // Activate connection on backend
-      try {
-        const response = await fetch(ACTIVATE_CONNECTION_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(connectionData)
+        })
+        .catch(() => {
+          showStep('phone');
+          const e = document.getElementById('pay-err');
+          e.textContent = 'Network error. Please try again.';
+          e.style.display = 'block';
         });
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            if (data.connectionToken) sessionStorage.setItem("gh_connection_token", data.connectionToken);
-            if (data.sessionId) sessionStorage.setItem("gh_session_id", data.sessionId);
-          }
-        }
-      } catch (error) {
-        // Backend unreachable — session stored locally, user can still browse
-      }
-
-      // Populate success card with full details
-      populateSuccess(transactionId, packageInfo, durationMinutes, expiryTime,
-        sessionStorage.getItem("gh_connection_token") || "");
-
-      const timeUntilExpiry = expiryTime.getTime() - Date.now();
-      if (timeUntilExpiry > 0) {
-        setTimeout(() => {
-          sessionStorage.setItem("gh_connection_active", "false");
-          sessionStorage.setItem("gh_internet_active", "false");
-        }, timeUntilExpiry);
-      }
-      
+    },
+    onClose: function() {
+      showStep('phone');
     }
-    
-    // Paystack Payment Handler
-    function initializePaystackPayment(phone, amount, packageName, currency) {
-      // Use the package currency directly (KES is enabled in your Paystack account)
-      let paystackCurrency = currency || "KES";
-      let paystackAmount = parseFloat(amount);
-      
-      // Convert to smallest currency unit
-      // KES uses cents (1 KES = 100 cents)
-      if (paystackCurrency === "KES") {
-        paystackAmount = Math.round(paystackAmount * 100); // Convert to cents
-        // Minimum is 100 cents (1 KES)
-        if (paystackAmount < 100) {
-          paystackAmount = 100;
-        }
-      } else if (paystackCurrency === "NGN") {
-        // NGN uses kobo (1 NGN = 100 kobo)
-        paystackAmount = Math.round(paystackAmount * 100);
-        if (paystackAmount < 100) {
-          paystackAmount = 100;
-        }
-      } else if (paystackCurrency === "USD") {
-        // USD uses cents (1 USD = 100 cents)
-        paystackAmount = Math.round(paystackAmount * 100);
-        if (paystackAmount < 100) {
-          paystackAmount = 100;
-        }
-      } else {
-        // Default: assume smallest unit is 100th of main unit
-        paystackAmount = Math.round(paystackAmount * 100);
-        if (paystackAmount < 100) {
-          paystackAmount = 100;
-        }
-      }
-      
-      // Generate unique reference
-      const paymentReference = "GORNHOM_" + Date.now().toString();
+  });
 
-      // Initialize Paystack payment
-      const handler = PaystackPop.setup({
-        key: PAYSTACK_PUBLIC_KEY,
-        email: BUSINESS_EMAIL,
-        amount: paystackAmount,
-        currency: paystackCurrency,
-        ref: paymentReference,
-        metadata: {
-          custom_fields: [
-            {
-              display_name: "Package",
-              variable_name: "package",
-              value: packageName
-            },
-            {
-              display_name: "Customer Phone",
-              variable_name: "customer_phone",
-              value: phone
-            },
-            {
-              display_name: "Business Phone",
-              variable_name: "business_phone",
-              value: "+254116465399"
-            },
-            {
-              display_name: "Payment Recipient",
-              variable_name: "recipient_phone",
-              value: "+254116465399"
-            }
-          ]
-        },
-        callback: function(response) {
-          // Payment successful - verify with backend before activating
-          
-          const txnId = response.reference || paymentReference;
+  handler.openIframe();
+}
 
-          // Show loading while we verify
-          showStep("loading");
-          if (loadingStatusEl) loadingStatusEl.textContent = "Verifying payment...";
+// expose for inline handlers
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.startPayment = startPayment;
 
-          // Verify then activate
-          fetch(`${VERIFY_PAYMENT_ENDPOINT}/${txnId}`)
-            .then(function(r) { return r.json(); })
-            .then(function(verifyData) {
-              if (!verifyData.success) {
-                setText(paymentErrorEl, "Payment could not be verified. Please contact support if you were charged.");
-                setHidden(paymentErrorEl, false);
-                showStep("phone");
-                return;
-              }
-
-              if (transactionIDEl) setText(transactionIDEl, txnId);
-              if (successPackageNameEl) setText(successPackageNameEl, selectedPackage.name);
-              if (successAmountEl) setText(successAmountEl, `${selectedPackage.currency} ${selectedPackage.price}`);
-
-              sessionStorage.setItem("gh_transaction_id", txnId);
-              sessionStorage.setItem("gh_payment_status", "success");
-              sessionStorage.setItem("gh_payment_method", "paystack");
-
-              if (paymentPollInterval) { clearInterval(paymentPollInterval); paymentPollInterval = null; }
-
-              return activateInternetConnection(txnId, phone, selectedPackage);
-            })
-            .then(function() {
-              showStep("success");
-            })
-            .catch(function(err) {
-              console.error("Post-payment error:", err);
-              showStep("success");
-            });
-        },
-        onClose: function() {
-          // User closed the payment modal
-          setText(paymentErrorEl, "Payment was cancelled. Please try again.");
-          setHidden(paymentErrorEl, false);
-          showStep("phone");
-        }
-      });
-      
-      if (IS_TEST_MODE) {
-      }
-
-      handler.openIframe();
-    }
-
-    if (initiatePaymentBtn) {
-      initiatePaymentBtn.addEventListener("click", async function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (!selectedPackage) return;
-        setHidden(paymentErrorEl, true);
-
-        const phone = normalizePhoneForPayment(mpesaPhoneEl && mpesaPhoneEl.value);
-        if (!phone) {
-          setText(paymentErrorEl, "Enter a valid phone number.");
-          setHidden(paymentErrorEl, false);
-          if (mpesaPhoneEl) mpesaPhoneEl.focus();
-          return;
-        }
-
-        // Validate phone number format
-        if (phone.length < 10 || phone.length > 15) {
-          setText(paymentErrorEl, "Please enter a valid phone number.");
-          setHidden(paymentErrorEl, false);
-          if (mpesaPhoneEl) mpesaPhoneEl.focus();
-          return;
-        }
-
-        // Production mode - using real phone numbers
-
-        // Store payment info
-        sessionStorage.setItem("gh_selected_package", selectedPackage.name);
-        sessionStorage.setItem("gh_selected_price", `${selectedPackage.currency} ${selectedPackage.price}`);
-        sessionStorage.setItem("gh_payment_phone", phone);
-
-        // Show loading step
-        showStep("loading");
-        
-        // Update loading message
-        const loadingText = document.querySelector("#stepLoading p");
-        if (loadingText) {
-          loadingText.textContent = "Initializing payment...";
-        }
-
-        // Use Paystack for payment
-        try {
-          // Check if Paystack is loaded
-          if (typeof PaystackPop === 'undefined') {
-            throw new Error("Paystack payment system is not loaded. Please refresh the page.");
-          }
-
-          // Update loading message
-          if (loadingText) {
-            loadingText.textContent = "Opening payment gateway...";
-          }
-
-          // Initialize Paystack payment
-          initializePaystackPayment(
-            phone,
-            selectedPackage.price,
-            selectedPackage.name,
-            selectedPackage.currency || "KES"
-          );
-
-        } catch (error) {
-          console.error("Payment initialization error:", error);
-          setText(paymentErrorEl, error.message || "Failed to initialize payment. Please try again.");
-          setHidden(paymentErrorEl, false);
-          showStep("phone");
-        }
-      });
-    }
-
-    // Note: PIN entry is now handled on the user's phone via M-Pesa STK Push
-    // This button is kept for backward compatibility but can be removed
-    if (confirmPINBtn) {
-      confirmPINBtn.addEventListener("click", function() {
-        // User should enter PIN on their phone, not here
-        setText(pinErrorEl, "Please enter your M-Pesa PIN on your phone when prompted.");
-        setHidden(pinErrorEl, false);
-      });
-    }
-
-    if (cancelPINBtn) {
-      cancelPINBtn.addEventListener("click", function() {
-        closeModal();
-      });
-    }
-
-    if (cancelPaymentBtn) {
-      cancelPaymentBtn.addEventListener("click", function() {
-        if (confirm("Are you sure you want to cancel this payment?")) {
-          closeModal();
-        }
-      });
-    }
-
-    if (goToSessionBtn) {
-      goToSessionBtn.addEventListener("click", function() {
-        const isServed = window.location.pathname.startsWith('/portal');
-        window.location.href = isServed ? "/portal/session" : "session.html";
-      });
-    }
-
-    // PIN input: auto-format and limit to 4 digits
-    if (mpesaPINEl) {
-      mpesaPINEl.addEventListener("input", function(e) {
-        let value = e.target.value.replace(/\D/g, "");
-        if (value.length > 4) value = value.slice(0, 4);
-        e.target.value = value;
-        setHidden(pinErrorEl, true);
-      });
-    }
-    
-    } catch (error) {
-      // Show inline error instead of alert
-      const errEl = document.getElementById("paymentError");
-      if (errEl) {
-        errEl.textContent = "Page failed to load. Please refresh.";
-        errEl.classList.remove("hidden");
-      }
-    }
-  })();
-
-  // Load packages from API and render grid dynamically
-  (function loadPackages() {
-    const API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/api";
-    const grid = document.getElementById("packageGrid");
-
-    function renderPackages(pkgs) {
-      grid.innerHTML = pkgs.map(function(p) {
-        const deviceLabel = p.maxDevices === 1 ? '1 Device only' : p.maxDevices + ' Devices';
-        const isPopular = p.popular;
-        const isEnterprise = p.enterprise;
-
-        const cardClass = isEnterprise
-          ? 'bg-gradient-to-br from-white to-logo-green/5 dark:from-slate-900 dark:to-logo-green/10 rounded-xl border-2 border-logo-green/30 p-6 flex flex-col hover:border-logo-green/50 transition-all hover:shadow-xl relative scale-105 z-10'
-          : isPopular
-          ? 'bg-white dark:bg-slate-900 rounded-xl border border-primary/20 shadow-lg p-6 flex flex-col hover:border-primary/50 transition-all hover:shadow-xl relative scale-105 z-10'
-          : 'bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col hover:border-primary/50 transition-all hover:shadow-xl';
-
-        const badge = isEnterprise
-          ? '<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-logo-green to-logo-green/90 text-white text-[10px] font-bold uppercase px-3 py-1 rounded-full shadow-lg animate-pulse">Enterprise</div>'
-          : isPopular
-          ? '<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-logo-red to-logo-red/90 text-white text-[10px] font-bold uppercase px-3 py-1 rounded-full shadow-lg animate-pulse">Popular</div>'
-          : '';
-
-        const tierClass = isEnterprise
-          ? 'bg-logo-green/20 text-logo-green'
-          : isPopular ? 'bg-primary/10 text-primary'
-          : 'bg-slate-100 dark:bg-slate-800 text-slate-500';
-
-        return `<div class="${cardClass}">
-          ${badge}
-          <div class="flex-grow">
-            <div class="mb-4"><span class="px-2 py-1 ${tierClass} text-[10px] font-bold uppercase tracking-wider rounded">${p.tier}</span></div>
-            <h3 class="text-xl font-bold mb-1">${p.name}</h3>
-            <div class="flex items-baseline gap-1 mb-6"><span class="text-2xl font-bold text-primary">${p.currency} ${Number(p.price).toLocaleString()}</span></div>
-            <ul class="space-y-3 mb-8">
-              <li class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400"><span class="material-icons text-primary text-sm">speed</span>${p.speed}</li>
-              <li class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400"><span class="material-icons text-primary text-sm">devices</span>${deviceLabel}</li>
-            </ul>
-          </div>
-          <button type="button" class="buyBtn w-full py-3 bg-gradient-to-r from-logo-green to-logo-green/90 text-white font-bold rounded-lg hover:from-logo-green/90 hover:to-logo-green transition-all transform hover:scale-105 active:scale-95 shadow-lg flex items-center justify-center gap-2 cursor-pointer"
-            data-package="${p.name}" data-price="${p.price}" data-currency="${p.currency}" data-max-devices="${p.maxDevices}">
-            Buy Now
-          </button>
-        </div>`;
-      }).join('');
-    }
-
-    const controller = new AbortController();
-    const timeout = setTimeout(function() { controller.abort(); }, 4000);
-    fetch(API_BASE_URL + '/packages', { signal: controller.signal })
-      .then(function(r) { clearTimeout(timeout); return r.json(); })
-      .then(renderPackages)
-      .catch(function() {
-        // Fallback if backend is unreachable
-        renderPackages([
-          { name:'30 Minutes', tier:'Lite',     price:5,    currency:'KES', speed:'5Mbps',     maxDevices:1 },
-          { name:'1 Hour',     tier:'Basic',    price:10,   currency:'KES', speed:'5Mbps',     maxDevices:1 },
-          { name:'1 Day',      tier:'Standard', price:60,   currency:'KES', speed:'10Mbps',    maxDevices:2, popular:true },
-          { name:'1 Week',     tier:'Premium',  price:260,  currency:'KES', speed:'20Mbps',    maxDevices:3 },
-          { name:'1 Month',    tier:'Ultimate', price:500,  currency:'KES', speed:'Unlimited', maxDevices:5 },
-          { name:'Enterprise Plan', tier:'Business', price:2500, currency:'KES', speed:'100Mbps', maxDevices:25, enterprise:true },
-        ]);
-      });
-  })();
+})();
 </script>
-</body></html>
+</body>
+</html>

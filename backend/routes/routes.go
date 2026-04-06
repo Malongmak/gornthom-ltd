@@ -28,7 +28,6 @@ func Register(r *gin.Engine, cfg *config.Config, rs *services.RouterService) {
 	{
 		conn.POST("/activate", connH.Activate)
 		conn.GET("/status", connH.Status)
-		conn.POST("/revoke", connH.Revoke)
 		conn.POST("/reconnect", connH.Reconnect)
 		conn.POST("/device-check", connH.DeviceCheck)
 	}
@@ -47,29 +46,42 @@ func Register(r *gin.Engine, cfg *config.Config, rs *services.RouterService) {
 		mpesa.POST("/callback", mpesaH.Callback)
 	}
 
-	// Locations
+	// Locations (public read)
 	locH := handlers.NewLocationHandler(rs)
-	locs := r.Group("/api/locations")
-	{
-		locs.GET("", locH.List)
-		locs.POST("", locH.Add)
-		locs.PATCH("/:id", locH.Update)
-		locs.DELETE("/:id", locH.Delete)
-	}
 
-	// Packages
+	// Packages (public read)
 	pkgH := handlers.NewPackageHandler()
-	pkgs := r.Group("/api/packages")
+
+	// Admin login (public)
+	r.POST("/api/admin/login", handlers.AdminLogin)
+
+	// Protected admin routes
+	admin := r.Group("/api/admin", handlers.AdminAuth())
 	{
-		pkgs.GET("", pkgH.List)
-		pkgs.GET("/all", pkgH.ListAll)
-		pkgs.PATCH("/:id", pkgH.Update)
+		adminH := handlers.NewAdminHandler(rs)
+		admin.GET("/stats", adminH.Stats)
+		admin.GET("/transactions", adminH.Transactions)
 	}
 
-	// Admin
-	adminH := handlers.NewAdminHandler(rs)
-	r.GET("/api/admin/stats", adminH.Stats)
-	r.GET("/api/admin/transactions", adminH.Transactions)
+	// Protected settings
+	settingsH := handlers.NewSettingsHandler(cfg)
+	settings := r.Group("/api/settings", handlers.AdminAuth())
+	{
+		settings.GET("", settingsH.Get)
+		settings.PATCH("", settingsH.Update)
+	}
+
+	// Protected package/location mutations
+	r.GET("/api/packages", pkgH.List)
+	r.GET("/api/packages/all", pkgH.ListAll)
+	r.PATCH("/api/packages/:id", handlers.AdminAuth(), pkgH.Update)
+
+	r.GET("/api/locations", locH.List)
+	r.POST("/api/locations", handlers.AdminAuth(), locH.Add)
+	r.PATCH("/api/locations/:id", handlers.AdminAuth(), locH.Update)
+	r.DELETE("/api/locations/:id", handlers.AdminAuth(), locH.Delete)
+
+	r.POST("/api/connection/revoke", handlers.AdminAuth(), connH.Revoke)
 
 	// Health
 	r.GET("/health", func(c *gin.Context) {

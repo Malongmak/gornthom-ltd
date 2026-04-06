@@ -197,7 +197,7 @@
 
   // Redirect if no active session
   if (!expiryISO) {
-    window.location.replace('/portal/packages');
+    window.location.replace('/packages');
     return;
   }
 
@@ -218,7 +218,7 @@
       if (expiryEl) expiryEl.textContent = 'Session expired';
       sessionStorage.setItem('gh_connection_active', 'false');
       sessionStorage.setItem('gh_internet_active', 'false');
-      setTimeout(() => window.location.replace('/portal'), 3000);
+      setTimeout(() => window.location.replace('/packages'), 3000);
       return;
     }
 
@@ -268,7 +268,7 @@
         const data = await res.json();
         if (!data.active) {
           sessionStorage.setItem('gh_connection_active', 'false');
-          window.location.replace('/portal');
+          window.location.replace('/packages');
         }
       }
     } catch (e) { /* network error, ignore */ }
@@ -279,7 +279,7 @@
   // Buy More Time → go back to packages
   if (buyMoreBtn) {
     buyMoreBtn.addEventListener('click', () => {
-      window.location.href = '/portal/packages';
+      window.location.href = '/packages';
     });
   }
 
@@ -299,7 +299,7 @@
       }
 
       sessionStorage.clear();
-      window.location.replace('/portal');
+      window.location.replace('/packages');
     });
   }
 })();

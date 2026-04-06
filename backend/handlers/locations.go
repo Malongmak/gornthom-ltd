@@ -120,9 +120,10 @@ func (h *LocationHandler) Update(c *gin.Context) {
 	var body struct {
 		Status string `json:"status"`
 		Name   string `json:"name"`
+		Region string `json:"region"`
 	}
 	c.ShouldBindJSON(&body)
-	if err := db.UpdateLocation(id, body.Status, body.Name); err != nil {
+	if err := db.UpdateLocation(id, body.Status, body.Name, body.Region); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"success": false, "message": err.Error()})
 		return
 	}
