@@ -18,6 +18,15 @@ func NewAdminHandler(rs *services.RouterService) *AdminHandler {
 	return &AdminHandler{rs: rs, startTime: time.Now()}
 }
 
+func (h *AdminHandler) Transactions(c *gin.Context) {
+	transactions, err := db.GetAllTransactions()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"success": false, "message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, transactions)
+}
+
 func (h *AdminHandler) Stats(c *gin.Context) {
 	sessions, _ := db.GetAllSessions()
 	transactions, _ := db.GetAllTransactions()

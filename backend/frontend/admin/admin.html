@@ -802,10 +802,12 @@ async function delLoc(id) {
 // ── Transactions ─────────────────────────────────────────────
 async function loadTxn() {
   try {
-    const d = await fetch(API + '/admin/stats').then(r => r.json());
-    allTxn = (d.connections || []).map(c => ({
-      phone: c.phone, package: c.package, amount: c.packagePrice,
-      method: 'paystack', date: c.startTime
+    const txns = await fetch(API + '/admin/transactions').then(r => r.json());
+    allTxn = (txns || []).map(t => ({
+      phone: t.phone, package: t.package, amount: t.amount,
+      method: t.paymentMethod || t.payment_method || 'paystack',
+      status: t.status || 'success',
+      date: t.createdAt || t.created_at
     }));
     renderTxn(allTxn);
   } catch(e) { toast('Failed to load transactions', 'error'); }

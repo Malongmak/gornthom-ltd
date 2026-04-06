@@ -67,7 +67,9 @@ func Register(r *gin.Engine, cfg *config.Config, rs *services.RouterService) {
 	}
 
 	// Admin
-	r.GET("/api/admin/stats", handlers.NewAdminHandler(rs).Stats)
+	adminH := handlers.NewAdminHandler(rs)
+	r.GET("/api/admin/stats", adminH.Stats)
+	r.GET("/api/admin/transactions", adminH.Transactions)
 
 	// Health
 	r.GET("/health", func(c *gin.Context) {
